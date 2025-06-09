@@ -44,10 +44,10 @@ services:
     ports:
       - '3326:3306'
     environment:
-      MYSQL_DATABASE: "${DB_DATABASE}"
-      MYSQL_ROOT_PASSWORD: "${DB_USERNAME}"
-      MYSQL_USER: "${DB_PASSWORD}"
-      MYSQL_PASSWORD: "${DB_DPASSWORD}"
+      MYSQL_DATABASE: "${DB_DATABASE}"         # ex: nf
+      MYSQL_ROOT_PASSWORD: "root_password"     # defina aqui uma senha forte para root
+      MYSQL_USER: "${DB_USERNAME}"              # ex: appuser
+      MYSQL_PASSWORD: "${DB_PASSWORD}"          # ex: app_password
 
   phpmyadmin:
     container_name: setupNSF-phpmyadmin

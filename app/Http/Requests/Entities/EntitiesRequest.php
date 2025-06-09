@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Entities;
 
-use App\Enums\TypeEntity;
+use App\Enum\TypeEntity;
 use App\Http\Requests\BaseFormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class EntitiesRequest extends BaseFormRequest
@@ -28,7 +29,7 @@ class EntitiesRequest extends BaseFormRequest
             'social_denomination' => ['required', 'string'],
             'customer_number' => ['required', 'string', 'max:255', 'unique:entities,customer_number,' . $id],
             'policy_number' => ['required', 'string', 'max:255', 'unique:entities,policy_number,' . $id],
-            'entity_type' => ['required', 'numeric', new Enum(TypeEntity::class)],
+            'entity_type' => ['required', 'integer', Rule::enum(TypeEntity::class)],
         ];
     }
 

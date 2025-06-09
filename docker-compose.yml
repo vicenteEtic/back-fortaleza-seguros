@@ -42,12 +42,12 @@ services:
     networks:
       - setupNSF-network
     ports:
-      - '3326:3306'
+      - '3306:3306'
     environment:
-      MYSQL_DATABASE: "${DB_DATABASE}"
-      MYSQL_ROOT_PASSWORD: "${DB_USERNAME}"
-      MYSQL_USER: "${DB_PASSWORD}"
-      MYSQL_PASSWORD: "${DB_DPASSWORD}"
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
 
   phpmyadmin:
     container_name: setupNSF-phpmyadmin

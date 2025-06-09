@@ -30,6 +30,7 @@ services:
     networks:
       - setupNSF-network
 
+
   mysql:
     container_name: setupNSF-mysql
     image: mysql:8.0
@@ -42,12 +43,12 @@ services:
     networks:
       - setupNSF-network
     ports:
-      - '3306:3306'
+      - '3326:3306'
     environment:
+      MYSQL_DATABASE: nf
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: user
+      MYSQL_PASSWORD: nf@204
 
   phpmyadmin:
     container_name: setupNSF-phpmyadmin

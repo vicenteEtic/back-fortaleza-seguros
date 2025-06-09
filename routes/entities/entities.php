@@ -12,7 +12,6 @@ Route::post('', [EntitiesController::class, 'store'])
 Route::get('{entity}', [EntitiesController::class, 'show'])
     ->name('entities.show');
 
-
 Route::put('{entity}', [EntitiesController::class, 'update'])
     ->name('entities.update');
 

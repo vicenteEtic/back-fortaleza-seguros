@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset name="My Project Ruleset">
+    <description>My custom ruleset</description>
+
+    <!-- Incluir padrões de codificação -->
+    <rule ref="PSR12"/>    <!-- Padrão PSR-12 -->
+    <rule ref="Squiz"/>    <!-- Regras do Squiz -->
+
+    <!-- Definir quais arquivos ou diretórios devem ser analisados -->
+    <file>src/</file>
+    <file>./app/</file>
+    <file>./config/</file>
+    <file>./resources/</file>
+    <file>./routes/</file>
+    <file>./tests/</file>
+
+    <!-- Excluir arquivos ou diretórios específicos -->
+    <exclude-pattern>*/tests/*</exclude-pattern>  <!-- Excluir testes da análise -->
+
+    <!-- Adicione outras regras ou ajustes personalizados aqui -->
+</ruleset>

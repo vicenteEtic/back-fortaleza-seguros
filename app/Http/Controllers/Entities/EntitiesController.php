@@ -15,6 +15,7 @@ class EntitiesController extends AbstractController
     {
         $this->service = $service;
     }
+
     /**
      * Store a newly created resource in storage.
      */

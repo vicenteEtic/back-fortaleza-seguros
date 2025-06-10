@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('policy_number')->unique()->nullable();
             $table->tinyInteger('entity_type')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

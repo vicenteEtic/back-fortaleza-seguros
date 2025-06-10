@@ -4,7 +4,7 @@ namespace App\Http\Requests\Indicator;
 
 use App\Http\Requests\BaseFormRequest;
 
-class IndicatorRequest extends BaseFormRequest
+class IndicatorTypeRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,10 @@ class IndicatorRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:1000'],
+            'description' => ['required', 'string', 'max:255'],
+            'comment' => ['required', 'string', 'max:255'],
+            'risk' => ['required', 'string', 'max:255'],
+            'indicator_id' => ['required', 'exists:indicator,id'],
         ];
     }
 }

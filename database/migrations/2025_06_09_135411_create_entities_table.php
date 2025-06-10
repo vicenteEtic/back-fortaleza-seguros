@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('entities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('social_denomination')->nullable();
-            $table->string('customer_number')->nullable();
-            $table->string('policy_number')->nullable();
+            $table->string('customer_number')->unique()->nullable();
+            $table->string('policy_number')->unique()->nullable();
             $table->tinyInteger('entity_type')->nullable();
             $table->timestamps();
         });

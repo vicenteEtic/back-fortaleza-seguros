@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Indicator extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'indicator';
     protected $primaryKey = 'id';
     protected $fillable = ['name', 'description', 'created_at', 'updated_a2t'];

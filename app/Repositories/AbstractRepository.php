@@ -29,7 +29,7 @@ abstract class AbstractRepository
         $query = $this->model->query();
 
         if (in_array(SoftDeletes::class, class_uses($this->model))) {
-            if($withTrashed == true){
+            if ($withTrashed == true) {
                 $query = $query->withTrashed();
             }
         }
@@ -47,13 +47,7 @@ abstract class AbstractRepository
     protected function applyFilter($query, $filterParams)
     {
         if (isset($filterParams)) {
-            $filterHandler = new FilterHandler;
             $filterHandlerV2 = new FilterHandlerV2;
-
-            $version = $this->getVersionFilter($filterParams);
-            if ($version === 1) {
-                return $filterHandler->applyFilter($query, $filterParams);
-            }
 
             return $filterHandlerV2->applyFilter($query, $filterParams);
         }

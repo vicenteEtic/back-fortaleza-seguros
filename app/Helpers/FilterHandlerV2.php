@@ -127,7 +127,7 @@ class FilterHandlerV2
     private function applyIlike($query, $field, $value)
     {
         $this->handleRelation($query, $field, function ($q, $field) use ($value) {
-            $q->where(DB::raw('unaccent(CAST(' . $field . ' AS TEXT))'), 'ilike', DB::raw('unaccent(\'%' . $value . '%\')'));
+            $q->whereRaw('LOWER(' . $this->escapeField($field) . ') LIKE ?', ['%' . mb_strtolower($value, 'UTF-8') . '%']);
         });
     }
 

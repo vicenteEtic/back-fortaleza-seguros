@@ -28,7 +28,7 @@ class IndicatorSeeder extends Seeder
 
         //inserindo os indicadores
         foreach ($Indicators as $value) {
-            Indicator::createOrUpdate($value);
+            Indicator::updateOrCreate(["name" => $value['name']], $value);
         }
     }
 }

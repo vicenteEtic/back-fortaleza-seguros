@@ -20,8 +20,8 @@ class DiligenceController extends AbstractController
     {
         try {
             $this->logRequest();
-            $entities = $this->service->store($request->validated());
-            return response()->json($entities, Response::HTTP_CREATED);
+            $diligence = $this->service->store($request->validated());
+            return response()->json($diligence, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -35,8 +35,8 @@ class DiligenceController extends AbstractController
     {
         try {
             $this->logRequest();
-            $entities = $this->service->update($request->validated(), $id);
-            return response()->json($entities, Response::HTTP_OK);
+            $diligence = $this->service->update($request->validated(), $id);
+            return response()->json($diligence, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);

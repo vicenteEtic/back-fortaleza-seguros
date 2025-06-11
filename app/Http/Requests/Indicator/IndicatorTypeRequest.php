@@ -23,7 +23,7 @@ class IndicatorTypeRequest extends BaseFormRequest
     {
         return [
             'description' => ['required', 'string', 'max:255'],
-            'comment' => ['required', 'string', 'max:255'],
+            'score' => ['required', 'integer'],
             'risk' => ['required', 'string', 'max:255'],
             'indicator_id' => ['required', 'exists:indicator,id'],
         ];

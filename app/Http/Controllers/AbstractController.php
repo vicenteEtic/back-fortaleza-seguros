@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
- 
+
 use App\Services\AbstractService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -29,7 +29,7 @@ abstract class AbstractController extends Controller
         try {
             $this->logRequest();
             $filters = $request['filters'] ?? $request['filtersV2'];
-            $service = $this->service->index($request['paginate'], $filters, $request['orderBy']);
+            $service = $this->service->index($request['paginate'], $filters, $request['orderBy'], $request['relationships']);
             return response()->json($service);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -87,5 +87,4 @@ abstract class AbstractController extends Controller
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entities', function (Blueprint $table) {
+        Schema::create('diligence', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('social_denomination')->nullable();
-            $table->string('customer_number')->unique()->nullable();
-            $table->string('policy_number')->unique()->nullable();
-            $table->tinyInteger('entity_type')->nullable();
-            $table->timestamps();
+            $table->string('name');
+            $table->longText('description')->nullable();
+            $table->integer('max');
+            $table->integer('min');
+            $table->string('risk');
+            $table->string('color');
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entities');
+        Schema::dropIfExists('diligence');
     }
 };

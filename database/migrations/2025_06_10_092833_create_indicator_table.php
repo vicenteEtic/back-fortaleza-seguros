@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entities', function (Blueprint $table) {
+        Schema::create('indicator', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('social_denomination')->nullable();
-            $table->string('customer_number')->unique()->nullable();
-            $table->string('policy_number')->unique()->nullable();
-            $table->tinyInteger('entity_type')->nullable();
+            $table->string('name');
+            $table->string('description')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entities');
+        Schema::dropIfExists('indicator');
     }
 };

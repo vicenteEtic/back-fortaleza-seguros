@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class MakeFullModuleCommand extends Command
 {
@@ -59,7 +60,7 @@ class MakeFullModuleCommand extends Command
 
     protected function createModel($path, $filename, $namespacePath)
     {
-        $tableName = strtolower($filename);
+        $tableName = Str::snake($filename);
         $fillable = [];
 
         // Verifica se a tabela existe no banco de dados
@@ -71,7 +72,10 @@ class MakeFullModuleCommand extends Command
             $fillable = array_diff(
                 $columns,
                 [
-                    'id'
+                    'id',
+                    'created_at',
+                    'updated_at',
+                    'deleted_at'
                 ]
             );
         }
@@ -154,7 +158,9 @@ namespace App\Http\Controllers\\{$namespacePath};
 
 use App\Http\Controllers\AbstractController;
 use App\Services\\{$namespacePath}\\{$filename}Service;
+use App\Http\Requests\\{$namespacePath}\\{$filename}Request;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 
 class {$filename}Controller extends AbstractController
@@ -162,6 +168,39 @@ class {$filename}Controller extends AbstractController
     public function __construct({$filename}Service \$service)
     {
         \$this->service = \$service;
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store({$filename}Request \$request)
+    {
+        try {
+            \$this->logRequest();
+            \$entity = \$this->service->store(\$request->validated());
+            return response()->json(\$entity, Response::HTTP_CREATED);
+        } catch (Exception \$e) {
+            \$this->logRequest(\$e);
+            return response()->json(\$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update({$filename}Request \$request, \$id)
+    {
+        try {
+            \$this->logRequest();
+            \$entity = \$this->service->update(\$request->validated(), \$id);
+            return response()->json(\$entity, Response::HTTP_OK);
+        } catch (ModelNotFoundException \$e) {
+            \$this->logRequest(\$e);
+            return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+        } catch (Exception \$e) {
+            \$this->logRequest(\$e);
+            return response()->json(\$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }";
 
@@ -174,6 +213,32 @@ class {$filename}Controller extends AbstractController
 
     protected function createFormRequest($path, $filename, $namespacePath)
     {
+        $tableName = Str::snake($filename);
+        $rules = [];
+
+        // Verifica se a tabela existe no banco de dados
+        if (\Schema::hasTable($tableName)) {
+            // Pega as colunas da tabela
+            $columns = \Schema::getColumnListing($tableName);
+
+            // Remove colunas padrão que não devem estar nas rules
+            $fillable = array_diff(
+                $columns,
+                [
+                    'id',
+                    'created_at',
+                    'updated_at',
+                    'deleted_at'
+                ]
+            );
+
+            // Cria regras básicas para cada coluna (pode ser personalizado conforme necessidade)
+            foreach ($fillable as $column) {
+                $rules[] = "'$column' => 'required'";
+            }
+        }
+
+        $rulesString = implode(",\n            ", $rules);
 
         // Template do FormRequest
         $formRequestTemplate = "<?php
@@ -200,7 +265,7 @@ class {$filename}Request extends BaseFormRequest
     public function rules(): array
     {
         return [
-            // Adicione suas regras de validação aqui
+            $rulesString
         ];
     }
 }";

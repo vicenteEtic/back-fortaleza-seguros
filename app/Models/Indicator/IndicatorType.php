@@ -13,7 +13,7 @@ class IndicatorType extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'description',
-        'comment',
+        'score',
         'risk',
         'indicator_id',
     ];

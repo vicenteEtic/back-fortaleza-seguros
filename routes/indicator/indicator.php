@@ -19,7 +19,6 @@ Route::put('{indicator}', [IndicatorController::class, 'update'])
 Route::delete('{indicator}', [IndicatorController::class, 'destroy'])
     ->name('indicator.destroy');
 
-
 Route::get('type', [IndicatorTypeController::class, 'index'])
     ->name('indicator.type.index');
 

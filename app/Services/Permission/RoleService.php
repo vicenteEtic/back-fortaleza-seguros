@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Services\Permission;
+
+use App\Repositories\Permission\RoleRepository;
+use App\Services\AbstractService;
+
+class RoleService extends AbstractService
+{
+    public function __construct(RoleRepository $repository, private readonly PermissionService $permissionService)
+    {
+        parent::__construct($repository);
+    }
+
+    public function store(array $data)
+    {
+        $permision = $this->repository->store($data);
+        if (isset($data['permissions']) && is_array($data['permissions'])) {
+            $permision->permissions()->sync($data['permissions']);
+        }
+        return $permision;
+    }
+}

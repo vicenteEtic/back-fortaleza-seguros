@@ -16,9 +16,9 @@ abstract class AbstractService
     /**
      * Display a listing of the resource.
      */
-    public function index(?int $paginate, ?array $filterParams, ?array $orderByParams)
+    public function index(?int $paginate, ?array $filterParams, ?array $orderByParams, $relationships = [])
     {
-        return $this->repository->index($paginate, $filterParams, $orderByParams);
+        return $this->repository->index($paginate, $filterParams, $orderByParams, $relationships);
     }
 
     /**
@@ -60,5 +60,4 @@ abstract class AbstractService
     {
         return $this->repository->restore($id);
     }
-
 }

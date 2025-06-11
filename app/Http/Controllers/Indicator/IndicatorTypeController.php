@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Indicator;
 
 use App\Http\Controllers\AbstractController;
-use App\Http\Requests\Indicator\IndicatorRequest;
-use App\Services\Indicator\IndicatorService;
+use App\Http\Requests\Indicator\IndicatorTypeRequest;
+use App\Services\Indicator\IndicatorTypeService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 
-class IndicatorController extends AbstractController
+class IndicatorTypeController extends AbstractController
 {
-    public function __construct(IndicatorService $service)
+    public function __construct(IndicatorTypeService $service)
     {
         $this->service = $service;
     }
@@ -19,7 +19,7 @@ class IndicatorController extends AbstractController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(IndicatorRequest $request)
+    public function store(IndicatorTypeRequest $request)
     {
         try {
             $this->logRequest();
@@ -34,7 +34,7 @@ class IndicatorController extends AbstractController
     /**
      * Update the specified resource in storage.
      */
-    public function update(IndicatorRequest $request, $id)
+    public function update(IndicatorTypeRequest $request, $id)
     {
         try {
             $this->logRequest();

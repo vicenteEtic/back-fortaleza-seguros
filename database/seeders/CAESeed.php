@@ -978,7 +978,7 @@ class CAESeed extends Seeder
 
         //inserindo os indicadores
         foreach ($IndicatorType as $value) {
-            if (!IndicatorIndicatorTyp::where('description', $value['description'])->exists()) {
+            if (!IndicatorIndicatorType::where('description', $value['description'])->exists()) {
                 IndicatorIndicatorType::create($value);
             }
         }

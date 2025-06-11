@@ -19,9 +19,9 @@ abstract class AbstractRepository
     /**
      * Display a listing of the resource.
      */
-    public function index(?int $paginate, ?array $filterParams, ?array $orderByParams)
+    public function index(?int $paginate, ?array $filterParams, ?array $orderByParams, $relationships = [])
     {
-        return $this->buildQuery($paginate, $filterParams, $orderByParams);
+        return $this->buildQuery($paginate, $filterParams, $orderByParams, $relationships, null);
     }
 
     protected function buildQuery($paginate = null, $filterParams = null, $orderByParams = null, $relationships = [], $count = null, $withTrashed = false)

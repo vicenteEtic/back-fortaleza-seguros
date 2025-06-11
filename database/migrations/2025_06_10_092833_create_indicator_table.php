@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('description')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

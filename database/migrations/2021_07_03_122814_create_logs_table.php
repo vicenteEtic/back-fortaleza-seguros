@@ -16,15 +16,15 @@ class CreateLogsTable extends Migration
         Schema::create('log', function (Blueprint $table) {
             $table->id();
             $table->enum('level', ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug']);
-            $table->string('REMOTE_ADDR')->nullable();
-            $table->string('PATH_INFO')->nullable();
-            $table->string('USER_NAME')->nullable();
+            $table->string('remote_addr')->nullable();
+            $table->string('path_info')->nullable();
+            $table->string('user_name')->nullable();
             $table->string('type')->nullable();
             $table->string('userId')->nullable();
-            $table->string('HTTP_USER_AGENT')->nullable();
+            $table->string('http_user_agent')->nullable();
             $table->longText('message')->nullable();
-            $table->unsignedBigInteger('fk_entities')->nullable();
-            $table->foreign('fk_entities')->references('id')->on('entities')->onDelete('CASCADE')->onUpgrade('CASCADE');
+            $table->unsignedBigInteger('id_entity')->nullable();
+            $table->foreign('id_entity')->references('id')->on('entities')->onDelete('CASCADE')->onUpgrade('CASCADE');
             $table->timestamps();
             $table->softDeletes();
         });

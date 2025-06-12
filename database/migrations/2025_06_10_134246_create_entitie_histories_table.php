@@ -13,7 +13,7 @@ class CreateEntitieHistoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('entitie_history', function (Blueprint $table) {
+        Schema::create('entitie_logs', function (Blueprint $table) {
             $table->id();
             $table->enum('level', ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug']);
             $table->string('REMOTE_ADDR')->nullable();

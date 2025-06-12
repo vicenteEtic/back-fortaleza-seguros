@@ -18,7 +18,6 @@ class CreateLogsTable extends Migration
             $table->enum('level', ['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug']);
             $table->string('remote_addr')->nullable();
             $table->string('path_info')->nullable();
-            
             $table->string('user_name')->nullable();
             $table->string('type')->nullable();
             $table->string('userId')->nullable();

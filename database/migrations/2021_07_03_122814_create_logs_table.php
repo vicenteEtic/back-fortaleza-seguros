@@ -19,10 +19,9 @@ class CreateLogsTable extends Migration
             $table->string('REMOTE_ADDR')->nullable();
             $table->string('PATH_INFO')->nullable();
             $table->string('USER_NAME')->nullable();
-            $table->string('USER_ID')->nullable();
+            $table->string('userId')->nullable();
             $table->string('HTTP_USER_AGENT')->nullable();
             $table->longText('message')->nullable();
-            $table->string('id_document')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

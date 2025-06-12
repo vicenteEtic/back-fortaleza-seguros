@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('indicator', function (Blueprint $table) {
+        Schema::create('permission', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('description')->nullable();
-            $table->softDeletes();
+            $table->string('name', 255)->unique();
+            $table->string('description', 255)->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes(); // This will add a deleted_at column for soft deletes
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('indicator');
+        Schema::dropIfExists('permission');
     }
 };

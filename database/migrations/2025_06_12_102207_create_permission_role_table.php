@@ -13,12 +13,8 @@ return new class extends Migration
     {
         Schema::create('permission_role', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('permission_id')
-                ->constrained('permission')
-                ->onDelete('cascade');
-            $table->foreignId('role_id')
-                ->constrained('permission')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('permission_id');
+            $table->unsignedBigInteger('role_id');
             $table->softDeletes();
             $table->timestamps();
         });

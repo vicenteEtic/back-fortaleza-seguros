@@ -21,8 +21,9 @@ class RoleRequest extends BaseFormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('role') ? $this->route('role') : null;
         return [
-            'name' => ['required'],
+            'name' => ['required', "unique:role,name,{$id},id"],
             'description' => ['nullable', 'string', 'max:255'],
             'permissions' => ['required', 'array'],
             'permissions.*' => ['required', 'exists:permission,id'],

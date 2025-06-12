@@ -9,3 +9,6 @@ Route::prefix('diligence')->group(base_path('routes/diligence/diligence.php'));
 Route::prefix('indicator')->group(base_path('routes/indicator/indicator.php'));
 Route::prefix('permission')->group(base_path('routes/user/permission/permission.php'));
 Route::prefix('role')->group(base_path('routes/user/permission/role.php'));
+Route::prefix('indicator')->group(base_path('routes/indicator/indicator.php'));
+Route::prefix('diligence')->group(base_path('routes/diligence/diligence.php'));
+Route::prefix('history')->group(base_path('routes/history/history.php'));

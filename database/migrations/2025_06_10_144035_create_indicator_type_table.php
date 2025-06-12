@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('indicator_type', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('description');
-            $table->string('comment');
+            $table->integer('score');
             $table->string('risk');
             $table->foreignId('indicator_id')
                 ->constrained('indicator')

@@ -20,4 +20,13 @@ class RoleService extends AbstractService
         }
         return $permision;
     }
+
+    public function update(array $data, int $id)
+    {
+        $permision = $this->repository->update($data, $id);
+        if (isset($data['permissions']) && is_array($data['permissions'])) {
+            $permision->permissions()->sync($data['permissions']);
+        }
+        return $permision;
+    }
 }

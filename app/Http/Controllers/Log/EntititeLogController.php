@@ -4,82 +4,35 @@ namespace App\Http\Controllers\Log;
 
 use App\Http\Controllers\Controller;
 use App\Models\Log\EntitieLog;
+use Exception;
 use Illuminate\Http\Request;
 
+use Illuminate\Http\Response;
 class EntititeLogController extends Controller
 {
- 
+   
     public function index()
     {
-
-
-        //pegar o processo
-
-        $response =  EntitieLog::orderBy('id', 'desc')->get();
-
-        $data = [];
-        foreach ($response as $item) {
-            $data[] = [
-                "id" => $item->id,
-                "level" => $item->level,
-                "REMOTE_ADDR" => $item->REMOTE_ADDR,
-                "PATH_INFO" => $item->PATH_INFO,
-                "HTTP_USER_AGENT" => $item->HTTP_USER_AGENT,
-                "message" => $item->message,
-                "created_at" => $item->created_at,
-                'user' => [
-                    "first_name" => $item->user->first_name,
-                    "email" => $item->user->email,
-                    "phone" => $item->user->phone,
-                    "last_name" => $item->user->last_name,
-                ],
-
-
-            ];
-        }
-            $response = json_encode($data, JSON_UNESCAPED_SLASHES);
-            return response($response, 200)->header('Content-Type', 'application/json');
-        $response = json_encode($response, JSON_UNESCAPED_SLASHES);
-        return response($response, 200)->header('Content-Type', 'application/json');
         try {
-        } catch (\Throwable $th) {
-            return response()->json([
-                "message" => "Erro ao listar historico"
-            ], 400);
+        $data =  EntitieLog::with('entitie','user')->orderBy('id', 'desc')->get();
+
+        return response($data, 200)->header('Content-Type', 'application/json');
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        
         }
     }
-    public function show($id)
+    public function show($entitie_id)
     {
         try {
-
-            //pegar o processo
-            $response =  EntitieLog::with('user')->where('fk_entities', $id)->orderBy('id', 'desc')->get();
-            $data = [];
-            foreach ($response as $item) {
-                $data[] = [
-                    "id" => $item->id,
-                    "level" => $item->level,
-                    "REMOTE_ADDR" => $item->REMOTE_ADDR,
-                    "PATH_INFO" => $item->PATH_INFO,
-                    "HTTP_USER_AGENT" => $item->HTTP_USER_AGENT,
-                    "message" => $item->message,
-                    "created_at" => $item->created_at,
-                    'user' => [
-                        "first_name" => $item->user->first_name,
-                        "email" => $item->user->email,
-                        "phone" => $item->user->phone,
-                        "last_name" => $item->user->last_name,
-                    ],
-
-
-                ];
-            }
-            $response = json_encode($data, JSON_UNESCAPED_SLASHES);
+            $response =  EntitieLog::with('entitie','user')->where('fk_entities', $entitie_id)->orderBy('id', 'desc')->get();
+            $response = json_encode($response, JSON_UNESCAPED_SLASHES);
             return response($response, 200)->header('Content-Type', 'application/json');
-        } catch (\Throwable $th) {
-            return response()->json([
-                "message" => "Erro ao listar historico"
-            ], 400);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        
         }
     }
 

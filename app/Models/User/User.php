@@ -20,9 +20,19 @@ class User extends Model implements
      *
      * @var array<int, string>
      */
+    protected $table = 'users';
+
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'id'
+        'first_name',
+        'last_name',
+        'phone',
+        'email',
+        'is_active',
+        'role_id',
+        'email_verified_at',
+        'password',
     ];
 
     /**
@@ -46,7 +56,7 @@ class User extends Model implements
 
 
 
-    public function canRule($rule)
+    public function can($rule)
     {
         $permissions = $this->permissions->contains('name', $rule);
         if ($permissions) {
@@ -72,7 +82,7 @@ class User extends Model implements
     }
 
 
-    public function canRules($rule)
+    public function cans($rule)
     {
         $permissions = $this->permissions;
         foreach ($permissions as $permission) {

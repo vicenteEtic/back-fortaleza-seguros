@@ -16,6 +16,7 @@ use App\Services\Log\LogService;
 abstract class Controller
 {
     use AuthorizesRequests, ValidatesRequests;
+   
     protected LogService $logService;
 
     public function __construct(LogService $logService)

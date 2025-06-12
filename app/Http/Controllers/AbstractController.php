@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AbstractService;
+use App\Services\Log\LogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,10 +17,13 @@ abstract class AbstractController extends Controller
 {
     protected AbstractService $service;
 
-    public function __construct(AbstractService $service)
+    public function __construct(AbstractService $service, LogService $logService)
     {
+        parent::__construct($logService);
         $this->service = $service;
     }
+
+ 
 
     /**
      * Display a listing of the resource.
@@ -28,6 +32,7 @@ abstract class AbstractController extends Controller
     {
         try {
             $this->logRequest();
+            $this->storeLogUser('info',"cadastrou um indicador");
             $filters = $request['filters'] ?? $request['filtersV2'];
             $service = $this->service->index($request['paginate'], $filters, $request['orderBy'], $request['relationships']);
             return response()->json($service);

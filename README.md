@@ -1,66 +1,197 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Documentação do Comando `make:module`
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Descrição
+O comando `make:module` é um comando Artisan personalizado que automatiza a criação de múltiplos componentes para um módulo no Laravel. Ele pode criar Model, Repository, Service, Controller e FormRequest com uma única execução.
 
-## About Laravel
+### Exemplo de Descrição
+```bash
+# Cria uma estrutura completa para o módulo de Usuários
+php artisan make:module User --all
+```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Uso Básico
+```bash
+php artisan make:module NomeDoModulo
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Exemplo de Uso Básico
+```bash
+# Cria apenas a estrutura básica (sem componentes específicos)
+php artisan make:module Product
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Opções
+O comando aceita várias opções para especificar quais componentes devem ser criados:
 
-## Learning Laravel
+| Opção    | Descrição                                      | Exemplo de Uso                          |
+|----------|-----------------------------------------------|-----------------------------------------|
+| `--m`    | Cria apenas o Model                           | `php artisan make:module User --m`      |
+| `--r`    | Cria apenas o Repository                      | `php artisan make:module User --r`      |
+| `--s`    | Cria apenas o Service                         | `php artisan make:module User --s`      |
+| `--c`    | Cria apenas o Controller                      | `php artisan make:module User --c`      |
+| `--f`    | Cria apenas o FormRequest                     | `php artisan make:module User --f`      |
+| `--all`  | Cria todos os componentes                     | `php artisan make:module User --all`    |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Exemplos Completos
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. **Criar todos os componentes de um módulo**:
+```bash
+php artisan make:module User --all
+```
+Saída esperada:
+```
+Model User criado em app/Models/User.php
+Repository User criado em app/Repositories/UserRepository.php  
+Service User criado em app/Services/UserService.php
+Controller User criado em app/Http/Controllers/UserController.php
+FormRequest User criado em app/Http/Requests/UserRequest.php
+Arquivos criados com sucesso!
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. **Criar apenas Model e Controller**:
+```bash
+php artisan make:module Product --m --c
+```
+Saída esperada:
+```
+Model Product criado em app/Models/Product.php
+Controller Product criado em app/Http/Controllers/ProductController.php
+Arquivos criados com sucesso!
+```
 
-## Laravel Sponsors
+3. **Criar módulo em subdiretório**:
+```bash
+php artisan make:module Admin/User --all
+```
+Saída esperada:
+```
+Model User criado em app/Models/Admin/User.php  
+Repository User criado em app/Repositories/Admin/UserRepository.php
+Service User criado em app/Services/Admin/UserService.php
+Controller User criado em app/Http/Controllers/Admin/UserController.php  
+FormRequest User criado em app/Http/Requests/Admin/UserRequest.php
+Arquivos criados com sucesso!
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Funcionalidades com Exemplos
 
-### Premium Partners
+### 1. Criação de Model
+**Exemplo**: Para uma tabela `products` com colunas `name`, `price` e `description`:
+```php
+// app/Models/Product.php
+class Product extends Model
+{
+    protected $table = 'products';
+    protected $fillable = ['name', 'price', 'description'];
+}
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 2. Criação de Repository  
+**Exemplo**:
+```php
+// app/Repositories/ProductRepository.php
+class ProductRepository extends AbstractRepository
+{
+    public function __construct(Product $model)
+    {
+        parent::__construct($model);
+    }
+}
+```
 
-## Contributing
+### 3. Criação de Service
+**Exemplo**:
+```php
+// app/Services/ProductService.php  
+class ProductService extends AbstractService
+{
+    public function __construct(ProductRepository $repository)
+    {
+        parent::__construct($repository);
+    }
+}
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Criação de Controller
+**Exemplo**:
+```php
+// app/Http/Controllers/ProductController.php
+class ProductController extends AbstractController
+{
+    public function __construct(ProductService $service)
+    {
+        $this->service = $service;
+    }
+}
+```
 
-## Code of Conduct
+### 5. Criação de FormRequest
+**Exemplo**:
+```php
+// app/Http/Requests/ProductRequest.php
+class ProductRequest extends BaseFormRequest
+{
+    public function rules()
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'nullable|string'
+        ];
+    }
+}
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Estrutura de Diretórios com Exemplo
+Para o comando:
+```bash
+php artisan make:module Admin/User --all
+```
 
-## Security Vulnerabilities
+A estrutura gerada será:
+```
+app/
+├── Models/
+│   └── Admin/
+│       └── User.php
+├── Repositories/
+│   └── Admin/
+│       └── UserRepository.php
+├── Services/
+│   └── Admin/
+│       └── UserService.php
+└── Http/
+    ├── Controllers/
+    │   └── Admin/
+    │       └── UserController.php
+    └── Requests/
+        └── Admin/
+            └── UserRequest.php
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Observações com Exemplos
+1. **Classes Abstratas**: O comando assume que existem:
+```php
+// app/Repositories/AbstractRepository.php
+abstract class AbstractRepository {
+    // implementação base
+}
 
-## License
+// app/Services/AbstractService.php  
+abstract class AbstractService {
+    // implementação base
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+2. **Tabela não existente**: Se executar para um model sem tabela:
+```bash
+php artisan make:module Temp --m
+```
+Gerará:
+```php
+// app/Models/Temp.php
+class Temp extends Model
+{
+    protected $fillable = []; // Array vazio
+}
+```

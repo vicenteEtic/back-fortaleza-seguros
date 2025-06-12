@@ -22,9 +22,9 @@ class PermissionRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'array'],
-            'description' => ['required', 'array'],
-            'is_active' => ['required', 'array']
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'is_active' => ['required', 'boolean'],
         ];
     }
 

@@ -6,7 +6,7 @@ use App\Models\Log\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
-class LogEntiteService
+class LogService
 {
     public static function create(string $message, string $level = 'info'): void
     {

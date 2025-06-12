@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Models\Permission\Permission;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -44,10 +45,6 @@ class User extends Model implements
     ];
 
 
-    public function permissions()
-    {
-        return $this->hasMany(Permission::class, 'user_id', 'id');
-    }
 
     public function canRule($rule)
     {

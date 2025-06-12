@@ -87,4 +87,5 @@ abstract class AbstractController extends Controller
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 }

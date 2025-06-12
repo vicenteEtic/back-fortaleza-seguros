@@ -1,29 +1,14 @@
 <?php
 
-
 namespace App\Models\Log;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Log extends Model
 {
-    use HasFactory, SoftDeletes;
-
-    protected $table = 'logs';
-
-    protected $guarded = ['id'];
-     /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
-    public function user(){
-        return $this->belongsTo(User::class, 'USER_ID', 'id');
-    }
-
+    use HasFactory;
+    protected $table = 'log';
+    protected $primaryKey = 'id';
+    protected $fillable = ['level', 'REMOTE_ADDR', 'PATH_INFO', 'USER_NAME', 'USER_ID', 'HTTP_USER_AGENT', 'message', 'id_document'];
 }

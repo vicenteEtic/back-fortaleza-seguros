@@ -64,7 +64,7 @@ class Can
         }
 
         if (Auth::user()) {
-            return can($rule);
+            return Auth::user()->can($rule);
         }
 
         return false;

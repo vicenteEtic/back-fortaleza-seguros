@@ -27,7 +27,7 @@ class IndicatorController extends AbstractController
         try {
             $this->logRequest();
             $entities = $this->service->store($request->validated());
-            $this->storeLogUser('info',"cadastrou um indicador");
+            $this->storeLogUser('info',"cadastrou um indicador",'user');
             return response()->json($entities, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);

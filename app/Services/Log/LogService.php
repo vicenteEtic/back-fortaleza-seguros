@@ -17,7 +17,7 @@ class LogService extends AbstractService
         $this->logRepository = $repository;
     }
 
-    public function storeLogUser(string $level, string $message): void
+    public function storeLogUser(string $level, string $message,string $type): void
     {
         $data = [
             'REMOTE_ADDR' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
@@ -28,6 +28,8 @@ class LogService extends AbstractService
             'HTTP_USER_AGENT' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
             'message' => $message,
             'level' => $level,
+            'type' => $type,
+            
         ];
 
         $this->logRepository->store($data);

@@ -23,9 +23,9 @@ class RoleRequest extends BaseFormRequest
     {
         return [
             'name' => ['required'],
-            'description' => ['required'],
+            'description' => ['nullable', 'string', 'max:255'],
             'permissions' => ['required', 'array'],
-            'permissions.*' => ['required']
+            'permissions.*' => ['required', 'exists:permission,id'],
         ];
     }
 

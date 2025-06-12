@@ -17,22 +17,21 @@ class LogService extends AbstractService
         $this->logRepository = $repository;
     }
 
-    public function storeLogUser(string $level, string $message,string $type): void
+    public function storeLogUser(string $level, string $message, string $type,$id_entity): void
     {
         $data = [
-            'REMOTE_ADDR' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-            'PATH_INFO' => URL::current(),
-            'REQUEST_TIME' => $_SERVER['REQUEST_TIME'] ?? null,
-            'USER_NAME' => Auth::check() ? Auth::user()->first_name : 'guest',
-            'userId' => Auth::check() ? Auth::user()->id : null,
-            'HTTP_USER_AGENT' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+            'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            'path_info' => URL::current(),
+            'request_time' => $_SERVER['REQUEST_TIME'] ?? null,
+            'user_id' => Auth::check() ? Auth::user()->id : null,
+            'http_user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
             'message' => $message,
             'level' => $level,
             'type' => $type,
-            
+            'id_entity' => $id_entity,
+
         ];
 
         $this->logRepository->store($data);
-
     }
 }

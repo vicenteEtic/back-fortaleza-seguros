@@ -22,7 +22,26 @@ class UserRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            // Adicione suas regras de validação aqui
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'is_active' => ['nullable', 'boolean'],
+            'role_id' => ['required', 'integer', 'exists:role,id'],
+            'password' => ['required', 'string', 'min:8'],
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'first_name' => 'Nome',
+            'last_name' => 'Sobrenome',
+            'phone' => 'Telefone',
+            'email' => 'E-mail',
+            'is_active' => 'Status Ativo',
+            'role_id' => 'Função',
+            'password' => 'Senha',
         ];
     }
 }

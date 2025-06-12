@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Log;
+<<<<<<< HEAD
 
 use App\Http\Controllers\AbstractController;
 use App\Services\Log\LogService;
@@ -12,6 +13,16 @@ use Illuminate\Http\Response;
 class LogController extends AbstractController
 {
     public function __construct(LogService $service)
+=======
+use App\Http\Controllers\Controller;
+use App\Models\Log\Log;
+use App\Services\Log\LogService as LogLogService;
+class LogController extends Controller
+{
+
+    private $Log;
+    public function __construct()
+>>>>>>> 88120df (feat: log de atividades)
     {
         $this->service = $service;
     }
@@ -21,6 +32,7 @@ class LogController extends AbstractController
      */
     public function store(LogRequest $request)
     {
+<<<<<<< HEAD
         try {
 
             
@@ -51,3 +63,29 @@ class LogController extends AbstractController
         }
     }
 }
+=======
+
+        $data =  Log::with('user')->orderBy('id', 'desc')->get();
+        LogLogService::create("mensagem", 'info');
+        return response($data, 200)->header('Content-Type', 'application/json');
+        try {
+        } catch (\Throwable $th) {
+            return response()->json([
+                "message" => "Erro ao listar historico"
+            ], 400);
+        }
+    }
+    public function show($user_id)
+    {
+        try {
+            $response =  Log::with('user')->where('userId', $user_id)->orderBy('id', 'desc')->get();
+            $response = json_encode($response, JSON_UNESCAPED_SLASHES);
+            return response($response, 200)->header('Content-Type', 'application/json');
+        } catch (\Throwable $th) {
+            return response()->json([
+                "message" => "Erro ao listar historico"
+            ], 400);
+        }
+    }
+}
+>>>>>>> 88120df (feat: log de atividades)

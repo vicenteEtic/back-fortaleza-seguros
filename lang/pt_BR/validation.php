@@ -152,6 +152,8 @@ return [
     |
     */
 
+    'failed_validation' => 'Falha na validação',
+
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',

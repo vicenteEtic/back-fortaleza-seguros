@@ -14,19 +14,19 @@ class RoleService extends AbstractService
 
     public function store(array $data)
     {
-        $permision = $this->repository->store($data);
+        $role = $this->repository->store($data);
         if (isset($data['permissions']) && is_array($data['permissions'])) {
-            $permision->permissions()->sync($data['permissions']);
+            $role->permissions()->sync($data['permissions']);
         }
-        return $permision;
+        return $role;
     }
 
     public function update(array $data, int $id)
     {
-        $permision = $this->repository->update($data, $id);
+        $role = $this->repository->update($data, $id);
         if (isset($data['permissions']) && is_array($data['permissions'])) {
-            $permision->permissions()->sync($data['permissions']);
+            $role->permissions()->sync($data['permissions']);
         }
-        return $permision;
+        return $role;
     }
 }

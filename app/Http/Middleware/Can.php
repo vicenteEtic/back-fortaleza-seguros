@@ -2,11 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\Cliente\Usuario\UsuarioPermissaoService;
-use App\Services\Permission\PermissionTypeUserService;
 use Closure;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class Can
@@ -22,12 +20,11 @@ class Can
             return $next($request);
         }
 
-        return redirect('/painel')->with("error_alert", "Não tem permissão para aceder a este Modulo ou não esta disponivel no seu contrato");
+        throw new AccessDeniedHttpException('Você não tem permissão para acessar este recurso.');
     }
 
     private function checkPermissions(array $permissions): bool
     {
-
         foreach ($permissions as $permissionSet) {
             if (str_contains($permissionSet, '|')) {
                 $orPermissions = explode('|', $permissionSet);

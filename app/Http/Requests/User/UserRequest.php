@@ -21,11 +21,12 @@ class UserRequest extends BaseFormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('id') ?? null;
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'email' => ['required', 'email', 'max:255', "unique:users,email,{$id},id"],
             'is_active' => ['nullable', 'boolean'],
             'role_id' => ['required', 'integer', 'exists:role,id'],
             'password' => ['required', 'string', 'min:8'],

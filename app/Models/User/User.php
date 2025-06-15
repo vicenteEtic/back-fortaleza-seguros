@@ -2,13 +2,14 @@
 
 namespace App\Models\User;
 
-use App\Models\Permission\Permission;
+use App\Models\Permission\Role;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use App\Models\Permission\Permission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
 class User extends Model implements
     AuthenticatableContract
@@ -55,10 +56,14 @@ class User extends Model implements
     ];
 
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
 
     public function can($rule)
     {
-        $permissions = $this->permissions->contains('name', $rule);
+        $permissions = $this->role->permissions->contains('name', $rule);
         if ($permissions) {
             return true;
         }

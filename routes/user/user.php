@@ -8,15 +8,19 @@ Route::get('', [UserController::class, 'index'])
     ->middleware(['can:usuario-show']);
 
 Route::post('', [UserController::class, 'store'])
-    ->name('user.store');
+    ->name('user.store')
+    ->middleware(['can:usuario-create']);
 
 Route::get('{id}', [UserController::class, 'show'])
-    ->name('user.show');
+    ->name('user.show')
+    ->middleware(['can:usuario-show']);
 
 Route::put('{id}', [UserController::class, 'update'])
-    ->name('user.update');
+    ->name('user.update')
+    ->middleware(['can:usuario-edit']);
 
 Route::delete('{id}', [UserController::class, 'destroy'])
-    ->name('user.destroy');
+    ->name('user.destroy')
+    ->middleware(['can:usuario-delete']);
 
 Route::post('/logout', [UserController::class, 'logout']);

@@ -40,6 +40,9 @@ class RiskAssessmentRequest extends BaseFormRequest
             'channel' => ['required', Rule::exists(IndicatorType::class, 'id')],
             'product_risk' => ['nullable', 'array'],
             'product_risk.*' => ['required', Rule::exists(IndicatorType::class, 'id')],
+            'beneficial_owners' => ['nullable', 'array'],
+            'beneficial_owners.*.name' => ['required', 'string', 'max:255'],
+            'beneficial_owners.*.pep' => ['required', 'boolean'],
         ];
     }
 

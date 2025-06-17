@@ -27,6 +27,10 @@ class RiskAssessmentService extends AbstractService
         $data['user_id'] = Auth::id();
         $riskAssessment = $this->repository->store($data);
 
+        if (isset($data['beneficial_owners'])) {
+            $this->createBeneficialOwner($data, $riskAssessment->id);
+        }
+
         $this->loadRelations($riskAssessment);
 
         $riskProducts = $this->indicatorTypeRepository->getByIds($data['product_risk']);
@@ -39,9 +43,7 @@ class RiskAssessmentService extends AbstractService
 
         $this->updateEntityRisk($riskAssessment, $total, $diligence);
 
-        if ($data['beneficial_owners']) {
-            $this->createBeneficialOwner($data, $riskAssessment->id);
-        }
+
 
         return $riskAssessment;
     }
@@ -64,7 +66,8 @@ class RiskAssessmentService extends AbstractService
             'channel',
             'countryResidence',
             'category',
-            'nationlity'
+            'nationlity',
+            'beneficialOwners'
         ]);
     }
 

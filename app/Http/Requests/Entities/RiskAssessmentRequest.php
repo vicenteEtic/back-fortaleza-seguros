@@ -5,6 +5,7 @@ namespace App\Http\Requests\Entities;
 use App\Enum\FormEstablishment;
 use App\Enum\StatusResidence;
 use App\Http\Requests\BaseFormRequest;
+use App\Models\Entities\Entities;
 use App\Models\Entities\ProductRisk;
 use App\Models\Indicator\IndicatorType;
 use Illuminate\Validation\Rule;
@@ -35,7 +36,7 @@ class RiskAssessmentRequest extends BaseFormRequest
             'pep' => ['required', 'boolean'],
             'country_residence' => ['required', Rule::exists(IndicatorType::class, 'id')],
             'nationality' => ['required', Rule::exists(IndicatorType::class, 'id')],
-            'entity_id' => ['required', Rule::exists('entities', 'id')],
+            'entity_id' => ['required', Rule::exists(Entities::class, 'id')],
             'channel' => ['required', Rule::exists(IndicatorType::class, 'id')],
             'product_risk' => ['nullable', 'array'],
             'product_risk.*' => ['required', Rule::exists(IndicatorType::class, 'id')],

@@ -2,13 +2,13 @@
 
 namespace App\Services\Entities;
 
-use App\Repositories\Entities\BeneficialOwnerRepository;
-use App\Repositories\Entities\ProductRiskRepository;
 use App\Services\AbstractService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Diligence\DiligenceService;
+use App\Repositories\Entities\ProductRiskRepository;
 use App\Repositories\Entities\RiskAssessmentRepository;
 use App\Repositories\Indicator\IndicatorTypeRepository;
+use App\Repositories\Entities\BeneficialOwnerRepository;
 
 class RiskAssessmentService extends AbstractService
 {
@@ -42,8 +42,8 @@ class RiskAssessmentService extends AbstractService
         $diligence = $this->diligenceService->getDilligenceAssessment($total);
 
         $this->updateEntityRisk($riskAssessment, $total, $diligence);
-
-
+        $riskAssessment->score = $total;
+        $riskAssessment->save();
 
         return $riskAssessment;
     }

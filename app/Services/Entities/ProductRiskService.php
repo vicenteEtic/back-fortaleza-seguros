@@ -10,4 +10,19 @@ class ProductRiskService extends AbstractService
     {
         parent::__construct($repository);
     }
+
+    public function storeProductRisks($riskProducts, $riskAssessmentId): void
+    {
+        foreach ($riskProducts->get() as $product) {
+            $productRisk = [
+                'product_id' => $product->id,
+                'score' => $product->score,
+                'risk_assessment_id' => $riskAssessmentId
+            ];
+            $this->repository->storeOrUpdate(
+                ['product_id' => $product->id],
+                $productRisk
+            );
+        }
+    }
 }

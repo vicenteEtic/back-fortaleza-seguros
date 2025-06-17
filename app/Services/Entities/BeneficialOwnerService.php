@@ -10,4 +10,12 @@ class BeneficialOwnerService extends AbstractService
     {
         parent::__construct($repository);
     }
+
+    public function createBeneficialOwner(array $data, int $riskAssessmentId): void
+    {
+        foreach ($data['beneficial_owners'] as $owner) {
+            $owner['risk_assessment_id'] = $riskAssessmentId;
+            $this->repository->store($owner);
+        }
+    }
 }

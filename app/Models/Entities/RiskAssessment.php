@@ -27,7 +27,10 @@ class RiskAssessment extends Model
         'entity_id',
         'channel',
         'score',
-        'user_id'
+        'user_id',
+        'color',
+        'risk_level',
+        'diligence'
     ];
 
 

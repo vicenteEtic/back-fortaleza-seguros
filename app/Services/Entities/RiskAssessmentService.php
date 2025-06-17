@@ -16,8 +16,8 @@ class RiskAssessmentService extends AbstractService
         RiskAssessmentRepository $repository,
         private readonly IndicatorTypeRepository $indicatorTypeRepository,
         private readonly DiligenceService $diligenceService,
-        private readonly ProductRiskRepository $productRiskRepository,
-        private readonly BeneficialOwnerRepository $beneficialOwnerRepository
+        private readonly ProductRiskService $productRiskService,
+        private readonly BeneficialOwnerService $beneficialOwnerService
     ) {
         parent::__construct($repository);
     }
@@ -28,13 +28,13 @@ class RiskAssessmentService extends AbstractService
         $riskAssessment = $this->repository->store($data);
 
         if (isset($data['beneficial_owners'])) {
-            $this->createBeneficialOwner($data, $riskAssessment->id);
+            $this->beneficialOwnerService->createBeneficialOwner($data, $riskAssessment->id);
         }
 
         $this->loadRelations($riskAssessment);
 
         $riskProducts = $this->indicatorTypeRepository->getByIds($data['product_risk']);
-        $this->storeProductRisks($riskProducts, $riskAssessment->id);
+        $this->productRiskService->storeProductRisks($riskProducts, $riskAssessment->id);
 
         $totalRiskProduct = $riskProducts->sum('score');
         $total = $this->calculateTotalScore($riskAssessment, $totalRiskProduct);
@@ -43,18 +43,15 @@ class RiskAssessmentService extends AbstractService
 
         $this->updateEntityRisk($riskAssessment, $total, $diligence);
         $riskAssessment->score = $total;
+        $riskAssessment->color = $diligence->color;
+        $riskAssessment->risk_level = $diligence->risk;
+        $riskAssessment->diligence = $diligence->name;
         $riskAssessment->save();
 
         return $riskAssessment;
     }
 
-    public function createBeneficialOwner(array $data, int $riskAssessmentId): void
-    {
-        foreach ($data['beneficial_owners'] as $owner) {
-            $owner['risk_assessment_id'] = $riskAssessmentId;
-            $this->beneficialOwnerRepository->store($owner);
-        }
-    }
+
 
     private function loadRelations($riskAssessment): void
     {
@@ -71,20 +68,7 @@ class RiskAssessmentService extends AbstractService
         ]);
     }
 
-    private function storeProductRisks($riskProducts, $riskAssessmentId): void
-    {
-        foreach ($riskProducts->get() as $product) {
-            $productRisk = [
-                'product_id' => $product->id,
-                'score' => $product->score,
-                'risk_assessment_id' => $riskAssessmentId
-            ];
-            $this->productRiskRepository->storeOrUpdate(
-                ['product_id' => $product->id],
-                $productRisk
-            );
-        }
-    }
+
 
     private function calculateTotalScore($riskAssessment, $totalRiskProduct): int
     {
@@ -106,7 +90,7 @@ class RiskAssessmentService extends AbstractService
     {
         $entity = $riskAssessment?->entity();
         $entity->update([
-            'risk_level' => $total,
+            'risk_level' => $diligence?->risk,
             'diligence' => $diligence?->name,
             'color' => $diligence?->color,
             'last_evaluation' => now()

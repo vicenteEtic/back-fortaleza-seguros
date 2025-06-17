@@ -24,6 +24,9 @@ return new class extends Migration
             $table->unsignedBigInteger('entity_id');
             $table->unsignedBigInteger('channel');
             $table->unsignedBigInteger('score')->nullable();
+            $table->string('color')->nullable();
+            $table->string('risk_level')->nullable();
+            $table->string('diligence')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();

@@ -15,11 +15,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $this->call(IndicatorSeeder::class);
         $this->call(DiligenceSeeder::class);
         $this->call(IndicatorSeeder::class);
         $this->call(IdentificationCapacitySeeder::class);
-    
+
         $this->call(ResidenceSeed::class);
         $this->call(EstablishmentSeed::class);
         $this->call(LegalFormSeed::class);
@@ -32,9 +31,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CountriesSeed::class);
         $this->call(TypeActivitySeed::class);
         $this->call(ProfissionPSeed::class);
-        
+
         $this->call(ChannelSeed::class);
-        
-        
     }
 }

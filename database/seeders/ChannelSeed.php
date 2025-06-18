@@ -84,7 +84,7 @@ class ChannelSeed extends Seeder
             ['description' => 'Société Générale', 'risk' => 'Baixo', 'score' => 1, 'indicator_id' => 11],
 
             ['description' => 'Exu-Mediadores de Seguros, Lda', 'risk' => 'Baixo', 'score' => 2, 'indicator_id' => 11],
-        
+
 
 
 

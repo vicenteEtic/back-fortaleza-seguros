@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('customer_number')->unique()->nullable();
             $table->string('policy_number')->unique()->nullable();
             $table->tinyInteger('entity_type')->nullable();
+            $table->string('color')->nullable();
+            $table->string('risk_level')->nullable();
+            $table->string('diligence')->nullable();
+            $table->timestamp('last_evaluation')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

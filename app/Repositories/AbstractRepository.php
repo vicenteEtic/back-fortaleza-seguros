@@ -29,7 +29,7 @@ abstract class AbstractRepository
         $query = $this->model->query();
 
         if (in_array(SoftDeletes::class, class_uses($this->model))) {
-            if($withTrashed == true){
+            if ($withTrashed == true) {
                 $query = $query->withTrashed();
             }
         }
@@ -133,6 +133,18 @@ abstract class AbstractRepository
     public function store(array $data)
     {
         return $this->model->create($data);
+    }
+
+    /**
+     * Store a new resource or update an existing one.
+     *
+     * @param array $attributes Attributes to find the record.
+     * @param array $values Values to update or create.
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function storeOrUpdate(array $attributes, array $values = [])
+    {
+        return $this->model->updateOrCreate($attributes, $values);
     }
 
     /**

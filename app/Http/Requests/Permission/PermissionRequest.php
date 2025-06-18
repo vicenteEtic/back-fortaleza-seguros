@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Diligence;
+namespace App\Http\Requests\Permission;
 
 use App\Http\Requests\BaseFormRequest;
 
-class DiligenceRequest extends BaseFormRequest
+class PermissionRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,23 +23,17 @@ class DiligenceRequest extends BaseFormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'max' => ['required', 'integer'],
-            'min' => ['required', 'integer'],
-            'risk' => ['required', 'string', 'max:255'],
-            'color' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'is_active' => ['required', 'boolean'],
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Nome',
-            'description' => 'Descrição',
-            'max' => 'Valor Máximo',
-            'min' => 'Valor Mínimo',
-            'risk' => 'Risco',
-            'color' => 'Cor',
+            'name' => 'Nome da Permissão',
+            'description' => 'Descrição da Permissão',
+            'is_active' => 'Status'
         ];
     }
 }

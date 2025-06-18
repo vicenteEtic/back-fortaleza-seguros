@@ -31,7 +31,7 @@ class UserService extends AbstractService
         $token = Auth::attempt($credentials);
 
         if (!$token) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Email ou senha incorretos'], 401);
         }
 
         $user = Auth::user();

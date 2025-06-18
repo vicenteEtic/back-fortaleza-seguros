@@ -68,8 +68,6 @@ class RiskAssessmentService extends AbstractService
         ]);
     }
 
-
-
     private function calculateTotalScore($riskAssessment, $totalRiskProduct): int
     {
         $fromEstablishment = $riskAssessment->form_establishment == 0 ? 1 : 3;

@@ -33,5 +33,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ProfissionPSeed::class);
 
         $this->call(ChannelSeed::class);
+        $this->call(PermissionSeed::class);
     }
 }

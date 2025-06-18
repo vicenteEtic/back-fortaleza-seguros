@@ -20,5 +20,9 @@ Route::put('{entity}', [EntitiesController::class, 'update'])
     ->middleware('can:entidades-edit');
 
 Route::delete('{entity}', [EntitiesController::class, 'destroy'])
+<<<<<<< 25-implementar-mddulo-de-avaliacao-de-risco
+    ->name('entities.destroy');
+=======
     ->name('entities.destroy')
     ->middleware('can:entidades-delete');
+>>>>>>> develop

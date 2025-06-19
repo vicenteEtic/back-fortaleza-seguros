@@ -5,10 +5,8 @@ namespace App\Services\Entities;
 use App\Services\AbstractService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Diligence\DiligenceService;
-use App\Repositories\Entities\ProductRiskRepository;
 use App\Repositories\Entities\RiskAssessmentRepository;
 use App\Repositories\Indicator\IndicatorTypeRepository;
-use App\Repositories\Entities\BeneficialOwnerRepository;
 
 class RiskAssessmentService extends AbstractService
 {
@@ -93,5 +91,35 @@ class RiskAssessmentService extends AbstractService
             'color' => $diligence?->color,
             'last_evaluation' => now()
         ]);
+    }
+
+
+    public function getTotalRiskLevelByCategory(): array
+    {
+        return $this->repository->totalRiskLevelByCategory();
+    }
+
+    public function getTotalRiskLevelByProfession(): array
+    {
+        return $this->repository->totalRiskLevelByProfession();
+    }
+
+    public function getTotalRiskLevelByChannel(): array
+    {
+        return $this->repository->totalRiskLevelByChannel();
+    }
+
+    public function getTotalRiskLevelByPep(): array
+    {
+        return $this->repository->totalRiskLevelByPep();
+    }
+
+    public function getTotalRiskLevelByCountryResidence(): array
+    {
+        return $this->repository->totalRiskLevelByCountryResidence();
+    }
+    public function getTotalRiskLevelByNationality(): array
+    {
+        return $this->repository->totalRiskLevelByNationality();
     }
 }

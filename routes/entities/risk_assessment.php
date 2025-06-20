@@ -33,5 +33,8 @@ Route::get('total-risk-level-by-country-residence', [RiskAssessmentController::c
 Route::get('total-risk-level-by-nationality', [RiskAssessmentController::class, 'getTotalRiskLevelByNationality'])
     ->name('risk_assessment.total_risk_level_by_nationality');
 
+Route::get('heat-map/{year?}', [RiskAssessmentController::class, 'getHeatMap'])
+    ->name('risk_assessment.heat_map');
+
 Route::get('{id}', [RiskAssessmentController::class, 'show'])
     ->name('risk_assessment.show');

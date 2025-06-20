@@ -78,7 +78,7 @@ class RiskAssessment extends Model
 
     public function productRisk()
     {
-        return $this->belongsToMany(productRisk::class, 'product_risk', 'risk_assessment_id');
+        return $this->hasMany(productRisk::class, 'risk_assessment_id');
     }
 
     public function beneficialOwners()

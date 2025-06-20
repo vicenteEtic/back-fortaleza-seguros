@@ -3,10 +3,10 @@
 namespace App\Repositories\Entities;
 
 use App\Enum\TypeEntity;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use App\Models\entities\RiskAssessment;
 use App\Repositories\AbstractRepository;
-use Illuminate\Support\Collection;
 
 class RiskAssessmentRepository extends AbstractRepository
 {
@@ -147,5 +147,48 @@ class RiskAssessmentRepository extends AbstractRepository
             'indicator_type',
             'indicator_type.description'
         );
+    }
+
+
+    public  function getDistinctYears(): array
+    {
+        return $this->model->select(DB::raw('YEAR(created_at) as ano'))
+            ->distinct()
+            ->orderBy('ano', 'desc')
+            ->pluck('ano')
+            ->toArray();
+    }
+
+    public  function getMonthlyData(int $year): array
+    {
+        $monthlyData = $this->model
+            ->select(
+                DB::raw('MONTH(risk_assessment.created_at) AS month'),
+                DB::raw('MONTHNAME(risk_assessment.created_at) AS monthName'),
+                DB::raw('risk_assessment.diligence AS name'),
+                DB::raw('COUNT(*) AS total'),
+                'diligence.color'  // Supondo que a cor esteja na tabela 'diligences'
+            )
+            ->join('diligence', 'diligence.name', '=', 'risk_assessment.diligence') // Adiciona o JOIN com a tabela de diligências
+            ->whereYear('risk_assessment.created_at', $year)
+            ->groupBy('month', 'monthName', 'name', 'diligence.color')  // Agora estamos agrupando pela cor também
+            ->orderBy('month')
+            ->get()
+            ->toArray();
+
+        return $monthlyData;
+    }
+
+    public function getTotalRiskAssessments(): int
+    {
+        return $this->model->count();
+    }
+    public function getLastAssessment(int $limit = 3): ?Collection
+    {
+        return $this->model
+            ->with(['entity', 'user', 'productRisk'])
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)
+            ->get();
     }
 }

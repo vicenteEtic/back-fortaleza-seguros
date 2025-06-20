@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\DashboardRequest;
 use App\Services\Dashboard\DashboardService;
 
 class DashboardController extends Controller

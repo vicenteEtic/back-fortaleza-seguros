@@ -5,7 +5,7 @@ namespace App\Repositories\Entities;
 use App\Enum\TypeEntity;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use App\Models\entities\RiskAssessment;
+use App\Models\Entities\RiskAssessment;
 use App\Repositories\AbstractRepository;
 
 class RiskAssessmentRepository extends AbstractRepository

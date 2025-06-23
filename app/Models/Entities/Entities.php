@@ -12,6 +12,7 @@ class Entities extends Model
     protected $table = 'entities';
     protected $primaryKey = 'id';
     protected $fillable = [
+        'name',
         'social_denomination',
         'policy_number',
         'customer_number',

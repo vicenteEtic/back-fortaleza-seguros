@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Jobs;
+
+use App\External\PepExternalApi;
+use App\Models\Alerta\Alerta;
+use App\Models\Entities\BeneficialOwner;
+use App\Models\Entities\Entities;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+
+class GestaoAlertaJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, SerializesModels;
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
+    {
+        $this->processEntities(Entities::all(), 'social_denomination');
+        $this->processEntities(BeneficialOwner::all(), 'name');
+    }
+
+    /**
+     * Process entities and create alerts based on external API data.
+     *
+     * @param \Illuminate\Database\Eloquent\Collection $entities
+     * @param string $nameField
+     * @return void
+     */
+    private function processEntities($entities, string $nameField): void
+    {
+        foreach ($entities as $entity) {
+            $entityName = $entity->$nameField;
+            Log::info("Processing entity: {$entityName}");
+
+            try {
+                $externalData = PepExternalApi::getDataPepExternal($entityName);
+
+                if (empty($externalData)) {
+                    Log::info("No data found for entity: {$entityName}");
+                    continue;
+                }
+
+                $this->createAlerts($externalData, $entity->id);
+            } catch (\Exception $e) {
+                Log::error("Error processing entity {$entityName}: {$e->getMessage()}");
+            }
+        }
+    }
+
+    /**
+     * Create alerts from external API data.
+     *
+     * @param array $data
+     * @param int $entityId
+     * @return void
+     */
+    private function createAlerts(array $data, int $entityId): void
+    {
+        foreach ($data as $item) {
+            Log::info("Creating alert for: {$item['name']}");
+    
+
+            Alerta::create([
+                'name' => $item['name'],
+                'level' => 'high',
+                'from_id' => $entityId,
+                'origin_id' => $item['id'],
+                'entity_id' => $entityId,
+                'score' => $item['score'] ?? 0,
+            ]);
+        }
+    }
+}

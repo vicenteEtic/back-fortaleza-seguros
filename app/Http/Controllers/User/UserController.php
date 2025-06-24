@@ -69,4 +69,15 @@ class UserController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    public function me()
+    {
+        try {
+            $this->logRequest();
+            $user = $this->service->me();
+            return response()->json($user, Response::HTTP_OK);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

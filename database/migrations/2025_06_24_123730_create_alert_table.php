@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('alerta', function (Blueprint $table) {
+        Schema::create('alert', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 100)->nullable();
             $table->string('level')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('alerta');
+        Schema::dropIfExists('alert');
     }
 };

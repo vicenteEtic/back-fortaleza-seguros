@@ -47,4 +47,9 @@ class UserService extends AbstractService
         $user->currentAccessToken()->delete();
         return true;
     }
+
+    public function me()
+    {
+        return Auth::user()->load('role', 'role.permissions');
+    }
 }

@@ -2,23 +2,40 @@
 
 namespace App\Http\Controllers\Indicator;
 
+use App\EndicatorKey\IndicatorKeys;
 use App\Http\Controllers\AbstractController;
 use App\Http\Requests\Indicator\IndicatorRequest;
 use App\Services\Indicator\IndicatorService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 class IndicatorController extends AbstractController
 {
+
+    protected IndicatorService $indicatorService;
+
+
     public function __construct(IndicatorService $service)
     {
-        $this->service = $service;
+        parent::__construct($service);
+        $this->indicatorService = $service;
+    }
+    public function index(Request $request)
+    {
+        try {
+        $indicators = $this->indicatorService->getIndicatorsByFk(IndicatorKeys::FK_MAP);
+        return response()->json($indicators);
+   
+        } catch (\Throwable $th) {
+            $this->logRequest($th);
+            return response()->json(['error' => 'Erro ao buscar os dados.'], 500);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(IndicatorRequest $request)
     {
         try {

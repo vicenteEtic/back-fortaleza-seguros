@@ -16,10 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('risk_assessment')->group(base_path('routes/entities/risk_assessment.php'));
     Route::prefix('pep')->group(base_path('routes/entities/pep.php'));
     Route::prefix('alert')->group(base_path('routes/alert/alert.php'));
-<<<<<<< HEAD
-=======
     Route::prefix('dashboard')->group(base_path('routes/entities/dashboard.php'));
->>>>>>> a0d5663c4356e7f7b759c5d06c0adbb52b42266e
 });
 
 Route::prefix('auth')->middleware('guest')->group(base_path('routes/user/auth.php'));

@@ -150,9 +150,15 @@ abstract class AbstractRepository
     /**
      * Display the specified resource.
      */
-    public function show(int|string $id)
+    public function show(int|string $id, array $relationships = [])
     {
-        return $this->model->findOrFail($id);
+        $query = $this->model->query();
+
+        if (!empty($relationships)) {
+            $query = $query->with($relationships);
+        }
+
+        return $query->findOrFail($id);
     }
 
     /**

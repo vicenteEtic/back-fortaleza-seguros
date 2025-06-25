@@ -21,4 +21,18 @@ class IndicatorTypeRepository extends AbstractRepository
     {
         return $this->model->whereIn('id', $ids);
     }
+
+    public function getIndicatorsByFk(array $indicators): array
+    {
+        $data = [];
+
+        foreach ($indicators as $key => $fk) {
+            $data[$key] = $this->model::where('indicator_id', $fk)
+                ->orderBy('description', 'asc')
+                ->get()
+                ->toArray();
+        }
+
+        return $data;
+    }
 }

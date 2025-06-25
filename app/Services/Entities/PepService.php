@@ -8,6 +8,7 @@ use App\Services\AbstractService;
 
 class PepService extends AbstractService
 {
+
     public function __construct(PepRepository $repository, private readonly PepExternalApi $pepExternalApi)
     {
         parent::__construct($repository);

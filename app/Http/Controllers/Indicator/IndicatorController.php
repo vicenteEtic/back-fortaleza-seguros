@@ -23,7 +23,7 @@ class IndicatorController extends AbstractController
         parent::__construct($service);
         $this->indicatorService = $service;
     }
-    public function index(Request $request)
+    public function getIndicatorsByFk(Request $request)
     {
         try {
         $indicators = $this->indicatorService->getIndicatorsByFk(IndicatorKeys::FK_MAP);

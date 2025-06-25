@@ -13,6 +13,38 @@ use InvalidArgumentException;
 class RiskAssessmentService extends AbstractService
 {
 
+    public function index(?int $paginate, ?array $filterParams, ?array $orderByParams, $relationships = [])
+    {
+        $relationships =  [
+            'entity',
+            'user',
+            'profession',
+            'indetificationCapacity',
+            'channel',
+            'countryResidence',
+            'category',
+            'nationlity',
+            'beneficialOwners'
+        ];
+        return $this->repository->index($paginate, $filterParams, $orderByParams, $relationships);
+    }
+
+    public function show($id)
+    {
+        $relationships =  [
+            'entity',
+            'user',
+            'profession',
+            'indetificationCapacity',
+            'channel',
+            'countryResidence',
+            'category',
+            'nationlity',
+            'beneficialOwners'
+        ];
+        return $this->repository->show($id, $relationships);
+    }
+
     private const MONTHS = [
         1 => 'Janeiro',
         2 => 'Fevereiro',

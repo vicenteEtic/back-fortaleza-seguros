@@ -12,4 +12,9 @@ class Indicator extends Model
     protected $table = 'indicator';
     protected $primaryKey = 'id';
     protected $fillable = ['name', 'description', 'created_at', 'updated_at'];
+
+    public function indicatorType()
+    {
+        return $this->hasMany(IndicatorType::class, 'indicator_id');
+    }
 }

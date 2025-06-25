@@ -19,9 +19,18 @@ class IndicatorService extends AbstractService
         $this->indicatorTypeRepository = $indicatorTypeRepository;
     }
 
-
-    public function getIndicatorsByFk(array $indicators)
+    private  $EndicatorKey = [
+        'capacity_identification'     => 1,
+        'form_legal'                  => 3,
+        'type_activity'               => 5,
+        'risk_products'               => 7,
+        'countries'                   => 9,
+        'type_activity_collective'    => 10,
+        'channels'                    => 11,
+        'Cae'                         => 12,
+    ];
+    public function getIndicatorsByFk()
     {
-        return $this->indicatorTypeRepository->getIndicatorsByFk($indicators);
+        return $this->indicatorTypeRepository->getIndicatorsByFk($this->EndicatorKey);
     }
 }

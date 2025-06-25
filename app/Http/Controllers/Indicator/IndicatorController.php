@@ -14,21 +14,16 @@ use Illuminate\Http\Request;
 
 class IndicatorController extends AbstractController
 {
-
-    protected IndicatorService $indicatorService;
-
-
     public function __construct(IndicatorService $service)
     {
-        parent::__construct($service);
-        $this->indicatorService = $service;
+        $this->service = $service;
     }
     public function getIndicatorsByFk(Request $request)
     {
         try {
-            $indicators = $this->indicatorService->getIndicatorsByFk();
+            $indicators = $this->service->getIndicatorsByFk();
             return response()->json($indicators);
-        } catch (\Throwable $th) { 
+        } catch (\Throwable $th) {
             $this->logRequest($th);
             return response()->json(['error' => 'Erro ao buscar os dados.'], 500);
         }

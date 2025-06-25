@@ -2,17 +2,17 @@
 
 namespace App\Jobs;
 
+use App\Models\Alert\Alert;
 use App\External\PepExternalApi;
-use App\Models\Alerta\Alerta;
-use App\Models\Entities\BeneficialOwner;
 use App\Models\Entities\Entities;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Queue\SerializesModels;
+use App\Models\Entities\BeneficialOwner;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class GestaoAlertaJob implements ShouldQueue
+class AlertJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, SerializesModels;
 
@@ -64,11 +64,12 @@ class GestaoAlertaJob implements ShouldQueue
     {
         foreach ($data as $item) {
             Log::info("Creating alert for: {$item['name']}");
-    
 
-            Alerta::create([
+            Alert::createOrUpdate([
+                'origin_id' => $item['id']
+            ], [
                 'name' => $item['name'],
-                'level' => 'high',
+                'level' => 'Alto',
                 'from_id' => $entityId,
                 'origin_id' => $item['id'],
                 'entity_id' => $entityId,

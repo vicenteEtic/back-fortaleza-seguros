@@ -2,17 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\GestaoAlertaJob;
+use App\Jobs\AlertJob;
 use Illuminate\Console\Command;
 
-class GerarAlertaPepCommand extends Command
+class UpdateAlertPepCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:gerar-alerta-pep-command';
+    protected $signature = 'app:update-alert-pep-command';
 
     /**
      * The console command description.
@@ -26,6 +26,6 @@ class GerarAlertaPepCommand extends Command
      */
     public function handle()
     {
-        GestaoAlertaJob::dispatch();
+        AlertJob::dispatch();
     }
 }

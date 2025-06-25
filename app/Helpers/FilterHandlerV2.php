@@ -127,7 +127,8 @@ class FilterHandlerV2
     private function applyIlike($query, $field, $value)
     {
         $this->handleRelation($query, $field, function ($q, $field) use ($value) {
-            $q->where(DB::raw('unaccent(CAST(' . $field . ' AS TEXT))'), 'ilike', DB::raw('unaccent(\'%' . $value . '%\')'));
+            // Para MySQL, use LIKE e COLLATE para case-insensitive e acentuação-insensitive (se disponível)
+            $q->where($field, 'LIKE', '%' . $value . '%');
         });
     }
 

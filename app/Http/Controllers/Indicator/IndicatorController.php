@@ -26,10 +26,9 @@ class IndicatorController extends AbstractController
     public function getIndicatorsByFk(Request $request)
     {
         try {
-        $indicators = $this->indicatorService->getIndicatorsByFk(IndicatorKeys::FK_MAP);
-        return response()->json($indicators);
-   
-        } catch (\Throwable $th) {
+            $indicators = $this->indicatorService->getIndicatorsByFk();
+            return response()->json($indicators);
+        } catch (\Throwable $th) { 
             $this->logRequest($th);
             return response()->json(['error' => 'Erro ao buscar os dados.'], 500);
         }

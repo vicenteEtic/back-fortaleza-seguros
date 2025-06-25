@@ -9,7 +9,8 @@ Route::get('', [IndicatorController::class, 'index'])
 
 Route::post('', [IndicatorController::class, 'store'])
     ->name('indicator.store');
-
+    Route::get('getIndicatorsByFk', [IndicatorController::class, 'getIndicatorsByFk'])
+    ->name('indicator.getIndicatorsByFk');
 Route::get('{indicator}', [IndicatorController::class, 'show'])
     ->name('indicator.show');
 
@@ -18,6 +19,9 @@ Route::put('{indicator}', [IndicatorController::class, 'update'])
 
 Route::delete('{indicator}', [IndicatorController::class, 'destroy'])
     ->name('indicator.destroy');
+
+
+
 
 Route::get('type', [IndicatorTypeController::class, 'index'])
     ->name('indicator.type.index');

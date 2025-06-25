@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Indicator;
 
-use App\EndicatorKey\IndicatorKeys;
-use App\Http\Controllers\AbstractController;
-use App\Http\Requests\Indicator\IndicatorRequest;
-use App\Services\Indicator\IndicatorService;
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Controllers\AbstractController;
+use App\Services\Indicator\IndicatorService;
+use App\Http\Requests\Indicator\IndicatorRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class IndicatorController extends AbstractController
 {

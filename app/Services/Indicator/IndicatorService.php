@@ -27,7 +27,7 @@ class IndicatorService extends AbstractService
         'countries'                   => 9,
         'type_activity_collective'    => 10,
         'channels'                    => 11,
-        'Cae'                         => 12,
+        'cae'                         => 12,
     ];
     public function getIndicatorsByFk()
     {

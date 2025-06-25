@@ -9,16 +9,6 @@ use App\Services\AbstractService;
 
 class IndicatorService extends AbstractService
 {
-    protected IndicatorTypeRepository $indicatorTypeRepository;
-
-    public function __construct(
-        IndicatorRepository $repository,
-        IndicatorTypeRepository $indicatorTypeRepository
-    ) {
-        parent::__construct($repository);
-        $this->indicatorTypeRepository = $indicatorTypeRepository;
-    }
-
     private  $EndicatorKey = [
         'capacity_identification'     => 1,
         'form_legal'                  => 3,
@@ -29,6 +19,17 @@ class IndicatorService extends AbstractService
         'channels'                    => 11,
         'cae'                         => 12,
     ];
+    protected IndicatorTypeRepository $indicatorTypeRepository;
+
+    public function __construct(
+        IndicatorRepository $repository,
+        IndicatorTypeRepository $indicatorTypeRepository
+    ) {
+        parent::__construct($repository);
+        $this->indicatorTypeRepository = $indicatorTypeRepository;
+    }
+
+
     public function getIndicatorsByFk()
     {
         return $this->indicatorTypeRepository->getIndicatorsByFk($this->EndicatorKey);

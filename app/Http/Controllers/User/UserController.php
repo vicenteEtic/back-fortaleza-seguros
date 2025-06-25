@@ -10,7 +10,6 @@ use App\Http\Requests\User\AuthRequest;
 use App\Http\Requests\User\UserRequest;
 use App\Http\Controllers\AbstractController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends AbstractController
 {
@@ -65,6 +64,17 @@ class UserController extends AbstractController
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    public function me()
+    {
+        try {
+            $this->logRequest();
+            $user = $this->service->me();
+            return response()->json($user, Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

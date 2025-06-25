@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Models\Alerta;
+namespace App\Models\Alert;
 
+use App\Models\Entities\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Alerta extends Model
+class Alert extends Model
 {
     use HasFactory;
-    protected $table = 'alerta';
+    protected $table = 'alert';
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
@@ -17,4 +18,9 @@ class Alerta extends Model
         'entity_id',
         'score'
     ];
+
+    public function entity()
+    {
+        return $this->belongsTo(Entities::class, 'entity_id');
+    }
 }

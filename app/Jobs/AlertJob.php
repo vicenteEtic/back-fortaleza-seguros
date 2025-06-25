@@ -65,7 +65,9 @@ class AlertJob implements ShouldQueue
         foreach ($data as $item) {
             Log::info("Creating alert for: {$item['name']}");
 
-            Alert::create([
+            Alert::createOrUpdate([
+                'origin_id' => $item['id']
+            ], [
                 'name' => $item['name'],
                 'level' => 'Alto',
                 'from_id' => $entityId,

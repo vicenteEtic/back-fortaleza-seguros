@@ -19,7 +19,7 @@ class  DiligenceSeeder extends Seeder
         $RiskType = [
 
             ['risk' => "Baixo", 'name' => 'Simplificada', 'min' => "0", 'max' => "10", 'color' => "#92D050"],
-            ['risk' => "Médio", 'name' => 'Standard', 'min' => "12", 'max' => "19", 'color' => "#ffc107"],
+            ['risk' => "Médio", 'name' => 'Standard', 'min' => "11", 'max' => "19", 'color' => "#ffc107"],
             ['risk' => "Alto", 'name' => 'Reforçada', 'min' => "20", 'max' => "100", 'color' => "#FFC000"],
             ['risk' => "Inaceitável", 'name' => 'Cliente Inaceitável', 'min' => "101", 'max' => "150", 'color' => "#ff0000"],
         ];

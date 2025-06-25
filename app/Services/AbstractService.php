@@ -29,6 +29,11 @@ abstract class AbstractService
         return $this->repository->store($data);
     }
 
+    public function storeOrUpdate(array $attributes, array $values = [])
+    {
+        return $this->repository->storeOrUpdate($attributes, $values);
+    }
+
     /**
      * Display the specified resource.
      */

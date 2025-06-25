@@ -20,4 +20,17 @@ class PepExternalApi
         }
         return response()->json(['error' => 'Failed to fetch data from PEP API'], $api->status());
     }
+
+    public static function getAllPep($name)
+    {
+        $api = Http::get(env('URL_PEP_API') . '/pep', [
+            "filters" => [
+                "name" =>  $name
+            ]
+        ]);
+        if ($api->successful()) {
+            return $api->json();
+        }
+        return response()->json(['error' => 'Failed to fetch data from PEP API'], $api->status());
+    }
 }

@@ -16,7 +16,10 @@ class Alert extends Model
         'level',
         'origin_id',
         'entity_id',
-        'score'
+        'score',
+        'type',
+        'list',
+        'is_active'
     ];
 
     public function entity()

@@ -25,7 +25,8 @@ class RiskAssessmentService extends AbstractService
             'category',
             'nationlity',
             'beneficialOwners',
-            'productRisk'
+            'productRisk',
+            'productRisk.product'
         ];
         return $this->repository->index($paginate, $filterParams, $orderByParams, $relationships);
     }
@@ -42,7 +43,8 @@ class RiskAssessmentService extends AbstractService
             'category',
             'nationlity',
             'beneficialOwners',
-            'productRisk'
+            'productRisk',
+            'productRisk.product'
         ];
         return $this->repository->show($id, $relationships);
     }
@@ -115,7 +117,8 @@ class RiskAssessmentService extends AbstractService
             'category',
             'nationlity',
             'beneficialOwners',
-            'productRisk'
+            'productRisk',
+            'productRisk.product'
         ]);
     }
 

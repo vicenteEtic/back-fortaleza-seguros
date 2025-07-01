@@ -42,8 +42,8 @@ class RiskAssessment extends Model
     public $casts = [
         'form_establishment' => FormEstablishment::class,
         'status_residence' =>  StatusResidence::class,
-        'type_assessment' => TypeAssessment::class,
-        'status' => StatusAssessment::class
+        // 'type_assessment' => TypeAssessment::class,
+        // 'status' => StatusAssessment::class
     ];
     public function entity()
     {

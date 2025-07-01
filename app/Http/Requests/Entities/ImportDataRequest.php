@@ -22,6 +22,20 @@ class ImportDataRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
+            '*.beneficial_owner'     => ['nullable', 'string'],
+            '*.category'             => ['nullable', 'string'],
+            '*.channel'              => ['nullable', 'string'],
+            '*.country_residence'    => ['nullable', 'string'],
+            '*.customer_number'      => ['nullable', 'integer'],
+            '*.entity_type'          => ['nullable', 'integer'],
+            '*.form_establishment'   => ['nullable', 'boolean'],
+            '*.nationality'          => ['nullable', 'string'],
+            '*.pep'                  => ['nullable', 'boolean'],
+            '*.policy_number'        => ['nullable', 'integer'],
+            '*.product_risk'         => ['nullable', 'string'],
+            '*.profession'           => ['nullable', 'string'],
+            '*.social_denomination'  => ['nullable', 'string'],
+            '*.status_residence'     => ['nullable', 'boolean'],
         ];
     }
 }

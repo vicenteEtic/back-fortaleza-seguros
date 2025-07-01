@@ -39,18 +39,21 @@ class EntitiesService extends AbstractService
         $timeLimit = Carbon::now()->subSeconds(self::TIME_LIMIT_SECONDS);
         $existingRecord = $this->riskAssessmentControlService->findOneBy(
             [
-                'updated_at',
-                '>=',
-                $timeLimit
+                [
+                    'updated_at',
+                    '>=',
+                    $timeLimit
+                ]
             ]
         );
 
         if (!$existingRecord) {
             $dataArray = $this->riskAssessmentControlService->store([
-                'sucess' => 0,
+                'total_sucess' => 0,
                 'error' => 0,
-                'fk_user' => $userId,
-                'total' => 0,
+                'user_id' => $userId,
+                'total_error' => 0,
+                'total' => 0
             ]);
             $recordId = $dataArray->id;
         } else {

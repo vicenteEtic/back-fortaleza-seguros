@@ -72,7 +72,8 @@ class RiskAssessmentService extends AbstractService
 
     public function store(array $data)
     {
-        $data['user_id'] = Auth::id();
+        $data['user_id'] = Auth::id() ?? $data['user_id'];
+
         $riskAssessment = $this->repository->store($data);
 
         if (isset($data['beneficial_owners'])) {

@@ -2,16 +2,18 @@
 
 namespace App\Jobs;
 
-use App\Enum\StatusAssessment;
 use App\Enum\TypeAssessment;
-use App\Models\Entities\RiskAssessmentControl;
-use App\Services\Entities\RiskAssessmentService;
 use Illuminate\Bus\Queueable;
+use App\Enum\StatusAssessment;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Entities\RiskAssessmentControl;
+use App\Services\Entities\EntitiesService;
+use App\Services\Entities\RiskAssessmentService;
+use App\Services\Indicator\IndicatorTypeService;
 
 class ImportDataJob implements ShouldQueue
 {
@@ -61,28 +63,40 @@ class ImportDataJob implements ShouldQueue
 
         $data = $this->prepareAssessmentData($record);
         $data['user_id'] = $this->userID;
-        $data['type_assessment'] = TypeAssessment::IMPORT; // Import type
-        $data['status'] = StatusAssessment::SUCESS; // Success
+        $data['type_assessment'] = TypeAssessment::IMPORT->value; // Import type
+        $data['status'] = StatusAssessment::SUCESS->value; // Success
 
         $riskAssessment = $this->riskAssessmentService->store($data);
     }
 
     private function prepareAssessmentData(array $record): array
     {
+        $indicatorService = app(IndicatorTypeService::class);
+        $entityService = app(EntitiesService::class);
+
+        $entity = $entityService->storeOrUpdate(
+            [
+                'policy_number' => $record['policy_number'],
+                'customer_number' => $record['customer_number'],
+            ],
+            [
+                'policy_number' => $record['policy_number'],
+                'customer_number' => $record['customer_number'],
+                'social_denomination' => $record['social_denomination'],
+                'entity_type' => $record['entity_type'],
+            ]
+        );
         return [
-            'policy_number' => $record['policy_number'],
-            'customer_number' => $record['customer_number'],
-            'social_denomination' => $record['social_denomination'],
-            'entity_type' => $record['entity_type'],
-            'profession' => $record['profession'],
+            'entity_id' => $entity->id,
+            'profession' => $indicatorService->getByDescription($record['profession']),
             'form_establishment' => (bool)$record['form_establishment'],
             'status_residence' => (bool)$record['status_residence'],
             'pep' => $this->normalizePepValue($record['pep']),
-            'category' => $record['category'],
-            'channel' => $record['channel'],
+            'category' => $indicatorService->getByDescription($record['category']),
+            'channel' => $indicatorService->getByDescription($record['channel']),
             'product_risk' => [$record['product_risk']],
-            'country_residence' => $record['country_residence'],
-            'nationality' => $record['nationality'] ?? $record['country_residence'],
+            'country_residence' => $indicatorService->getByDescription($record['country_residence']),
+            'nationality' => $indicatorService->getByDescription($record['nationality']),
             'beneficial_owners' => $record['beneficial_owner'] ? [['name' => $record['beneficial_owner'], 'pep' => '']] : [],
         ];
     }

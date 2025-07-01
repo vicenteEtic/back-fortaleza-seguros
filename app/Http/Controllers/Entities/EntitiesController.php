@@ -54,6 +54,7 @@ class EntitiesController extends AbstractController
 
     public function storeImportData(ImportDataRequest $request)
     {
+
         try {
             $this->logRequest();
             $batchId = $this->service->initializeImportBatch(Auth::id());

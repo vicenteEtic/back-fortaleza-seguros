@@ -67,7 +67,7 @@ class EntitiesService extends AbstractService
         $chunks = array_chunk($data, self::BATCH_SIZE);
 
         foreach ($chunks as $index => $chunk) {
-            ImportDataJob::dispatch($chunk, $userId)
+            ImportDataJob::dispatch($chunk, $userId, $batchId)
                 ->onQueue('default')
                 ->delay(now()->addSeconds($index * 10));
         }

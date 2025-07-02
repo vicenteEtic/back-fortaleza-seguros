@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Entities\RiskAssessmentControlController;
 use App\Http\Controllers\Entities\RiskAssessmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', [RiskAssessmentController::class, 'index'])
     ->name('risk_assessment.index');
+
+Route::get('risk-assessment-control', [RiskAssessmentControlController::class, 'index'])
+    ->name('risk_assessment_control.index');
 
 Route::post('', [RiskAssessmentController::class, 'store'])
     ->name('risk_assessment.store');

@@ -50,7 +50,7 @@ class RiskAssessmentRepository extends AbstractRepository
                 ->where('entities.entity_type', $type);
 
             if ($joinTable) {
-                $query->join('indicator_type', 'indicator_type.id', '=', $groupByField);
+                $query->join('indicator_type', 'indicator_type.id', '=', "risk_assessment.$groupByField");
             }
 
             $select = array_merge(
@@ -63,9 +63,17 @@ class RiskAssessmentRepository extends AbstractRepository
                 [DB::raw('COUNT(*) AS total_geral')]
             );
 
+            // Adjust the groupBy clause
+            $groupBy = ["risk_assessment.$groupByField"];
+            if ($joinTable && $nameField === 'indicator_type.description') {
+                $groupBy[] = 'indicator_type.description';
+            } elseif (!$joinTable && $nameField === '(CASE WHEN pep = 1 THEN "SIM" ELSE "NÃO" END)') {
+                $groupBy[] = 'risk_assessment.pep';
+            }
+
             $data = $query
                 ->select($select)
-                ->groupBy("risk_assessment.$groupByField")
+                ->groupBy($groupBy)
                 ->get();
 
             $results[$key] = $this->formatResults($data);

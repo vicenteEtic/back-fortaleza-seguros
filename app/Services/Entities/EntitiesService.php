@@ -59,8 +59,6 @@ class EntitiesService extends AbstractService
         } else {
             $recordId = $existingRecord->id;
         }
-
-        Cache::put('Error_id', $recordId);
         return $recordId;
     }
 

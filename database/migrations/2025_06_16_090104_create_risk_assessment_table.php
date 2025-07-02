@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('risk_assessment', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('identification_capacity');
-            $table->unsignedBigInteger('form_establishment');
-            $table->unsignedBigInteger('category');
-            $table->tinyInteger('status_residence');
-            $table->unsignedBigInteger('profession');
-            $table->boolean('pep');
-            $table->unsignedBigInteger('country_residence');
-            $table->unsignedBigInteger('nationality');
+            $table->unsignedBigInteger('identification_capacity')->nullable();
+            $table->unsignedBigInteger('form_establishment')->nullable();
+            $table->unsignedBigInteger('category')->nullable();
+            $table->tinyInteger('status_residence')->nullable();
+            $table->unsignedBigInteger('profession')->nullable();
+            $table->boolean('pep')->default(0);
+            $table->unsignedBigInteger('country_residence')->nullable();
+            $table->unsignedBigInteger('nationality')->nullable();
             $table->unsignedBigInteger('entity_id');
-            $table->unsignedBigInteger('channel');
+            $table->unsignedBigInteger('channel')->nullable();
             $table->unsignedBigInteger('score')->nullable();
             $table->string('color')->nullable();
             $table->string('risk_level')->nullable();

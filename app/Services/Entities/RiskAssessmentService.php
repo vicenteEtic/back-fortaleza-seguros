@@ -2,16 +2,43 @@
 
 namespace App\Services\Entities;
 
+use App\Jobs\GenerateAlertsJob;
 use App\Services\AbstractService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Diligence\DiligenceService;
 use App\Repositories\Entities\RiskAssessmentRepository;
 use App\Repositories\Indicator\IndicatorTypeRepository;
+use App\Services\Alert\AlertService;
 use Illuminate\Database\Eloquent\Collection;
 use InvalidArgumentException;
 
 class RiskAssessmentService extends AbstractService
 {
+    private const MONTHS = [
+        1 => 'Janeiro',
+        2 => 'Fevereiro',
+        3 => 'Março',
+        4 => 'Abril',
+        5 => 'Maio',
+        6 => 'Junho',
+        7 => 'Julho',
+        8 => 'Agosto',
+        9 => 'Setembro',
+        10 => 'Outubro',
+        11 => 'Novembro',
+        12 => 'Dezembro',
+    ];
+
+    public function __construct(
+        RiskAssessmentRepository $repository,
+        private readonly IndicatorTypeRepository $indicatorTypeRepository,
+        private readonly DiligenceService $diligenceService,
+        private readonly ProductRiskService $productRiskService,
+        private readonly BeneficialOwnerService $beneficialOwnerService,
+        private AlertService $alertService
+    ) {
+        parent::__construct($repository);
+    }
 
     public function index(?int $paginate, ?array $filterParams, ?array $orderByParams, $relationships = [])
     {
@@ -49,34 +76,10 @@ class RiskAssessmentService extends AbstractService
         return $this->repository->show($id, $relationships);
     }
 
-    private const MONTHS = [
-        1 => 'Janeiro',
-        2 => 'Fevereiro',
-        3 => 'Março',
-        4 => 'Abril',
-        5 => 'Maio',
-        6 => 'Junho',
-        7 => 'Julho',
-        8 => 'Agosto',
-        9 => 'Setembro',
-        10 => 'Outubro',
-        11 => 'Novembro',
-        12 => 'Dezembro',
-    ];
-
-    public function __construct(
-        RiskAssessmentRepository $repository,
-        private readonly IndicatorTypeRepository $indicatorTypeRepository,
-        private readonly DiligenceService $diligenceService,
-        private readonly ProductRiskService $productRiskService,
-        private readonly BeneficialOwnerService $beneficialOwnerService
-    ) {
-        parent::__construct($repository);
-    }
-
     public function store(array $data)
     {
-        $data['user_id'] = Auth::id();
+        $data['user_id'] = Auth::id() ?? $data['user_id'];
+
         $riskAssessment = $this->repository->store($data);
 
         if (isset($data['beneficial_owners'])) {
@@ -99,6 +102,14 @@ class RiskAssessmentService extends AbstractService
         $riskAssessment->risk_level = $diligence->risk;
         $riskAssessment->diligence = $diligence->name;
         $riskAssessment->save();
+
+        if ($riskAssessment->entity->entity_type == 1) {
+            GenerateAlertsJob::dispatch($riskAssessment->entity->id, true, $riskAssessment->id)
+                ->onQueue('high');
+        } else {
+            GenerateAlertsJob::dispatch($riskAssessment->entity->id, true, $riskAssessment->id)
+                ->onQueue('high');
+        }
 
         return $riskAssessment;
     }

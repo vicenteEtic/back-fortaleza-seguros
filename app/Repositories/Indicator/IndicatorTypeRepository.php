@@ -22,6 +22,15 @@ class IndicatorTypeRepository extends AbstractRepository
         return $this->model->whereIn('id', $ids);
     }
 
+    public function getByDescription(?string $description = null)
+    {
+        if (is_null($description)) {
+            return null;
+        }
+        return $this->model->where('description', 'like', '%' . $description . '%')->first()?->id ?? null;
+    }
+
+
     public function getIndicatorsByFk(array $indicators): array
     {
         $data = [];

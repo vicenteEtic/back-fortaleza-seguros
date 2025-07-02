@@ -211,4 +211,13 @@ abstract class AbstractRepository
 
         return $model;
     }
+
+    public function findBy(array $criteria)
+    {
+        $model = $this->model->query()
+            ->where($criteria)
+            ->get();
+
+        return $model;
+    }
 }

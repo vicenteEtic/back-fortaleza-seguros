@@ -7,6 +7,9 @@ Route::get('', [EntitiesController::class, 'index'])
     ->name('entities.index')
     ->middleware('can:entidades-show');
 
+Route::post('import', [EntitiesController::class, 'storeImportData'])
+    ->name('entities.import');
+
 Route::post('', [EntitiesController::class, 'store'])
     ->name('entities.store')
     ->middleware('can:entidades-create');

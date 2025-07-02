@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 abstract class Controller
 {
@@ -17,9 +16,9 @@ abstract class Controller
         $requestFiltered = $this->filterSensitiveData($request);
         if (app()->environment() !== 'testing') {
             if ($e) {
-                Log::channel('generic')->error($e->getMessage(), ['Payload: ' . json_encode($requestFiltered), 'Trace: ' . $e->getTraceAsString()]);
+                Log::error($e->getMessage(), ['Payload: ' . json_encode($requestFiltered), 'Trace: ' . $e->getTraceAsString()]);
             } else {
-                Log::channel('generic')->info('URL: ' . request()->getRequestUri() . PHP_EOL . 'Método: ' . request()->method(), ['Payload: ' . json_encode($requestFiltered)]);
+                Log::info('URL: ' . request()->getRequestUri() . PHP_EOL . 'Método: ' . request()->method(), ['Payload: ' . json_encode($requestFiltered)]);
             }
         }
     }
@@ -36,7 +35,8 @@ abstract class Controller
 
         return $requestData;
     }
-    public function arrayChangeKeyCaseRecursive($array, $case = CASE_LOWER) {
+    public function arrayChangeKeyCaseRecursive($array, $case = CASE_LOWER)
+    {
         $array = array_change_key_case($array, $case);
         foreach ($array as $key => $value) {
             if (is_array($value)) {

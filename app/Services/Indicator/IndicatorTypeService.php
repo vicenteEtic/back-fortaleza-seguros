@@ -12,7 +12,7 @@ class IndicatorTypeService extends AbstractService
         parent::__construct($repository);
     }
 
-    public function getByDescription(?string $description)
+    public function getByDescription(?string $description = null)
     {
         return $this->repository->getByDescription($description);
     }

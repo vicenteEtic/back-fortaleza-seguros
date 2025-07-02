@@ -2,14 +2,11 @@
 
 namespace App\Services\Alert;
 
-use App\External\PepExternalApi;
-use App\External\SanctionExternalApi;
-use App\Models\Entities\Entities;
-use App\Repositories\Alert\AlertRepository;
-use App\Repositories\Entities\BeneficialOwnerRepository;
-use App\Repositories\Entities\EntitiesRepository;
 use App\Services\AbstractService;
-use Illuminate\Support\Facades\Log;
+use App\Repositories\Alert\AlertRepository;
+use App\Repositories\Entities\EntitiesRepository;
+use App\Repositories\Entities\BeneficialOwnerRepository;
+
 
 class AlertService extends AbstractService
 {

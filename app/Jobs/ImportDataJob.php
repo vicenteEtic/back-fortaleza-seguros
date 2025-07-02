@@ -21,12 +21,14 @@ class ImportDataJob implements ShouldQueue
 
     protected $data;
     protected $userID;
+    protected $batchId;
     private $riskAssessmentService;
 
-    public function __construct(array $data, $userID)
+    public function __construct(array $data, $userID, $batchId)
     {
         $this->userID = $userID;
         $this->data = $data;
+        $this->batchId = $batchId;
     }
 
     public $tries = 5;
@@ -40,7 +42,7 @@ class ImportDataJob implements ShouldQueue
             try {
                 $this->processRecord($record);
 
-                if (Cache::has('Error_id')) {
+                if (!Cache::has('Error_id')) {
                     $this->incrementSuccessCount();
                 }
             } catch (\Exception $e) {
@@ -64,8 +66,6 @@ class ImportDataJob implements ShouldQueue
         $data = $this->prepareAssessmentData($record);
         $data['user_id'] = $this->userID;
         $data['type_assessment'] = TypeAssessment::IMPORT->value; // Import type
-        $data['status'] = StatusAssessment::SUCESS->value; // Success
-
         $riskAssessment = $this->riskAssessmentService->store($data);
     }
 
@@ -84,21 +84,40 @@ class ImportDataJob implements ShouldQueue
                 'customer_number' => $record['customer_number'],
                 'social_denomination' => $record['social_denomination'],
                 'entity_type' => $record['entity_type'],
+                'pep' => $this->normalizePepValue($record['pep'])
             ]
         );
-        return [
+        $data =  [
             'entity_id' => $entity->id,
+            'identification_capacity' => $indicatorService->getByDescription($record["identification_capacity"]),
             'profession' => $indicatorService->getByDescription($record['profession']),
             'form_establishment' => (bool)$record['form_establishment'],
             'status_residence' => (bool)$record['status_residence'],
-            'pep' => $this->normalizePepValue($record['pep']),
             'category' => $indicatorService->getByDescription($record['category']),
             'channel' => $indicatorService->getByDescription($record['channel']),
-            'product_risk' => [$record['product_risk']],
+            'product_risk' => [$indicatorService->getByDescription($record['product_risk'])],
             'country_residence' => $indicatorService->getByDescription($record['country_residence']),
             'nationality' => $indicatorService->getByDescription($record['nationality']),
-            'beneficial_owners' => $record['beneficial_owner'] ? [['name' => $record['beneficial_owner'], 'pep' => '']] : [],
+            'beneficial_owners' => $record['beneficial_owner'] ? [['name' => $record['beneficial_owner'], 'pep' => false]] : [],
         ];
+
+        $requiredFields = [
+            'identification_capacity',
+            'profession',
+            'category',
+            'channel',
+            'product_risk',
+            'country_residence',
+            'nationality',
+        ];
+
+        foreach ($requiredFields as $field) {
+            $value = $data[$field];
+            if (is_null($value)) {
+                $data['status'] = StatusAssessment::ERROR->value;
+            }
+        }
+        return $data;
     }
 
     private function normalizePepValue($pep): int
@@ -122,7 +141,6 @@ class ImportDataJob implements ShouldQueue
 
     private function incrementSuccessCount()
     {
-        $errorId = Cache::get('Error_id');
         $errorRecord = RiskAssessmentControl::find($errorId);
 
         if ($errorRecord) {

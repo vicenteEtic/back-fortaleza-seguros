@@ -41,20 +41,10 @@ class ImportDataJob implements ShouldQueue
         foreach ($this->data as $record) {
             try {
                 $this->processRecord($record);
-
-                if (!Cache::has('Error_id')) {
-                    $this->incrementSuccessCount();
-                }
             } catch (\Exception $e) {
-                $this->handleError($record);
-
-                if (Cache::has('Error_id')) {
-                    $this->incrementErrorCount();
-                }
+                $this->incrementErrorCount();
             }
         }
-
-        Cache::forget('Error_id');
     }
 
     private function processRecord(array $record)
@@ -66,7 +56,12 @@ class ImportDataJob implements ShouldQueue
         $data = $this->prepareAssessmentData($record);
         $data['user_id'] = $this->userID;
         $data['type_assessment'] = TypeAssessment::IMPORT->value; // Import type
-        $riskAssessment = $this->riskAssessmentService->store($data);
+        if ($data["status"] == 1) {
+            $this->incrementSuccessCount();
+        } else {
+            $this->incrementErrorCount();
+        }
+        $this->riskAssessmentService->store($data);
     }
 
     private function prepareAssessmentData(array $record): array
@@ -111,6 +106,8 @@ class ImportDataJob implements ShouldQueue
             'nationality',
         ];
 
+        $data['status'] = StatusAssessment::SUCESS->value;
+
         foreach ($requiredFields as $field) {
             $value = $data[$field];
             if (is_null($value)) {
@@ -126,26 +123,13 @@ class ImportDataJob implements ShouldQueue
         return $pep ? 1 : 0;
     }
 
-    private function handleError(array $record)
-    {
-        $errorId = Cache::get('Error_id');
-
-        if (!$errorId) {
-            return;
-        }
-
-        // Aqui você pode implementar a lógica para registrar o erro
-        // Similar ao que estava fazendo com ErrorEvaluation e BeneficialOwnerError
-        // Mas idealmente isso também deveria ser movido para um serviço
-    }
-
     private function incrementSuccessCount()
     {
-        $errorRecord = RiskAssessmentControl::find($errorId);
+        $errorRecord = RiskAssessmentControl::find($this->batchId);
 
         if ($errorRecord) {
             $errorRecord->update([
-                'sucess' => $errorRecord->sucess + 1,
+                'total_sucess' => $errorRecord->total_sucess + 1,
                 'total' => $errorRecord->total + 1,
             ]);
         }
@@ -153,12 +137,11 @@ class ImportDataJob implements ShouldQueue
 
     private function incrementErrorCount()
     {
-        $errorId = Cache::get('Error_id');
-        $errorRecord = RiskAssessmentControl::find($errorId);
+        $errorRecord = RiskAssessmentControl::find($this->batchId);
 
         if ($errorRecord) {
             $errorRecord->update([
-                'error' => $errorRecord->error + 1,
+                'total_error' => $errorRecord->total_error + 1,
                 'total' => $errorRecord->total + 1,
             ]);
         }

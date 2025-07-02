@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('risk_assessment', function (Blueprint $table) {
-            $table->tinyInteger('type_assessment')->default(0)->after('user_id')->comment('1: Normal, 2: Import');
-            $table->tinyInteger('status')->default(0)->after('type_assessment')->comment('1: Success, 2: Error');
+            $table->tinyInteger('type_assessment')->default(1)->after('user_id')->comment('1: Normal, 2: Import');
+            $table->tinyInteger('status')->default(1)->after('type_assessment')->comment('1: Success, 2: Error');
         });
     }
 

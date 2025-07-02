@@ -14,6 +14,7 @@ use App\Models\Entities\RiskAssessmentControl;
 use App\Services\Entities\EntitiesService;
 use App\Services\Entities\RiskAssessmentService;
 use App\Services\Indicator\IndicatorTypeService;
+use Illuminate\Support\Facades\DB;
 
 class ImportDataJob implements ShouldQueue
 {
@@ -38,11 +39,16 @@ class ImportDataJob implements ShouldQueue
     {
         $this->riskAssessmentService = $riskAssessmentService;
 
+
         foreach ($this->data as $record) {
+            DB::beginTransaction();
             try {
                 $this->processRecord($record);
+                DB::commit();
             } catch (\Exception $e) {
+                DB::rollBack();
                 $this->incrementErrorCount();
+                continue;
             }
         }
     }
@@ -61,7 +67,11 @@ class ImportDataJob implements ShouldQueue
         } else {
             $this->incrementErrorCount();
         }
-        $this->riskAssessmentService->store($data);
+        $riskAssessment = $this->riskAssessmentService->store($data);
+        if ($riskAssessment) {
+            $riskAssessment->risk_assessment_control_id = $this->batchId;
+            $riskAssessment->save();
+        }
     }
 
     private function prepareAssessmentData(array $record): array

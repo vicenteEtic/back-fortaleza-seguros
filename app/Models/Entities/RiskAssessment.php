@@ -35,16 +35,16 @@ class RiskAssessment extends Model
         'risk_level',
         'diligence',
         'type_assessment',
-        'status'
+        'status',
+        'risk_assessment_control_id'
     ];
 
 
     public $casts = [
         'form_establishment' => FormEstablishment::class,
-        'status_residence' =>  StatusResidence::class,
-        // 'type_assessment' => TypeAssessment::class,
-        // 'status' => StatusAssessment::class
+        'status_residence' =>  StatusResidence::class
     ];
+
     public function entity()
     {
         return $this->belongsTo(Entities::class, 'entity_id');

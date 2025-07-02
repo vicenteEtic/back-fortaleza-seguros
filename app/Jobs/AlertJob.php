@@ -9,6 +9,7 @@ use App\Models\Entities\Entities;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Entities\BeneficialOwner;
+use App\Services\Alert\AlertService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,9 +18,6 @@ class AlertJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, SerializesModels;
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         $this->processEntities(Entities::all(), 'social_denomination');

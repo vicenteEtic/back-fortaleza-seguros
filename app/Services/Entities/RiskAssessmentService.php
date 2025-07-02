@@ -2,6 +2,7 @@
 
 namespace App\Services\Entities;
 
+use App\Jobs\GenerateAlertsJob;
 use App\Services\AbstractService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Diligence\DiligenceService;
@@ -99,9 +100,11 @@ class RiskAssessmentService extends AbstractService
         $riskAssessment->save();
 
         if ($riskAssessment->entity->entity_type == 1) {
-            $this->alertService->generateAlertGeneral($riskAssessment->entity->id, true, $riskAssessment->id);
+            GenerateAlertsJob::dispatch($riskAssessment->entity->id, true, $riskAssessment->id)
+                ->onQueue('high');
         } else {
-            $this->alertService->generateAlertGeneral($riskAssessment->entity->id, false, $riskAssessment->id);
+            GenerateAlertsJob::dispatch($riskAssessment->entity->id, true, $riskAssessment->id)
+                ->onQueue('high');
         }
 
         return $riskAssessment;

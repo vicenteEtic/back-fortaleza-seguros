@@ -25,3 +25,4 @@ Route::put('{entity}', [EntitiesController::class, 'update'])
 Route::delete('{entity}', [EntitiesController::class, 'destroy'])
     ->name('entities.destroy')
     ->middleware('can:entidades-delete');
+

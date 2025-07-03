@@ -49,13 +49,15 @@ class RiskAssessmentRepository extends AbstractRepository
                 ->join('entities', 'risk_assessment.entity_id', '=', 'entities.id')
                 ->where('entities.entity_type', $type);
 
+            if ($groupByField === 'product_id') {
+                $query->join('product_risk', 'product_risk.risk_assessment_id', '=', 'risk_assessment.id');
+                $query->join('indicator_type', 'indicator_type.id', '=', "product_risk.$groupByField");
+            }
+
             if ($joinTable) {
                 $query->join('indicator_type', 'indicator_type.id', '=', "risk_assessment.$groupByField");
             }
-            if($groupByField === 'risk_assessment_id') {
-                $query->join('product_risk', 'product_risk.risk_assessment_id', '=', 'risk_assessment.id');
-                $query->join('product', 'product.id', '=', 'product_risk.product_id');
-            }
+
 
             $select = array_merge(
                 [DB::raw("$nameField AS name")],
@@ -67,14 +69,16 @@ class RiskAssessmentRepository extends AbstractRepository
                 [DB::raw('COUNT(*) AS total_geral')]
             );
 
-            // Adjust the groupBy clause
-            $groupBy = ["risk_assessment.$groupByField"];
+
+
             if ($joinTable && $nameField === 'indicator_type.description') {
                 $groupBy[] = 'indicator_type.description';
             } elseif (!$joinTable && $nameField === '(CASE WHEN pep = 1 THEN "SIM" ELSE "NÃO" END)') {
                 $groupBy[] = 'risk_assessment.pep';
-            }else if(!$joinTable && $nameField === 'risk_assessment_id') {
-                $groupBy[] = 'product_risk.product_id';
+            } elseif ($groupByField === 'product_id') {
+                $groupBy[] = 'indicator_type.description';
+            } else {
+                $groupBy = ["risk_assessment.$groupByField"];
             }
 
             $data = $query
@@ -107,6 +111,15 @@ class RiskAssessmentRepository extends AbstractRepository
             'total_alto' => $item->total_alto ?? 0,
             'total_geral' => $item->total_geral ?? 0
         ])->toArray();
+    }
+
+    public function totalRiskLevelByProductRisk(): array
+    {
+        return $this->getRiskLevelSummary(
+            'product_id',
+            null,
+            'indicator_type.description'
+        );
     }
 
     public function totalRiskLevelByCategory(): array
@@ -185,7 +198,7 @@ class RiskAssessmentRepository extends AbstractRepository
             )
             ->join('diligence', 'diligence.name', '=', 'risk_assessment.diligence') // Adiciona o JOIN com a tabela de diligências
             ->whereYear('risk_assessment.created_at', $year)
-            ->groupBy('month', 'monthName', 'name', 'diligence.color')  // Agora estamos agrupando pela cor também
+            ->groupBy('month', 'monthName', 'name', 'diligence.color', 'risk_assessment.diligence')  // Agora estamos agrupando pela cor também
             ->orderBy('month')
             ->get()
             ->toArray();

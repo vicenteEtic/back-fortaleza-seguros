@@ -192,6 +192,11 @@ class RiskAssessmentService extends AbstractService
         return $this->repository->totalRiskLevelByNationality();
     }
 
+    public function getTotalRiskLevelByProductRisk(): array
+    {
+        return $this->repository->totalRiskLevelByProductRisk();
+    }
+
     public function getHeatMap(?int $year = null): array
     {
         $year = $this->validateYear($year ?? (int) date('Y'));

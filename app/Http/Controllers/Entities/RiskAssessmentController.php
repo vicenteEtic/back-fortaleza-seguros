@@ -143,6 +143,21 @@ class RiskAssessmentController extends AbstractController
         }
     }
 
+    public function getTotalRiskLevelByProductRisk()
+    {
+        try {
+            $this->logRequest();
+            $result = $this->service->getTotalRiskLevelByProductRisk();
+            return response()->json($result, Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            $this->logRequest($e);
+            return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public function getHeatMap(int $year = null)
     {
         try {

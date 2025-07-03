@@ -14,7 +14,7 @@ class AlertService extends AbstractService
         AlertRepository $repository,
         private EntitiesRepository $entitiesRepository,
         private BeneficialOwnerRepository $beneficialOwnerRepository
-    ) {w
+    ) {
         parent::__construct($repository);
     }
 

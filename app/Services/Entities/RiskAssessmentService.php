@@ -42,7 +42,7 @@ class RiskAssessmentService extends AbstractService
 
     public function index(?int $paginate, ?array $filterParams, ?array $orderByParams, $relationships = [])
     {
-        $relationships =  [
+        $relationships = [
             'entity',
             'user',
             'profession',
@@ -55,6 +55,8 @@ class RiskAssessmentService extends AbstractService
             'productRisk',
             'productRisk.product'
         ];
+
+        $orderByParams = $orderByParams ?? ['created_at' => 'desc'];
         return $this->repository->index($paginate, $filterParams, $orderByParams, $relationships);
     }
 
@@ -86,10 +88,12 @@ class RiskAssessmentService extends AbstractService
             $this->beneficialOwnerService->createBeneficialOwner($data, $riskAssessment->id);
         }
 
-        $this->loadRelations($riskAssessment);
+
 
         $riskProducts = $this->indicatorTypeRepository->getByIds($data['product_risk']);
         $this->productRiskService->storeProductRisks($riskProducts, $riskAssessment->id);
+
+        $this->loadRelations($riskAssessment);
 
         $totalRiskProduct = $riskProducts->sum('score');
         $total = $this->calculateTotalScore($riskAssessment, $totalRiskProduct);

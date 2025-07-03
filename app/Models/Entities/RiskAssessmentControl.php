@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class RiskAssessmentControl extends Model
 {
     use HasFactory;
-    protected $table = 'risk_assessment_control';
+    protected $table = 'risk_assessment_control';w
     protected $primaryKey = 'id';
     protected $fillable = [
         'total_sucess',

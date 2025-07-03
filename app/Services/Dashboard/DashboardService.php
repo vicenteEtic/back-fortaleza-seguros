@@ -24,9 +24,10 @@ class DashboardService
         return [
             'total_entities' => $totalEntities,
             'total_risk_assessments' => $totalRiskAssessments,
-            'tota_entities_colective' => $totalEntitiesColectivo,
+            'total_entities_colective' => $totalEntitiesColectivo,
             'total_entities_singular' => $totalEntitiesSingular,
-            'lasts_assessment' => $lastsAssessment
+            'lasts_assessment' => $lastsAssessment,
+            'lasts_entities' => $this->entitiesService->getLastEntities(3)
         ];
     }
 }

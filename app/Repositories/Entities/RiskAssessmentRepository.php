@@ -52,6 +52,10 @@ class RiskAssessmentRepository extends AbstractRepository
             if ($joinTable) {
                 $query->join('indicator_type', 'indicator_type.id', '=', "risk_assessment.$groupByField");
             }
+            if($groupByField === 'risk_assessment_id') {
+                $query->join('product_risk', 'product_risk.risk_assessment_id', '=', 'risk_assessment.id');
+                $query->join('product', 'product.id', '=', 'product_risk.product_id');
+            }
 
             $select = array_merge(
                 [DB::raw("$nameField AS name")],
@@ -69,6 +73,8 @@ class RiskAssessmentRepository extends AbstractRepository
                 $groupBy[] = 'indicator_type.description';
             } elseif (!$joinTable && $nameField === '(CASE WHEN pep = 1 THEN "SIM" ELSE "NÃO" END)') {
                 $groupBy[] = 'risk_assessment.pep';
+            }else if(!$joinTable && $nameField === 'risk_assessment_id') {
+                $groupBy[] = 'product_risk.product_id';
             }
 
             $data = $query

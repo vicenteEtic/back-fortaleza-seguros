@@ -118,8 +118,6 @@ class RiskAssessmentService extends AbstractService
         return $riskAssessment;
     }
 
-
-
     private function loadRelations($riskAssessment): void
     {
         $riskAssessment->load([

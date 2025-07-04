@@ -72,4 +72,9 @@ class EntitiesService extends AbstractService
                 ->delay(now()->addSeconds($index * 10));
         }
     }
+
+    public function getLastEntities(int $limit = 3)
+    {
+        return $this->repository->getLastEntities($limit);
+    }
 }

@@ -118,8 +118,6 @@ class RiskAssessmentService extends AbstractService
         return $riskAssessment;
     }
 
-
-
     private function loadRelations($riskAssessment): void
     {
         $riskAssessment->load([
@@ -192,6 +190,11 @@ class RiskAssessmentService extends AbstractService
     public function getTotalRiskLevelByNationality(): array
     {
         return $this->repository->totalRiskLevelByNationality();
+    }
+
+    public function getTotalRiskLevelByProductRisk(): array
+    {
+        return $this->repository->totalRiskLevelByProductRisk();
     }
 
     public function getHeatMap(?int $year = null): array

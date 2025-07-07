@@ -92,6 +92,52 @@ class RiskAssessmentRepository extends AbstractRepository
         return $results;
     }
 
+    private function getRiskLevelSummaryWithOutEntityType(string $groupByField, ?string $joinTable, string $nameField): array
+    {
+
+        $query = $this->model
+            ->join('entities', 'risk_assessment.entity_id', '=', 'entities.id');
+
+        if ($groupByField === 'product_id') {
+            $query->join('product_risk', 'product_risk.risk_assessment_id', '=', 'risk_assessment.id');
+            $query->join('indicator_type', 'indicator_type.id', '=', "product_risk.$groupByField");
+        }
+
+        if ($joinTable) {
+            $query->join('indicator_type', 'indicator_type.id', '=', "risk_assessment.$groupByField");
+        }
+
+
+        $select = array_merge(
+            [DB::raw("$nameField AS name")],
+            array_map(
+                fn($level, $field) => DB::raw("SUM(CASE WHEN risk_assessment.risk_level = '$level' THEN 1 ELSE 0 END) AS $field"),
+                array_keys(self::RISK_LEVELS),
+                self::RISK_LEVELS
+            ),
+            [DB::raw('COUNT(*) AS total_geral')]
+        );
+
+
+
+        if ($joinTable && $nameField === 'indicator_type.description') {
+            $groupBy[] = 'indicator_type.description';
+        } elseif (!$joinTable && $nameField === '(CASE WHEN pep = 1 THEN "SIM" ELSE "NÃO" END)') {
+            $groupBy[] = 'risk_assessment.pep';
+        } elseif ($groupByField === 'product_id') {
+            $groupBy[] = 'indicator_type.description';
+        } else {
+            $groupBy = ["risk_assessment.$groupByField"];
+        }
+
+        $data = $query
+            ->select($select)
+            ->groupBy($groupBy)
+            ->get()->toArray();
+
+        return $data;
+    }
+
     /**
      * Format query results into standardized array structure
      *
@@ -115,7 +161,7 @@ class RiskAssessmentRepository extends AbstractRepository
 
     public function totalRiskLevelByProductRisk(): array
     {
-        return $this->getRiskLevelSummary(
+        return $this->getRiskLevelSummaryWithOutEntityType(
             'product_id',
             null,
             'indicator_type.description'
@@ -142,7 +188,7 @@ class RiskAssessmentRepository extends AbstractRepository
 
     public function totalRiskLevelByChannel(): array
     {
-        return $this->getRiskLevelSummary(
+        return $this->getRiskLevelSummaryWithOutEntityType(
             'channel',
             'indicator_type',
             'indicator_type.description'

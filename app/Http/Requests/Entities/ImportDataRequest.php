@@ -22,21 +22,21 @@ class ImportDataRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            '*.identification_capacity' => ['nullable', 'string'],
-            '*.beneficial_owner'     => ['nullable', 'string'],
-            '*.category'             => ['nullable', 'string'],
-            '*.channel'              => ['nullable', 'string'],
-            '*.country_residence'    => ['nullable', 'string'],
-            '*.customer_number'      => ['nullable', 'integer'],
-            '*.entity_type'          => ['nullable', 'integer'],
-            '*.form_establishment'   => ['nullable', 'boolean'],
-            '*.nationality'          => ['nullable', 'string'],
-            '*.pep'                  => ['nullable', 'boolean'],
-            '*.policy_number'        => ['nullable', 'integer'],
-            '*.product_risk'         => ['nullable', 'string'],
-            '*.profession'           => ['nullable', 'string'],
-            '*.social_denomination'  => ['nullable', 'string'],
-            '*.status_residence'     => ['nullable', 'boolean'],
+            '*.identification_capacity' => ['nullable'],
+            '*.beneficial_owners'     => ['nullable'],
+            '*.category'             => ['nullable'],
+            '*.channel'              => ['nullable'],
+            '*.country_residence'    => ['nullable'],
+            '*.customer_number'      => ['nullable'],
+            '*.entity_type'          => ['nullable'],
+            '*.form_establishment'   => ['nullable'],
+            '*.nationality'          => ['nullable'],
+            '*.pep'                  => ['nullable'],
+            '*.policy_number'        => ['nullable'],
+            '*.product_risk'         => ['nullable'],
+            '*.profession'           => ['nullable'],
+            '*.social_denomination'  => ['nullable'],
+            '*.status_residence'     => ['nullable'],
         ];
     }
 }

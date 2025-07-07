@@ -39,7 +39,6 @@ class ImportDataJob implements ShouldQueue
     {
         $this->riskAssessmentService = $riskAssessmentService;
 
-
         foreach ($this->data as $record) {
             DB::beginTransaction();
             try {
@@ -94,16 +93,16 @@ class ImportDataJob implements ShouldQueue
         );
         $data =  [
             'entity_id' => $entity->id,
-            'identification_capacity' => $indicatorService->getByDescription($record["identification_capacity"]),
-            'profession' => $indicatorService->getByDescription($record['profession']),
+            'identification_capacity' => $indicatorService->getByDescription($record["identification_capacity"] ?? null),
+            'profession' => $indicatorService->getByDescription($record['profession'] ?? null),
             'form_establishment' => (bool)$record['form_establishment'],
             'status_residence' => (bool)$record['status_residence'],
-            'category' => $indicatorService->getByDescription($record['category']),
-            'channel' => $indicatorService->getByDescription($record['channel']),
-            'product_risk' => [$indicatorService->getByDescription($record['product_risk'])],
-            'country_residence' => $indicatorService->getByDescription($record['country_residence']),
-            'nationality' => $indicatorService->getByDescription($record['nationality']),
-            'beneficial_owners' => $record['beneficial_owner'] ? [['name' => $record['beneficial_owner'], 'pep' => false]] : [],
+            'category' => $indicatorService->getByDescription($record['category'] ?? null),
+            'channel' => $indicatorService->getByDescription($record['channel'] ?? null),
+            'product_risk' => [$indicatorService->getByDescription($record['product_risk']) ?? null],
+            'country_residence' => $indicatorService->getByDescription($record['country_residence'] ?? null),
+            'nationality' => $indicatorService->getByDescription($record['nationality'] ?? null),
+            'beneficial_ownerss' => $record['beneficial_owners'] ? [['name' => $record['beneficial_owners'], 'pep' => false]] : [],
         ];
 
         $requiredFields = [

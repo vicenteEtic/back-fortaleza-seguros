@@ -9,9 +9,8 @@ Route::get('', [IndicatorController::class, 'index'])
 
 Route::post('', [IndicatorController::class, 'store'])
     ->name('indicator.store');
-
-Route::get('{indicator}', [IndicatorController::class, 'show'])
-    ->name('indicator.show');
+Route::get('getIndicatorsByFk', [IndicatorController::class, 'getIndicatorsByFk'])
+    ->name('indicator.getIndicatorsByFk');
 
 Route::put('{indicator}', [IndicatorController::class, 'update'])
     ->name('indicator.update');
@@ -19,17 +18,44 @@ Route::put('{indicator}', [IndicatorController::class, 'update'])
 Route::delete('{indicator}', [IndicatorController::class, 'destroy'])
     ->name('indicator.destroy');
 
-Route::get('type', [IndicatorTypeController::class, 'index'])
-    ->name('indicator.type.index');
+Route::prefix('type')->group(function () {
+    Route::get('', [IndicatorTypeController::class, 'index'])
+        ->name('indicator.type.index');
 
-Route::post('type', [IndicatorTypeController::class, 'store'])
-    ->name('indicator.type.store');
+    Route::post('identification-capacity', [IndicatorTypeController::class, 'storeCapacidadeIdentificacaoVerificacao'])
+        ->name('indicator.type.store.identification-capacity');
 
-Route::get('type/{type}', [IndicatorTypeController::class, 'show'])
-    ->name('indicator.type.show');
+    Route::post('profession', [IndicatorTypeController::class, 'storeTipoActividadePrincipal'])
+        ->name('indicator.type.store.profession');
 
-Route::put('type/{type}', [IndicatorTypeController::class, 'update'])
-    ->name('indicator.type.update');
+    Route::post('product-risk', [IndicatorTypeController::class, 'storeTipoSeguro'])
+        ->name('indicator.type.store.product-risk');
 
-Route::delete('type/{type}', [IndicatorTypeController::class, 'destroy'])
-    ->name('indicator.type.destroy');
+    Route::post('country', [IndicatorTypeController::class, 'storeRiscoProdutosServicosTransacoes4'])
+        ->name('indicator.type.store.country');
+
+    Route::post('category', [IndicatorTypeController::class, 'storeTipoActividadePrincipalColectiva'])
+        ->name('indicator.type.store.category');
+
+    Route::post('canal', [IndicatorTypeController::class, 'storeCanal'])
+        ->name('indicator.type.store.canal');
+
+    Route::post('cae', [IndicatorTypeController::class, 'storeCae'])
+        ->name('indicator.type.store.cae');
+
+    Route::get('{type}', [IndicatorTypeController::class, 'show'])
+        ->name('indicator.type.show');
+
+    Route::put('{type}', [IndicatorTypeController::class, 'update'])
+        ->name('indicator.type.update');
+
+    Route::delete('{type}', [IndicatorTypeController::class, 'destroy'])
+        ->name('indicator.type.destroy');
+
+    Route::post('type-canal-store', [IndicatorTypeController::class, 'storeCanal'])
+        ->name('indicator.type.store.canal');
+});
+
+
+Route::get('{indicator}', [IndicatorController::class, 'show'])
+    ->name('indicator.show');

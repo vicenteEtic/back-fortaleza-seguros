@@ -130,11 +130,29 @@ abstract class AbstractRepository
     }
 
     /**
+     * Store a new resource or update an existing one.
+     *
+     * @param array $attributes Attributes to find the record.
+     * @param array $values Values to update or create.
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function storeOrUpdate(array $attributes, array $values = [])
+    {
+        return $this->model->updateOrCreate($attributes, $values);
+    }
+
+    /**
      * Display the specified resource.
      */
-    public function show(int|string $id)
+    public function show(int|string $id, array $relationships = [])
     {
-        return $this->model->findOrFail($id);
+        $query = $this->model->query();
+
+        if (!empty($relationships)) {
+            $query = $query->with($relationships);
+        }
+
+        return $query->findOrFail($id);
     }
 
     /**
@@ -184,6 +202,15 @@ abstract class AbstractRepository
         $model = $this->model->query()
             ->where($criteria)
             ->first();
+
+        return $model;
+    }
+
+    public function findBy(array $criteria)
+    {
+        $model = $this->model->query()
+            ->where($criteria)
+            ->get();
 
         return $model;
     }

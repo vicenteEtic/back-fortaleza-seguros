@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Log\Log as LogLog;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Log;
-use App\Models\Log as ModelsLog;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
-use App\Jobs\LoggerJob;
 use App\Services\Log\LogService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 abstract class Controller
 {
     use AuthorizesRequests, ValidatesRequests;
-   
+
     protected LogService $logService;
 
     public function __construct(LogService $logService)
@@ -31,9 +25,9 @@ abstract class Controller
         $requestFiltered = $this->filterSensitiveData($request);
         if (app()->environment() !== 'testing') {
             if ($e) {
-                Log::channel('generic')->error($e->getMessage(), ['Payload: ' . json_encode($requestFiltered), 'Trace: ' . $e->getTraceAsString()]);
+                Log::error($e->getMessage(), ['Payload: ' . json_encode($requestFiltered), 'Trace: ' . $e->getTraceAsString()]);
             } else {
-                Log::channel('generic')->info('URL: ' . request()->getRequestUri() . PHP_EOL . 'Método: ' . request()->method(), ['Payload: ' . json_encode($requestFiltered)]);
+                Log::info('URL: ' . request()->getRequestUri() . PHP_EOL . 'Método: ' . request()->method(), ['Payload: ' . json_encode($requestFiltered)]);
             }
         }
     }
@@ -60,9 +54,8 @@ abstract class Controller
         }
         return $array;
     }
-    public function storeLogUser(string $level = 'info', string $message): void {
+    public function storeLogUser(string $level = 'info', string $message): void
+    {
         $this->logService->storeLogUser($level, $message);
     }
-    
-   
 }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Ao usar o AbstractController é necessário criar manualmente os métodos store e update.

@@ -7,7 +7,10 @@ use Illuminate\Http\Response;
 use App\Services\Entities\EntitiesService;
 use App\Http\Controllers\AbstractController;
 use App\Http\Requests\Entities\EntitiesRequest;
+use App\Http\Requests\Entities\ImportDataRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EntitiesController extends AbstractController
 {
@@ -43,6 +46,20 @@ class EntitiesController extends AbstractController
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function storeImportData(ImportDataRequest $request)
+    {
+
+        try {
+            $this->logRequest();
+            $batchId = $this->service->initializeImportBatch(Auth::id());
+            $this->service->dispatchImportJobs($request->validated(), Auth::id(), $batchId);
+            return response()->json("Importação em progresso", Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

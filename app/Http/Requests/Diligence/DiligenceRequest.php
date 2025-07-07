@@ -22,12 +22,24 @@ class DiligenceRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            ['name', 'required', 'string', 'max:255'],
-            ['description', 'nullable', 'string'],
-            ['max', 'required', 'integer'],
-            ['min', 'required', 'integer'],
-            ['risk', 'required', 'string', 'max:255'],
-            ['color', 'required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'max' => ['required', 'integer'],
+            'min' => ['required', 'integer'],
+            'risk' => ['required', 'string', 'max:255'],
+            'color' => ['required', 'string', 'max:255'],
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'Nome',
+            'description' => 'Descrição',
+            'max' => 'Valor Máximo',
+            'min' => 'Valor Mínimo',
+            'risk' => 'Risco',
+            'color' => 'Cor',
         ];
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class MakeFullModuleCommand extends Command
 {
@@ -152,57 +152,60 @@ class {$filename}Service extends AbstractService
 
     protected function createController($path, $filename, $namespacePath)
     {
+        // Converter o filename para o formato desejado na variável entity
+        $entityName = lcfirst($filename); // Converte TesteFileName para testeFileName
+
         $controllerTemplate = "<?php
-
-namespace App\Http\Controllers\\{$namespacePath};
-
-use App\Http\Controllers\AbstractController;
-use App\Services\\{$namespacePath}\\{$filename}Service;
-use App\Http\Requests\\{$namespacePath}\\{$filename}Request;
-use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Response;
-
-class {$filename}Controller extends AbstractController
-{
-    public function __construct({$filename}Service \$service)
+    
+    namespace App\Http\Controllers\\{$namespacePath};
+    
+    use App\Http\Controllers\AbstractController;
+    use App\Services\\{$namespacePath}\\{$filename}Service;
+    use App\Http\Requests\\{$namespacePath}\\{$filename}Request;
+    use Exception;
+    use Illuminate\Database\Eloquent\ModelNotFoundException;
+    use Illuminate\Http\Response;
+    
+    class {$filename}Controller extends AbstractController
     {
-        \$this->service = \$service;
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store({$filename}Request \$request)
-    {
-        try {
-            \$this->logRequest();
-            \$entity = \$this->service->store(\$request->validated());
-            return response()->json(\$entity, Response::HTTP_CREATED);
-        } catch (Exception \$e) {
-            \$this->logRequest(\$e);
-            return response()->json(\$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        public function __construct({$filename}Service \$service)
+        {
+            \$this->service = \$service;
         }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update({$filename}Request \$request, \$id)
-    {
-        try {
-            \$this->logRequest();
-            \$entity = \$this->service->update(\$request->validated(), \$id);
-            return response()->json(\$entity, Response::HTTP_OK);
-        } catch (ModelNotFoundException \$e) {
-            \$this->logRequest(\$e);
-            return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
-        } catch (Exception \$e) {
-            \$this->logRequest(\$e);
-            return response()->json(\$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+    
+        /**
+         * Store a newly created resource in storage.
+         */
+        public function store({$filename}Request \$request)
+        {
+            try {
+                \$this->logRequest();
+                \${$entityName} = \$this->service->store(\$request->validated());
+                return response()->json(\${$entityName}, Response::HTTP_CREATED);
+            } catch (Exception \$e) {
+                \$this->logRequest(\$e);
+                return response()->json(\$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
         }
-    }
-}";
+    
+        /**
+         * Update the specified resource in storage.
+         */
+        public function update({$filename}Request \$request, \$id)
+        {
+            try {
+                \$this->logRequest();
+                \${$entityName} = \$this->service->update(\$request->validated(), \$id);
+                return response()->json(\${$entityName}, Response::HTTP_OK);
+            } catch (ModelNotFoundException \$e) {
+                \$this->logRequest(\$e);
+                return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+            } catch (Exception \$e) {
+                \$this->logRequest(\$e);
+                return response()->json(\$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+    }";
 
         $directory = app_path("/Http/Controllers/{$path}");
         File::ensureDirectoryExists($directory);

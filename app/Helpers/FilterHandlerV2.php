@@ -127,7 +127,8 @@ class FilterHandlerV2
     private function applyIlike($query, $field, $value)
     {
         $this->handleRelation($query, $field, function ($q, $field) use ($value) {
-            $q->whereRaw('LOWER(' . $this->escapeField($field) . ') LIKE ?', ['%' . mb_strtolower($value, 'UTF-8') . '%']);
+            // Para MySQL, use LIKE e COLLATE para case-insensitive e acentuação-insensitive (se disponível)
+            $q->where($field, 'LIKE', '%' . $value . '%');
         });
     }
 

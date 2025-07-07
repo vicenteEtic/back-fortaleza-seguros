@@ -29,6 +29,11 @@ abstract class AbstractService
         return $this->repository->store($data);
     }
 
+    public function storeOrUpdate(array $attributes, array $values = [])
+    {
+        return $this->repository->storeOrUpdate($attributes, $values);
+    }
+
     /**
      * Display the specified resource.
      */
@@ -59,5 +64,10 @@ abstract class AbstractService
     public function restore(int $id)
     {
         return $this->repository->restore($id);
+    }
+
+    public function findOneBy(array $criteria)
+    {
+        return $this->repository->findOneBy($criteria);
     }
 }

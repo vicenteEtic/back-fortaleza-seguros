@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Services\Log\LogService;
+use App\Traits\DatabaseLogger;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 abstract class Controller
 {
-    use AuthorizesRequests, ValidatesRequests;
+    use AuthorizesRequests, ValidatesRequests, DatabaseLogger;
 
     protected LogService $logService;
 
@@ -54,8 +55,16 @@ abstract class Controller
         }
         return $array;
     }
-    public function storeLogUser(string $level = 'info', string $message): void
+
+    public function resolvePath($object, $path)
     {
-        $this->logService->storeLogUser($level, $message);
+        $parts = explode('->', $path);
+        foreach ($parts as $part) {
+            if (!is_object($object) || !isset($object->{$part})) {
+                return null;
+            }
+            $object = $object->{$part};
+        }
+        return $object;
     }
 }

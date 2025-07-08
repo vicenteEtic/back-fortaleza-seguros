@@ -19,5 +19,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('dashboard')->group(base_path('routes/entities/dashboard.php'));
 });
 
-Route::prefix('log')->group(base_path('routes/logs/logs.php'));
+Route::prefix('logs')->group(base_path('routes/logs/logs.php'));
 Route::prefix('auth')->middleware('guest')->group(base_path('routes/user/auth.php'));

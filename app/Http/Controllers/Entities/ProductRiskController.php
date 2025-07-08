@@ -11,6 +11,10 @@ use Illuminate\Http\Response;
 
 class ProductRiskController extends AbstractController
 {
+    protected ?string $logType = 'entity';
+    protected ?string $nameEntity = "Produto de Risco";
+    protected ?string $fieldName = "product->description";
+
     public function __construct(ProductRiskService $service)
     {
         $this->service = $service;
@@ -24,9 +28,20 @@ class ProductRiskController extends AbstractController
         try {
             $this->logRequest();
             $productRisk = $this->service->store($request->validated());
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: "Produto de risco {$productRisk?->product?->description} criado com sucesso.",
+                idEntity: $productRisk->id
+            );
             return response()->json($productRisk, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: "Erro ao criar produto de risco.",
+            );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -39,12 +54,28 @@ class ProductRiskController extends AbstractController
         try {
             $this->logRequest();
             $productRisk = $this->service->update($request->validated(), $id);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: "Produto de risco {$productRisk?->product?->description} atualizado com sucesso.",
+                idEntity: $productRisk->id
+            );
             return response()->json($productRisk, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: "Erro ao atualizar produto de risco com ID {$id}.",
+            );
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
         } catch (Exception $e) {
             $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: "Erro ao atualizar produto de risco.",
+            );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

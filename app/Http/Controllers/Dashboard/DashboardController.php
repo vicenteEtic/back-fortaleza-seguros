@@ -6,11 +6,13 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\DashboardRequest;
 use App\Services\Dashboard\DashboardService;
 
 class DashboardController extends Controller
 {
+    protected ?string $logType = 'dashboard';
+    protected ?string $nameEntity = "Dashboard";
+
     public function __construct(private DashboardService $service) {}
 
     public function dashboard(Request $request)
@@ -18,6 +20,11 @@ class DashboardController extends Controller
         try {
             $this->logRequest();
             $data = $this->service->totalGeralData();
+            $this->logToDatabase(
+                type: $this->logType,
+                level: 'info',
+                customMessage: "Acessou o dashboard geral.",
+            );
             return response()->json($data, Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);

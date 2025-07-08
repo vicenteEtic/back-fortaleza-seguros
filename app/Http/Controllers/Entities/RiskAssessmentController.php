@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\DB;
 
 class RiskAssessmentController extends AbstractController
 {
+    protected ?string $logType = 'entity';
+    protected ?string $nameEntity = "Avaliação de Risco";
+    protected ?string $fieldName = "entity->social_denomination";
+
     public function __construct(RiskAssessmentService $service)
     {
         $this->service = $service;
@@ -25,30 +29,24 @@ class RiskAssessmentController extends AbstractController
         DB::beginTransaction();
         try {
             $this->logRequest();
-            $entity = $this->service->store($request->validated());
+            $riskAssessment = $this->service->store($request->validated());
+            $this->logToDatabase(
+                type: 'entity',
+                level: 'info',
+                customMessage: "Realizou uma avaliação na entidade {$riskAssessment?->entity?->social_denomination} que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência Cliente {$riskAssessment->diligence}.",
+                idEntity: $riskAssessment->entity_id
+            );
             DB::commit();
-            return response()->json($entity, Response::HTTP_CREATED);
+            return response()->json($riskAssessment, Response::HTTP_CREATED);
         } catch (Exception $e) {
             DB::rollBack();
             $this->logRequest($e);
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(RiskAssessmentRequest $request, $id)
-    {
-        try {
-            $this->logRequest();
-            $entity = $this->service->update($request->validated(), $id);
-            return response()->json($entity, Response::HTTP_OK);
-        } catch (ModelNotFoundException $e) {
-            $this->logRequest($e);
-            return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
-        } catch (Exception $e) {
-            $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'entity',
+                level: 'error',
+                customMessage: "Erro ao realizar avaliação na entidade {$request->entity_id}.",
+                idEntity: $request->entity_id
+            );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

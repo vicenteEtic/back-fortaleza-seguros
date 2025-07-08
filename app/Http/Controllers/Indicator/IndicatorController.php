@@ -33,9 +33,13 @@ class IndicatorController extends AbstractController
     {
         try {
             $this->logRequest();
-            $entities = $this->service->store($request->validated());
-            $this->storeLogUser('info',"cadastrou um indicador",'user','');
-            return response()->json($entities, Response::HTTP_CREATED);
+            $indicator = $this->service->store($request->validated());
+            $this->logToDatabase(
+                type: 'indicator',
+                level: 'info',
+                customMessage: "Indicador {$indicator->name} criado com sucesso."
+            );
+            return response()->json($indicator, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -49,8 +53,13 @@ class IndicatorController extends AbstractController
     {
         try {
             $this->logRequest();
-            $entities = $this->service->update($request->validated(), $id);
-            return response()->json($entities, Response::HTTP_OK);
+            $indicator = $this->service->update($request->validated(), $id);
+            $this->logToDatabase(
+                type: 'indicator',
+                level: 'info',
+                customMessage: "Indicador {$indicator->name} atualizado com sucesso."
+            );
+            return response()->json($indicator, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);

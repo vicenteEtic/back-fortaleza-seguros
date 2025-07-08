@@ -17,14 +17,16 @@ use Illuminate\Support\Facades\Auth;
 abstract class AbstractController extends Controller
 {
     protected AbstractService $service;
+    protected ?string $nameEntity = "Entidade";
+    protected ?string $fieldName = "name";
+    protected ?string $logType = 'entity';
 
-    public function __construct(AbstractService $service, LogService $logService)
+    public function __construct(AbstractService $service)
     {
-        parent::__construct($logService);
         $this->service = $service;
     }
 
- 
+
 
     /**
      * Display a listing of the resource.
@@ -33,9 +35,13 @@ abstract class AbstractController extends Controller
     {
         try {
             $this->logRequest();
-            $this->storeLogUser('info',"cadastrou um indicador");
             $filters = $request['filters'] ?? $request['filtersV2'];
             $service = $this->service->index($request['paginate'], $filters, $request['orderBy'], $request['relationships']);
+            $this->logToDatabase(
+                type: $this->logType,
+                level: 'info',
+                customMessage: "Listagem de registros em {$this->nameEntity}",
+            );
             return response()->json($service);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -51,9 +57,19 @@ abstract class AbstractController extends Controller
         try {
             $this->logRequest();
             $service = $this->service->show($id);
+            $this->logToDatabase(
+                type: $this->logType,
+                level: 'info',
+                customMessage: "Visualiação do registro {$this->resolvePath($service,$this->fieldName)} em {$this->nameEntity}. com o ID {$id}",
+            );
             return response()->json($service);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
+            $this->logToDatabase(
+                type: $this->logType,
+                level: 'error',
+                customMessage: "Erro ao visualizar o registro {$id} em {$this->nameEntity}."
+            );
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -69,9 +85,19 @@ abstract class AbstractController extends Controller
         try {
             $this->logRequest();
             $this->service->destroy($id);
+            $this->logToDatabase(
+                type: $this->logType,
+                level: 'info',
+                customMessage: "Registro {$id} removido com sucesso em {$this->nameEntity}."
+            );
             return response()->json(null, Response::HTTP_NO_CONTENT);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
+            $this->logToDatabase(
+                type: $this->logType,
+                level: 'error',
+                customMessage: "Erro ao remover o registro {$id} em {$this->nameEntity}."
+            );
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -93,5 +119,4 @@ abstract class AbstractController extends Controller
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

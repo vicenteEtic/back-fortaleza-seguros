@@ -2,36 +2,57 @@
 
 namespace App\Services\Log;
 
-use App\Repositories\Log\LogRepository;
+use Illuminate\Http\Request;
 use App\Services\AbstractService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
+use App\Repositories\Log\LogRepository;
 
 class LogService extends AbstractService
 {
-    protected $logRepository;
-
     public function __construct(LogRepository $repository)
     {
         parent::__construct($repository);
-        $this->logRepository = $repository;
     }
 
-    public function storeLogUser(string $level, string $message, string $type,$id_entity): void
+    public function storeLog(
+        ?string $level,
+        ?string $typeAction,
+        ?string $type,
+        ?string $module,
+        ?int $idEntity = null,
+        ?string $customMessage = null
+    ): void {
+        $request = request();
+
+        $message = $customMessage ?? $this->generateMessage($typeAction, $module, $level);
+
+        $this->repository->store([
+            'level'           => $level,
+            'type'            => $type,
+            'module'          => $module,
+            'remote_addr'     => $request->ip(),
+            'path_info'       => $request->path(),
+            'user_name'       => Auth::check() ? Auth::user()->first_name . " " . Auth::user()->last_name : 'guest',
+            'user_id'         => Auth::id(),
+            'http_user_agent' => $request->userAgent(),
+            'message'         => $message,
+            'entity_id'       => $idEntity,
+        ]);
+    }
+
+    protected function generateMessage(string $action, string $module, string $level): string
     {
-        $data = [
-            'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-            'path_info' => URL::current(),
-            'request_time' => $_SERVER['REQUEST_TIME'] ?? null,
-            'user_id' => Auth::check() ? Auth::user()->id : null,
-            'http_user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
-            'message' => $message,
-            'level' => $level,
-            'type' => $type,
-            'id_entity' => $id_entity,
+        $module = ucfirst($module);
 
-        ];
-
-        $this->logRepository->store($data);
+        return match ($action) {
+            'create' => "$module criado com sucesso.",
+            'edit'   => "$module editado com sucesso.",
+            'view'   => "Visualização de $module.",
+            'try'    => $level === 'error'
+                ? "Erro ao tentar acessar $module."
+                : "Tentativa de ação em $module.",
+            'delete' => "$module removido com sucesso.",
+            default  => "$module - ação desconhecida.",
+        };
     }
 }

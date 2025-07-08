@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Entities\RiskAssessmentControlController;
-use App\Http\Controllers\Entities\RiskAssessmentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Entities\RiskAssessmentController;
+use App\Http\Controllers\Entities\RiskAssessmentControlController;
 
 Route::get('', [RiskAssessmentController::class, 'index'])
     ->name('risk_assessment.index');

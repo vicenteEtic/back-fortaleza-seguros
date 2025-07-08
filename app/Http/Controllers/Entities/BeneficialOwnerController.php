@@ -11,6 +11,10 @@
     
     class BeneficialOwnerController extends AbstractController
     {
+        protected ?string $logType = 'user';
+        protected ?string $nameEntity = "Beneficiário";
+        protected ?string $fieldName = "name";
+        
         public function __construct(BeneficialOwnerService $service)
         {
             $this->service = $service;

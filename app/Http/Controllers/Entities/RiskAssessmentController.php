@@ -14,7 +14,7 @@ class RiskAssessmentController extends AbstractController
 {
     protected ?string $logType = 'entity';
     protected ?string $nameEntity = "Avaliação de Risco";
-    protected ?string $fieldName = "entity->social_denomination";
+    protected ?string $fieldName = "entity?->social_denomination";
 
     public function __construct(RiskAssessmentService $service)
     {
@@ -30,10 +30,19 @@ class RiskAssessmentController extends AbstractController
         try {
             $this->logRequest();
             $riskAssessment = $this->service->store($request->validated());
+
             $this->logToDatabase(
                 type: 'entity',
                 level: 'info',
-                customMessage: "Realizou uma avaliação na entidade {$riskAssessment?->entity?->social_denomination} que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência Cliente {$riskAssessment->diligence}.",
+                customMessage: "{$riskAssessment?->entity?->social_denomination} realizou uma avaliação na entidade {$riskAssessment?->entity?->social_denomination} que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência {$riskAssessment->diligence}.",
+                idEntity: $riskAssessment->entity_id
+            );
+
+            $userName = auth()->user()?->first_name ?? 'Usuário desconhecido';
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: "{$userName} realizou uma avaliação que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência {$riskAssessment->diligence}.",
                 idEntity: $riskAssessment->entity_id
             );
             DB::commit();
@@ -44,7 +53,7 @@ class RiskAssessmentController extends AbstractController
             $this->logToDatabase(
                 type: 'entity',
                 level: 'error',
-                customMessage: "Erro ao realizar avaliação na entidade {$request->entity_id}.",
+                customMessage: "O usuário " . auth()->user()->first_name . " tentou criar uma avaliação de risco, mas ocorreu um erro.",
                 idEntity: $request->entity_id
             );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

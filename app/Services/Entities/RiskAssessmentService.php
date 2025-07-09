@@ -2,15 +2,15 @@
 
 namespace App\Services\Entities;
 
+use InvalidArgumentException;
 use App\Jobs\GenerateAlertsJob;
 use App\Services\AbstractService;
+use App\Services\Alert\AlertService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Diligence\DiligenceService;
+use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Entities\RiskAssessmentRepository;
 use App\Repositories\Indicator\IndicatorTypeRepository;
-use App\Services\Alert\AlertService;
-use Illuminate\Database\Eloquent\Collection;
-use InvalidArgumentException;
 
 class RiskAssessmentService extends AbstractService
 {

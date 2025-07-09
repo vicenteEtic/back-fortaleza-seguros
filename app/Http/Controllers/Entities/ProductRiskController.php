@@ -31,7 +31,7 @@ class ProductRiskController extends AbstractController
             $this->logToDatabase(
                 type: 'user',
                 level: 'info',
-                customMessage: "Produto de risco {$productRisk?->product?->description} criado com sucesso.",
+                customMessage: "O usuário " . auth()->user()->first_name . " criou o produto de risco {$productRisk->product?->description} com sucesso.",
                 idEntity: $productRisk->id
             );
             return response()->json($productRisk, Response::HTTP_CREATED);
@@ -57,7 +57,7 @@ class ProductRiskController extends AbstractController
             $this->logToDatabase(
                 type: 'user',
                 level: 'info',
-                customMessage: "Produto de risco {$productRisk?->product?->description} atualizado com sucesso.",
+                customMessage: "O usuário " . auth()->user()->first_name . " atualizou o produto de risco {$productRisk->product?->description} com sucesso.",
                 idEntity: $productRisk->id
             );
             return response()->json($productRisk, Response::HTTP_OK);
@@ -66,7 +66,7 @@ class ProductRiskController extends AbstractController
             $this->logToDatabase(
                 type: 'user',
                 level: 'error',
-                customMessage: "Erro ao atualizar produto de risco com ID {$id}.",
+                customMessage: "O usuário " . auth()->user()->first_name . " tentou atualizar um produto de risco que não existe."
             );
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
         } catch (Exception $e) {
@@ -74,7 +74,7 @@ class ProductRiskController extends AbstractController
             $this->logToDatabase(
                 type: 'user',
                 level: 'error',
-                customMessage: "Erro ao atualizar produto de risco.",
+                customMessage: "O usuário " . auth()->user()->first_name . " tentou atualizar o produto de risco {$id}, mas ocorreu um erro."
             );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }

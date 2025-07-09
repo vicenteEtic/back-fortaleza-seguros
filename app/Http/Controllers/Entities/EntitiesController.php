@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Entities;
 
 use Exception;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Entities\EntitiesService;
 use App\Http\Controllers\AbstractController;
 use App\Http\Requests\Entities\EntitiesRequest;
 use App\Http\Requests\Entities\ImportDataRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class EntitiesController extends AbstractController
 {
@@ -34,7 +33,7 @@ class EntitiesController extends AbstractController
             $this->logToDatabase(
                 type: 'entity',
                 level: 'info',
-                customMessage: "Entidade {$entities->social_denomination} criada com sucesso.",
+                customMessage: "O usuário " . Auth::user()->first_name . " criou a entidade {$entities->social_denomination} com sucesso.",
                 idEntity: $entities->id
             );
             return response()->json($entities, Response::HTTP_CREATED);
@@ -60,7 +59,7 @@ class EntitiesController extends AbstractController
             $this->logToDatabase(
                 type: 'entity',
                 level: 'info',
-                customMessage: "Entidade {$entities->social_denomination} atualizada com sucesso.",
+                customMessage: "O usuário " . Auth::user()->first_name . " atualizou a entidade {$entities->social_denomination} com sucesso.",
                 idEntity: $entities->id
             );
             return response()->json($entities, Response::HTTP_OK);
@@ -87,13 +86,13 @@ class EntitiesController extends AbstractController
     {
         try {
             $this->logRequest();
-            $batchId = $this->service->initializeImportBatch(Auth::id());
-            $this->service->dispatchImportJobs($request->validated(), Auth::id(), $batchId);
             $this->logToDatabase(
                 type: 'entity',
                 level: 'info',
-                customMessage: "Importação de entidades iniciada com sucesso."
+                customMessage: "O usuário " . Auth::user()->first_name . " iniciou a importação de entidades.",
             );
+            $batchId = $this->service->initializeImportBatch(Auth::id());
+            $this->service->dispatchImportJobs($request->validated(), Auth::id(), $batchId);
             return response()->json("Importação em progresso", Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);

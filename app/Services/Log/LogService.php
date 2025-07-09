@@ -14,6 +14,17 @@ class LogService extends AbstractService
         parent::__construct($repository);
     }
 
+    public function index(?int $paginate, ?array $filterParams, ?array $orderByParams, $relationships = [])
+    {
+        $relationships = [
+            'entity',
+            'user'
+        ];
+
+        $orderByParams = $orderByParams ?? ['created_at' => 'desc'];
+        return $this->repository->index($paginate, $filterParams, $orderByParams, $relationships);
+    }
+
     public function storeLog(
         ?string $level,
         ?string $typeAction,

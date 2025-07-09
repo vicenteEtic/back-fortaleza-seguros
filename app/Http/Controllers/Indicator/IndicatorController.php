@@ -35,9 +35,9 @@ class IndicatorController extends AbstractController
             $this->logRequest();
             $indicator = $this->service->store($request->validated());
             $this->logToDatabase(
-                type: 'indicator',
+                type: 'user',
                 level: 'info',
-                customMessage: "Indicador {$indicator->name} criado com sucesso."
+                customMessage: "O usuário " . auth()->user()->first_name . " criou o indicador {$indicator->name} com sucesso.",
             );
             return response()->json($indicator, Response::HTTP_CREATED);
         } catch (Exception $e) {
@@ -55,9 +55,9 @@ class IndicatorController extends AbstractController
             $this->logRequest();
             $indicator = $this->service->update($request->validated(), $id);
             $this->logToDatabase(
-                type: 'indicator',
+                type: 'user',
                 level: 'info',
-                customMessage: "Indicador {$indicator->name} atualizado com sucesso."
+                customMessage: "O usuário " . auth()->user()->first_name . " atualizou o indicador {$indicator->name} com sucesso.",
             );
             return response()->json($indicator, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {

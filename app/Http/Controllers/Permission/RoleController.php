@@ -29,15 +29,14 @@ class RoleController extends AbstractController
         DB::beginTransaction();
         try {
             $this->logRequest();
-            $entity = $this->service->store($request->validated());
+            $role = $this->service->store($request->validated());
             $this->logToDatabase(
                 type: 'user',
                 level: 'info',
-                customMessage: "Perfil {$entity->name} criado com sucesso.",
-                idEntity: $entity->id
+                customMessage: "O usuário " . auth()->user()->first_name . " criou o perfil {$role->name} com sucesso."
             );
             DB::commit();
-            return response()->json($entity, Response::HTTP_CREATED);
+            return response()->json($role, Response::HTTP_CREATED);
         } catch (Exception $e) {
             DB::rollBack();
             $this->logRequest($e);
@@ -58,25 +57,30 @@ class RoleController extends AbstractController
         Db::beginTransaction();
         try {
             $this->logRequest();
-            $entity = $this->service->update($request->validated(), $id);
+            $role = $this->service->update($request->validated(), $id);
             $this->logToDatabase(
                 type: $this->logType,
                 level: 'info',
-                customMessage: "Perfil {$entity->name} atualizado com sucesso.",
-                idEntity: $entity->id
+                customMessage: "O usuário " . auth()->user()->first_name . " atualizou o perfil {$role->name} com sucesso."
             );
             DB::commit();
-            return response()->json($entity, Response::HTTP_OK);
+            return response()->json($role, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
             $this->logToDatabase(
                 type: 'user',
                 level: 'error',
-                customMessage: "Erro ao atualizar perfil com ID {$id}.",
+                customMessage: "O usuário " . auth()->user()->first_name . " tentou atualizar um perfil que não existe."
             );
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
         } catch (Exception $e) {
             $this->logRequest($e);
+            DB::rollBack();
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: "O usuário " . auth()->user()->first_name . " tentou atualizar o perfil {$id}, mas ocorreu um erro."
+            );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

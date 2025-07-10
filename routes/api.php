@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('entities')->group(base_path('routes/entities/entities.php'));

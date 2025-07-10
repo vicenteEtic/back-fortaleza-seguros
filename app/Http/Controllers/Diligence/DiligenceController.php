@@ -11,6 +11,10 @@ use Illuminate\Http\Response;
 
 class DiligenceController extends AbstractController
 {
+    protected ?string $nameEntity = "Diligência";
+    protected ?string $fieldName = "name";
+    protected ?string $logType = 'user';
+
     public function __construct(DiligenceService $service)
     {
         $this->service = $service;
@@ -21,6 +25,11 @@ class DiligenceController extends AbstractController
         try {
             $this->logRequest();
             $diligence = $this->service->store($request->validated());
+            $this->logToDatabase(
+                type: 'diligence',
+                level: 'info',
+                customMessage: "O usuário " . auth()->user()->first_name . " criou a diligência {$diligence->name} com sucesso."
+            );
             return response()->json($diligence, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -36,6 +45,11 @@ class DiligenceController extends AbstractController
         try {
             $this->logRequest();
             $diligence = $this->service->update($request->validated(), $id);
+            $this->logToDatabase(
+                type: 'diligence',
+                level: 'info',
+                customMessage: "O usuário " . auth()->user()->first_name . " atualizou a diligência {$diligence->name} com sucesso."
+            );
             return response()->json($diligence, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);

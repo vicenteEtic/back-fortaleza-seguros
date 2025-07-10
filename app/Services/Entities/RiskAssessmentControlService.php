@@ -2,8 +2,8 @@
 
 namespace App\Services\Entities;
 
-use App\Repositories\Entities\RiskAssessmentControlRepository;
 use App\Services\AbstractService;
+use App\Repositories\Entities\RiskAssessmentControlRepository;
 
 class RiskAssessmentControlService extends AbstractService
 {

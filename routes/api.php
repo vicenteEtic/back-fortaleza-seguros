@@ -9,11 +9,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('permission')->group(base_path('routes/user/permission/permission.php'));
     Route::prefix('role')->group(base_path('routes/user/permission/role.php'));
     Route::prefix('indicator')->group(base_path('routes/indicator/indicator.php'));
-    Route::prefix('history')->group(base_path('routes/history/history.php'));
     Route::prefix('user')->group(base_path('routes/user/user.php'));
     Route::prefix('risk_assessment')->group(base_path('routes/entities/risk_assessment.php'));
     Route::prefix('pep')->group(base_path('routes/entities/pep.php'));
     Route::prefix('alert')->group(base_path('routes/alert/alert.php'));
+    Route::prefix('logs')->group(base_path('routes/logs/logs.php'));
     Route::prefix('dashboard')->group(base_path('routes/entities/dashboard.php'));
 });
 

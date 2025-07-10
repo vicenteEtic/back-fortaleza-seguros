@@ -9,10 +9,16 @@ use App\Services\User\UserService;
 use App\Http\Requests\User\AuthRequest;
 use App\Http\Requests\User\UserRequest;
 use App\Http\Controllers\AbstractController;
+use App\Traits\DatabaseLogger;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Monolog\Level;
 
 class UserController extends AbstractController
 {
+    protected ?string $logType = 'user';
+    protected ?string $nameEntity = "Usuário";
+    protected ?string $fieldName = "first_name";
+
     public function __construct(UserService $service)
     {
         $this->service = $service;
@@ -23,9 +29,15 @@ class UserController extends AbstractController
         try {
             $this->logRequest();
             $token = $this->service->login($request);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: 'Iniciou sessão.',
+            );
             return response()->json(['api_token' => $token], Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);
+            $this->logToDatabase('error', 'Erro ao iniciar sessão do usuário.');
             return response()->json($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         }
     }
@@ -33,10 +45,20 @@ class UserController extends AbstractController
     {
         try {
             $this->logRequest();
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: 'Terminou sessão.',
+            );
             $response = $this->service->logout($request);
             return response()->json(["message" => "Sessão terminada!"], Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: 'Erro ao terminar sessão do usuário.',
+            );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -45,9 +67,19 @@ class UserController extends AbstractController
         try {
             $this->logRequest();
             $user = $this->service->store($request->validated());
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: "Usuário {$user?->first_name} criado com sucesso.",
+            );
             return response()->json($user, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: 'Erro ao criar usuário.',
+            );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -60,12 +92,27 @@ class UserController extends AbstractController
         try {
             $this->logRequest();
             $user = $this->service->update($request->validated(), $id);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: "Usuário {$user?->first_name} atualizado com sucesso.",
+            );
             return response()->json($user, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: 'Usuário não encontrado.',
+            );
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
         } catch (Exception $e) {
             $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: 'Erro ao atualizar usuário.',
+            );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

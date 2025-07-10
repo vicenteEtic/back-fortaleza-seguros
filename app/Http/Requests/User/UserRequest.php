@@ -29,7 +29,9 @@ class UserRequest extends BaseFormRequest
             'email' => ['required', 'email', 'max:255', "unique:users,email,{$id},id"],
             'is_active' => ['nullable', 'boolean'],
             'role_id' => ['required', 'integer', 'exists:role,id'],
-            'password' => [$id ? 'nullable' : 'required', 'string', 'min:8'],
+            ...($id === null ? [
+                'password' => ['required', 'string', 'min:8'],
+            ] : []),
         ];
     }
 

@@ -12,6 +12,10 @@ use Illuminate\Http\Response;
 
 class IndicatorTypeController extends AbstractController
 {
+    protected ?string $logType = 'user';
+    protected ?string $nameEntity = "Tipo de Indicador";
+    protected ?string $fieldName = "indicator_id";
+
     public function __construct(IndicatorTypeService $service)
     {
         $this->service = $service;
@@ -30,10 +34,15 @@ class IndicatorTypeController extends AbstractController
                 $data['indicator_id'] = $indicatorType;
             }
 
-            $entities = $this->service->store($data);
-            return response()->json($entities, Response::HTTP_CREATED);
+            $indicatorTypeStore = $this->service->store($data);
+            return response()->json($indicatorTypeStore, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'indicator',
+                level: 'error',
+                customMessage: "O usuário " . auth()->user()->first_name . " tentou criar um tipo de indicador, mas ocorreu um erro: "
+            );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -45,8 +54,13 @@ class IndicatorTypeController extends AbstractController
     {
         try {
             $this->logRequest();
-            $entities = $this->service->update($request->validated(), $id);
-            return response()->json($entities, Response::HTTP_OK);
+            $indicatorTypeStore = $this->service->update($request->validated(), $id);
+            $this->logToDatabase(
+                type: 'indicator',
+                level: 'info',
+                customMessage: "O usuário " . auth()->user()->first_name . " atualizou o tipo de indicador {$indicatorTypeStore->name} com sucesso."
+            );
+            return response()->json($indicatorTypeStore, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
             return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
@@ -61,37 +75,79 @@ class IndicatorTypeController extends AbstractController
      */
     public function storeCapacidadeIdentificacaoVerificacao(IndicatorTypeRequest $request)
     {
-        return $this->store($request, TypeIndicator::CAPACIDADE_IDENTIFICACAO_VERIFICACAO);
+        $typeIndicator = $this->store($request, TypeIndicator::CAPACIDADE_IDENTIFICACAO_VERIFICACAO);
+        $this->logToDatabase(
+            type: 'user',
+            level: 'info',
+            customMessage: "O usuario " . auth()->user()->first_name . " criou o tipo de indicador " . $request->name . " com sucesso."
+        );
+        return $typeIndicator;
     }
 
 
     public function storeTipoActividadePrincipal(IndicatorTypeRequest $request)
     {
-        return $this->store($request, TypeIndicator::TIPO_ACTIVIDADE_PRINCIPAL);
+        $typeIndicator = $this->store($request, TypeIndicator::TIPO_ACTIVIDADE_PRINCIPAL);
+        $this->logToDatabase(
+            type: 'user',
+            level: 'info',
+            customMessage: "O usuario " . auth()->user()->first_name . " criou o tipo de indicador " . $request->name . " com sucesso."
+        );
+        return $typeIndicator;
     }
 
     public function storeTipoSeguro(IndicatorTypeRequest $request)
     {
-        return $this->store($request, TypeIndicator::TIPO_SEGURO);
+        $typeIndicator = $this->store($request, TypeIndicator::TIPO_SEGURO);
+        $this->logToDatabase(
+            type: 'user',
+            level: 'info',
+            customMessage: "O usuario " . auth()->user()->first_name . " criou o tipo de indicador " . $request->name . " com sucesso."
+        );
+        return $typeIndicator;
     }
 
     public function storeRiscoProdutosServicosTransacoes4(IndicatorTypeRequest $request)
     {
-        return $this->store($request, TypeIndicator::RISCO_PRODUTOS_SERVICOS_TRANSACOES_4);
+        $typeIndicator = $this->store($request, TypeIndicator::RISCO_PRODUTOS_SERVICOS_TRANSACOES_4);
+        $this->logToDatabase(
+            type: 'user',
+            level: 'info',
+            customMessage: "O usuario " . auth()->user()->first_name . " criou o tipo de indicador " . $request->name . " com sucesso."
+        );
+        return $typeIndicator;
     }
 
     public function storeTipoActividadePrincipalColectiva(IndicatorTypeRequest $request)
     {
-        return $this->store($request, TypeIndicator::TIPO_ACTIVIDADE_PRINCIPAL_COLECTIVA);
+        $typeIndicator = $this->store($request, TypeIndicator::TIPO_ACTIVIDADE_PRINCIPAL_COLECTIVA);
+        $this->logToDatabase(
+            type: 'user',
+            level: 'info',
+            customMessage: "O usuario " . auth()->user()->first_name . " criou o tipo de indicador " . $request->name . " com sucesso."
+        );
+        return $typeIndicator;
     }
 
     public function storeCanal(IndicatorTypeRequest $request)
     {
-        return $this->store($request, TypeIndicator::CANAIS);
+        $typeIndicator = $this->store($request, TypeIndicator::CANAIS);
+        $this->logToDatabase(
+            type: 'user',
+            level: 'info',
+            customMessage: "O usuario " . auth()->user()->first_name . " criou o tipo de indicador " . $request->name . " com sucesso."
+        );
+        return $typeIndicator;
     }
 
     public function storeCae(IndicatorTypeRequest $request)
     {
-        return $this->store($request, TypeIndicator::CAE);
+        $typeIndicator = $this->store($request, TypeIndicator::CAE);
+        $this->logToDatabase(
+            type: 'user',
+            level: 'info',
+            customMessage: "O usuario " . auth()->user()->first_name . " criou o tipo de indicador " . $request->name . " com sucesso."
+        );
+        return $typeIndicator;
     }
 }

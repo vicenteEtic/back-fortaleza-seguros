@@ -14,11 +14,13 @@ use App\Models\Entities\RiskAssessmentControl;
 use App\Services\Entities\EntitiesService;
 use App\Services\Entities\RiskAssessmentService;
 use App\Services\Indicator\IndicatorTypeService;
+use App\Traits\DatabaseLogger;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ImportDataJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, DatabaseLogger;
 
     protected $data;
     protected $userID;
@@ -58,6 +60,8 @@ class ImportDataJob implements ShouldQueue
             return;
         }
 
+        Auth::loginUsingId($this->userID);
+
         $data = $this->prepareAssessmentData($record);
         $data['user_id'] = $this->userID;
         $data['type_assessment'] = TypeAssessment::IMPORT->value; // Import type
@@ -69,6 +73,19 @@ class ImportDataJob implements ShouldQueue
         $riskAssessment = $this->riskAssessmentService->store($data);
         if ($riskAssessment) {
             $riskAssessment->risk_assessment_control_id = $this->batchId;
+            $this->logToDatabase(
+                type: 'entity',
+                level: 'info',
+                customMessage: "{$riskAssessment?->entity?->social_denomination} realizou uma avaliação na entidade {$riskAssessment?->entity?->social_denomination} que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência {$riskAssessment->diligence}.",
+                idEntity: $riskAssessment->entity_id
+            );
+            $userName = auth()->user()?->first_name ?? 'Usuário desconhecido';
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: "{$userName} realizou uma avaliação que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência {$riskAssessment->diligence}.",
+                idEntity: $riskAssessment->entity_id
+            );
             $riskAssessment->save();
         }
     }

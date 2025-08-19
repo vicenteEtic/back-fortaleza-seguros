@@ -12,6 +12,10 @@ use Illuminate\Http\Response;
 
 class PepController extends AbstractController
 {
+    protected ?string $logType = 'user';
+    protected ?string $nameEntity = "Pessoa Exposta Politicamente";
+    protected ?string $fieldName = "name";
+
     public function __construct(PepService $service)
     {
         $this->service = $service;

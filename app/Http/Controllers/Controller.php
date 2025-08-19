@@ -2,13 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Log\LogService;
+use App\Traits\DatabaseLogger;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 abstract class Controller
 {
-    use AuthorizesRequests, ValidatesRequests;
+    use AuthorizesRequests, ValidatesRequests, DatabaseLogger;
+
+    protected LogService $logService;
+
+    public function __construct(LogService $logService)
+    {
+        $this->logService = $logService;
+    }
+
 
     protected function logRequest($e = null)
     {
@@ -44,5 +54,17 @@ abstract class Controller
             }
         }
         return $array;
+    }
+
+    public function resolvePath($object, $path)
+    {
+        $parts = explode('->', $path);
+        foreach ($parts as $part) {
+            if (!is_object($object) || !isset($object->{$part})) {
+                return null;
+            }
+            $object = $object->{$part};
+        }
+        return $object;
     }
 }

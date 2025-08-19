@@ -6,15 +6,18 @@ use App\Models\Permission\Role;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
-use App\Models\Permission\Permission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Model implements
-    AuthenticatableContract
+    AuthenticatableContract,
+    CanResetPassword
 {
-    use Authenticatable, Authorizable, MustVerifyEmail, HasApiTokens;
+    use Authenticatable, Authorizable, MustVerifyEmail, HasApiTokens,  Notifiable, CanResetPasswordTrait;
 
     /**
      * The attributes that are mass assignable.

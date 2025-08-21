@@ -51,19 +51,22 @@ class LogService extends AbstractService
         ]);
     }
 
-    protected function generateMessage(string $action, string $module, string $level): string
-    {
-        $module = ucfirst($module);
+    protected function generateMessage(?string $action, ?string $module, ?string $level): string
+{
+    $module = $module ?? 'Unknown';
+    $action = $action ?? 'unknown';
+    $level = $level ?? 'info';
 
-        return match ($action) {
-            'create' => "$module criado com sucesso.",
-            'edit'   => "$module editado com sucesso.",
-            'view'   => "Visualização de $module.",
-            'try'    => $level === 'error'
-                ? "Erro ao tentar acessar $module."
-                : "Tentativa de ação em $module.",
-            'delete' => "$module removido com sucesso.",
-            default  => "$module - ação desconhecida.",
-        };
-    }
+    return match ($action) {
+        'create' => "$module criado com sucesso.",
+        'edit'   => "$module editado com sucesso.",
+        'view'   => "Visualização de $module.",
+        'try'    => $level === 'error'
+            ? "Erro ao tentar acessar $module."
+            : "Tentativa de ação em $module.",
+        'delete' => "$module removido com sucesso.",
+        default  => "$module - ação desconhecida.",
+    };
+}
+
 }

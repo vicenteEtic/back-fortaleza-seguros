@@ -6,89 +6,76 @@ use Illuminate\Bus\Queueable;
 use App\External\PepExternalApi;
 use Illuminate\Support\Facades\Log;
 use App\External\SanctionExternalApi;
+use App\Models\Entities\Entities;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Repositories\Alert\AlertRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Repositories\Entities\BeneficialOwnerRepository;
 use App\Repositories\Entities\EntitiesRepository;
 
 class GenerateAlertsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $entityId;
-    protected $beneficialOwner;
-    protected $riskAssessment;
+    protected int $entityId;
+    protected string $riskAssessment;
     protected $alertRepository;
     protected $entitiesRepository;
-    protected $beneficialOwnerRepository;
 
     /**
-     * Create a new job instance.
-     *
-     * @param int $entityId
-     * @param bool $beneficialOwner
-     * @param int $riskAssessment
+     * @param int    $entityId
+     * @param string $riskAssessment
      */
-    public function __construct(int $entityId, bool $beneficialOwner = false, int $riskAssessment)
+    public function __construct(int $entityId, string $riskAssessment)
     {
         $this->entityId = $entityId;
-        $this->beneficialOwner = $beneficialOwner;
         $this->riskAssessment = $riskAssessment;
     }
 
     /**
      * Execute the job.
-     *
-     * @param AlertRepository $alertRepository
-     * @param EntitiesRepository $entitiesRepository
-     * @param BeneficialOwnerRepository $beneficialOwnerRepository
-     * @return void
      */
-    public function handle(AlertRepository $alertRepository, EntitiesRepository $entitiesRepository, BeneficialOwnerRepository $beneficialOwnerRepository): void
-    {
+    public function handle(
+        AlertRepository $alertRepository,
+        EntitiesRepository $entitiesRepository
+    ): void {
         $this->alertRepository = $alertRepository;
         $this->entitiesRepository = $entitiesRepository;
-        $this->beneficialOwnerRepository = $beneficialOwnerRepository;
 
-        $this->generateAlertGeneral($this->entityId, $this->beneficialOwner, $this->riskAssessment);
+        $this->generateAlertGeneral(
+            $this->entityId,
+            $this->riskAssessment
+        );
     }
 
     /**
-     * Generate alerts for the given entity and optionally beneficial owners.
-     *
-     * @param int $entityId
-     * @param bool $beneficialOwner
-     * @param int $riskAssessment
-     * @return void
+     * Generate alerts for the given entity.
      */
-    public function generateAlertGeneral(int $entityId, bool $beneficialOwner, int $riskAssessment): void
+    public function generateAlertGeneral(int $entityId, string $riskAssessment): void
     {
-        $entity = $this->entitiesRepository->findBy(['id' => $entityId]);
-
+        $entity = Entities::find($entityId);
         if (!$entity) {
-            Log::warning("Entity with ID {$entityId} not found or does not match type.");
+            Log::warning("Entity with ID {$entityId} não encontrada");
             return;
         }
-
-        $this->processEntities($entity, 'social_denomination');
-        $this->processEntitiesSanctions($entity, 'social_denomination');
-
-        if ($beneficialOwner) {
-            $beneficialOwners = $this->beneficialOwnerRepository->findBy(['risk_assessment_id' => $riskAssessment]);
-            $this->processEntities($beneficialOwners, 'name');
-            $this->processEntitiesSanctions($beneficialOwners, 'name');
+        $entityName = $entity->social_denomination ?? null;
+        // Consultar APIs externas
+        $externalData = PepExternalApi::getDataPepExternal($entityName);
+        $externalDataSanction = SanctionExternalApi::getDataSanctionExternal($entityName);
+   
+        // Criar alertas se houver retorno
+        if (!empty($externalData)) {
+            $this->createAlerts($externalData, $entity->id, "PEP");
+        }
+        if (!empty($externalDataSanction)) {
+            $this->createAlerts($externalDataSanction, $entity->id, "SANCTION");
         }
     }
-
+    
+    
     /**
      * Process entities for PEP checks.
-     *
-     * @param mixed $entities
-     * @param string $nameField
-     * @return void
      */
     public function processEntities($entities, string $nameField): void
     {
@@ -110,10 +97,6 @@ class GenerateAlertsJob implements ShouldQueue
 
     /**
      * Process entities for sanctions checks.
-     *
-     * @param mixed $entities
-     * @param string $nameField
-     * @return void
      */
     public function processEntitiesSanctions($entities, string $nameField): void
     {
@@ -134,11 +117,6 @@ class GenerateAlertsJob implements ShouldQueue
 
     /**
      * Create or update alerts based on external data.
-     *
-     * @param array $data
-     * @param int $entityId
-     * @param string $type
-     * @return void
      */
     private function createAlerts(array $data, int $entityId, string $type = "PEP"): void
     {

@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Entities;
 use App\Http\Controllers\AbstractController;
 use App\Services\Entities\RiskAssessmentService;
 use App\Http\Requests\Entities\RiskAssessmentRequest;
+use App\Jobs\GenerateAlertsJob;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+
+use function PHPUnit\Framework\returnSelf;
 
 class RiskAssessmentController extends AbstractController
 {
@@ -30,7 +33,11 @@ class RiskAssessmentController extends AbstractController
         try {
             $this->logRequest();
             $riskAssessment = $this->service->store($request->validated());
+            GenerateAlertsJob::dispatch(
+                $request->entity_id,
 
+                $riskAssessment->risk_level
+            );
             $this->logToDatabase(
                 type: 'entity',
                 level: 'info',

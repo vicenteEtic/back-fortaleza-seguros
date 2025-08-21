@@ -30,6 +30,7 @@ class EntitiesRequest extends BaseFormRequest
             'customer_number' => ['required', 'string', 'max:255', 'unique:entities,customer_number,' . $id],
             'policy_number' => ['required', 'string', 'max:255', 'unique:entities,policy_number,' . $id],
             'entity_type' => ['required', 'integer', Rule::enum(TypeEntity::class)],
+            'nif' =>  ['required', 'string'],
         ];
     }
 
@@ -40,6 +41,7 @@ class EntitiesRequest extends BaseFormRequest
             'customer_number' => 'Número do Cliente',
             'policy_number' => 'Número da Apólice',
             'entity_type' => 'Tipo de Entidade',
+            'nif' => 'Nif',
         ];
     }
 }

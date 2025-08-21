@@ -11,7 +11,7 @@ Route::get('risk-assessment-control', [RiskAssessmentControlController::class, '
     ->name('risk_assessment_control.index');
 
 Route::get('risk-assessment-control/{id}', [RiskAssessmentControlController::class, 'show'])
-    ->name('risk_assessment_control.index');
+    ->name('risk_assessment_control.index_risk_assessment_control');
 
 Route::post('', [RiskAssessmentController::class, 'store'])
     ->name('risk_assessment.store');

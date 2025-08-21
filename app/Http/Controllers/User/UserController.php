@@ -9,6 +9,7 @@ use App\Services\User\UserService;
 use App\Http\Requests\User\AuthRequest;
 use App\Http\Requests\User\UserRequest;
 use App\Http\Controllers\AbstractController;
+use App\Http\Requests\User\Verify2faRequest;
 use App\Traits\DatabaseLogger;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Monolog\Level;
@@ -127,4 +128,16 @@ class UserController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    public function verify2fa(Verify2faRequest $request)
+    {
+        try {
+          
+            $user = $this->service->verify2fa($request->validated());
+            return response()->json($user, Response::HTTP_CREATED);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    
 }

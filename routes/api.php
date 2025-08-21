@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\User\UserController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('entities')->group(base_path('routes/entities/entities.php'));
     Route::prefix('diligence')->group(base_path('routes/diligence/diligence.php'));
@@ -18,3 +18,4 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::prefix('auth')->middleware('guest')->group(base_path('routes/user/auth.php'));
+Route::post('auth/2fa', [UserController::class, 'verify2fa']);

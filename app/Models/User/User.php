@@ -3,6 +3,7 @@
 namespace App\Models\User;
 
 use App\Models\Permission\Role;
+use App\Notifications\CustomResetPassword;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
@@ -12,12 +13,14 @@ use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class User extends Model implements
     AuthenticatableContract,
     CanResetPassword
 {
     use Authenticatable, Authorizable, MustVerifyEmail, HasApiTokens,  Notifiable, CanResetPasswordTrait;
+    use TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +50,11 @@ class User extends Model implements
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
+        'two_factor_confirmed_at',
+        'two_factor_code',
+        'two_factor_expires_at'
     ];
 
     /**
@@ -56,6 +64,7 @@ class User extends Model implements
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'two_factor_expires_at' => 'datetime',
     ];
 
 
@@ -100,4 +109,28 @@ class User extends Model implements
         }
         return false;
     }
+
+    // Gera código de 6 dígitos e define validade de 10 min
+    public function generateTwoFactorCode()
+    {
+        $this->two_factor_code = rand(100000, 999999);
+        $this->two_factor_expires_at = now()->addMinutes(10);
+        $this->save();
+    }
+
+    // Verifica se o código é válido
+    public function validateTwoFactorCode($code)
+    {
+        return $this->two_factor_code === $code && $this->two_factor_expires_at->isFuture();
+    }
+
+    // Limpa código após uso
+    public function resetTwoFactorCode()
+    {
+        $this->two_factor_code = null;
+        $this->two_factor_expires_at = null;
+        $this->save();
+    }
+
+
 }

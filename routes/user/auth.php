@@ -12,8 +12,7 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 Route::post('/login', [UserController::class, 'login']);
 
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-    ->middleware('guest')
-    ->name('password.email');
+    ->middleware('guest');
 
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
     ->middleware('guest')
@@ -28,5 +27,4 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
     ->name('verification.send');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
+    ->middleware('auth');

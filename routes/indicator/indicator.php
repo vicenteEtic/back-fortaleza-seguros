@@ -38,7 +38,7 @@ Route::prefix('type')->group(function () {
         ->name('indicator.type.store.category');
 
     Route::post('canal', [IndicatorTypeController::class, 'storeCanal'])
-        ->name('indicator.type.store.canal');
+        ->name('indicator.type.store.canal_type');
 
     Route::post('cae', [IndicatorTypeController::class, 'storeCae'])
         ->name('indicator.type.store.cae');

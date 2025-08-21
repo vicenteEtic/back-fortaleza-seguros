@@ -58,11 +58,18 @@ class PepController extends AbstractController
     {
         try {
             $this->logRequest();
+    
             $peps = $this->service->GetPepExternal($request->all());
+    
             return response()->json($peps, Response::HTTP_OK);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logRequest($e);
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+    
+            return response()->json(
+                ['error' => $e->getMessage()],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
+    
 }

@@ -22,7 +22,8 @@ class Entities extends Model
         'last_evaluation',
         'deleted_at',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'nif'
     ];
 
     public function riskAssessments()

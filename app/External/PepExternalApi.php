@@ -8,34 +8,39 @@ class PepExternalApi
 {
     public static function getDataPepExternal($name)
     {
-        $api = Http::get(env('URL_PEP_API') . '/pep/search', [
+        $baseUrl = config('services.pep.url');
+
+        $api = Http::get("{$baseUrl}/pep/search", [
             "filters" => [
-                "name" =>  $name,
-                "min_score" => 50,
-                "limitSearch" => 5
+                "name"       => $name,
+                "min_score"  => 50,
+                "limitSearch"=> 5
             ]
         ]);
+
         if ($api->successful()) {
             return $api->json();
         }
+
         return response()->json(['error' => 'Failed to fetch data from PEP API'], $api->status());
     }
 
     public static function getAllPep($name = null)
     {
-        if (is_null($name)) {
-            $data = [];
-        } else {
-            $data = [
-                "filters" => [
-                    "name" =>  $name
-                ]
-            ];
-        }
-        $api = Http::get(env('URL_PEP_API') . '/pep', $data);
+        $baseUrl = config('services.pep.url');
+
+        $data = is_null($name) ? [] : [
+            "filters" => [
+                "name" => $name
+            ]
+        ];
+
+        $api = Http::get("{$baseUrl}/pep", $data);
+
         if ($api->successful()) {
             return $api->json();
         }
+
         return response()->json(['error' => 'Failed to fetch data from PEP API'], $api->status());
     }
 }

@@ -8,29 +8,39 @@ class SanctionExternalApi
 {
     public static function getDataSanctionExternal($name)
     {
-        $api = Http::get(env('URL_PEP_API') . '/sanction/search', [
+        $baseUrl = config('services.pep.url');
+
+        $api = Http::get("{$baseUrl}/sanction/search", [
             "filters" => [
-                "name" =>  $name,
-                "min_score" => 50,
+                "name"        => $name,
+                "min_score"   => 50,
                 "limitSearch" => 5
             ]
         ]);
+
         if ($api->successful()) {
             return $api->json();
         }
-        return response()->json(['error' => 'Failed to fetch data from PEP API'], $api->status());
+
+        return response()->json(['error' => 'Failed to fetch data from Sanction API'], $api->status());
     }
 
-    public static function getAllSanctions($name)
+    public static function getAllSanctions($name = null)
     {
-        $api = Http::get(env('URL_PEP_API') . '/sanction', [
+        $baseUrl = config('services.pep.url');
+
+        $data = is_null($name) ? [] : [
             "filters" => [
-                "name" =>  $name
+                "name" => $name
             ]
-        ]);
+        ];
+
+        $api = Http::get("{$baseUrl}/sanction", $data);
+
         if ($api->successful()) {
             return $api->json();
         }
-        return response()->json(['error' => 'Failed to fetch data from PEP API'], $api->status());
+
+        return response()->json(['error' => 'Failed to fetch data from Sanction API'], $api->status());
     }
 }

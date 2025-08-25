@@ -16,7 +16,7 @@ return new class extends Migration
             
             // Chaves estrangeiras
             $table->foreignId('alert_id')
-                ->constrained('alerts')
+                ->constrained('alert')
                 ->onDelete('cascade');
 
             $table->foreignId('user_id')

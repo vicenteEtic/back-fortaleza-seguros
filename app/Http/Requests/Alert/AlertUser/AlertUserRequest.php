@@ -4,6 +4,7 @@ namespace App\Http\Requests\Alert\AlertUser;
 
 use App\Http\Requests\BaseFormRequest;
 use App\Models\Alert\Alert;
+use App\Models\User\User;
 use Illuminate\Validation\Rule;
 class AlertUserRequest extends BaseFormRequest
 {
@@ -24,7 +25,7 @@ class AlertUserRequest extends BaseFormRequest
     {
         return [
             'alert_id' => ['required', Rule::exists(Alert::class, 'id')],
-            'user_id' => 'required',
+            'user_id' => ['required', Rule::exists(User::class, 'id')],
  
         ];
     }

@@ -8,3 +8,7 @@ Route::get('', [PepController::class, 'index'])
 
 Route::get('external', [PepController::class, 'pepExternalGetAll'])
     ->name('pep.external');
+
+    Route::get('sanction', [PepController::class, 'getDataSanctionExternal'])
+    ->name('pep.sanction');
+    

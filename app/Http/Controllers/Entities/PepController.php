@@ -72,4 +72,22 @@ class PepController extends AbstractController
         }
     }
     
+
+    public function getDataSanctionExternal(Request $request)
+    {
+        try {
+            $this->logRequest();
+    
+            $peps = $this->service->getAllSanctions($request->all());
+    
+            return response()->json($peps, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            $this->logRequest($e);
+    
+            return response()->json(
+                ['error' => $e->getMessage()],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }

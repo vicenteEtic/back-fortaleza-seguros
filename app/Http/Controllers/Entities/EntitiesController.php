@@ -36,6 +36,8 @@ class EntitiesController extends AbstractController
                 customMessage: "O usuário " . Auth::user()->first_name . " criou a entidade {$entities->social_denomination} com sucesso.",
                 idEntity: $entities->id
             );
+
+          
             return response()->json($entities, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -47,7 +49,6 @@ class EntitiesController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
     /**
      * Update the specified resource in storage.
      */

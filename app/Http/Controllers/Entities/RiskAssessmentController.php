@@ -41,7 +41,7 @@ class RiskAssessmentController extends AbstractController
             $this->logToDatabase(
                 type: 'entity',
                 level: 'info',
-                customMessage: "{$riskAssessment?->entity?->social_denomination} realizou uma avaliação na entidade {$riskAssessment?->entity?->social_denomination} que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência {$riskAssessment->diligence}.",
+                customMessage: "{$riskAssessment?->entity?->social_denomination} Foi realizada uma avaliação  que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência {$riskAssessment->diligence}.",
                 idEntity: $riskAssessment->entity_id
             );
 
@@ -49,8 +49,8 @@ class RiskAssessmentController extends AbstractController
             $this->logToDatabase(
                 type: 'user',
                 level: 'info',
-                customMessage: "{$userName} realizou uma avaliação que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência {$riskAssessment->diligence}.",
-                idEntity: $riskAssessment->entity_id
+                customMessage: "{$userName} realizou uma avaliação  na entidade  {$riskAssessment?->entity?->social_denomination} que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência {$riskAssessment->diligence}.",
+                idEntity:null
             );
             DB::commit();
             return response()->json($riskAssessment, Response::HTTP_CREATED);

@@ -38,7 +38,7 @@ class ImportDataJob implements ShouldQueue
     }
 
     public $tries = 5;
-    public $timeout = 300;
+    public $timeout = 36000; // 10 horas
 
     public function handle(RiskAssessmentService $riskAssessmentService,   AlertRepository $alertRepository)
     {

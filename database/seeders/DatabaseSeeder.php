@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         //   User::factory(2)->create();
 
-
+        $this->call(ProfessionNossaSeguros::class);
         // $this->call(DiligenceSeeder::class);
         // $this->call(IndicatorSeeder::class);
         // $this->call(IdentificationCapacitySeeder::class);
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(CountriesSeed::class);
         // $this->call(TypeActivitySeed::class);
         //    $this->call(ProfissionPSeed::class);
-        $this->call(ProfessionNossaSeguros::class);
+      
         //  $this->call(ProductRiskSeeder::class);
         //  $this->call(ChannelSeed::class);
         //  $this->call(PermissionSeed::class);

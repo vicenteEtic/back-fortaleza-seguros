@@ -21,7 +21,32 @@ class AlertUserController extends AbstractController
     }
 
 
-    public function index(Request $request)
+    public function findByUser(Request $request, $id)
+    {
+        try {
+            if ($this->logRequest) {
+                $this->logRequest();
+                $this->logToDatabase(
+                    type: $this->logType,
+                    level: 'info',
+                    customMessage: "O usuario " . Auth::user()->first_name . " Visualizou todos os registros no módulo {$this->nameEntity}",
+                );
+            }
+    
+            $filters = $request->get('filters') ?? $request->get('filtersV2');
+        
+    
+            return $this->service->getUserWithAlerts($id);
+        } catch (Exception $e) {
+            if ($this->logRequest) {
+                $this->logRequest($e);
+            }
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+
+    public function getAllUsersAlertSummary(Request $request)
     {
 
         try {
@@ -46,15 +71,12 @@ class AlertUserController extends AbstractController
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
 
     public function store(AlertUserRequest $request)
     {
         try {
             $this->logRequest();
-            $alertUser = $this->service->store($request->validated());
+            $alertUser = $this->service->storeMany($request->validated());
             return response()->json($alertUser, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);

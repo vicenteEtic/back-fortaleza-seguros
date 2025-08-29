@@ -8,8 +8,13 @@ use App\Models\Alert\AlertUser\AlertUser;
 Route::get('', [AlertController::class, 'index'])
     ->name('alert.index');
 
-Route::get('/user', [AlertUserController::class, 'index'])
-    ->name('alertUser.index');
+    Route::get('/user/{id}', [AlertUserController::class, 'findByUser'])
+    ->name('alertUser.show');
+
+Route::get('/user', [AlertUserController::class, 'getAllUsersAlertSummary'])
+    ->name('alertUser.getAllUsersAlertSummary');
+
+
 Route::post('/user', [AlertUserController::class, 'store'])
     ->name('alertUser.store');
 Route::put('/user', [AlertUserController::class, 'update'])

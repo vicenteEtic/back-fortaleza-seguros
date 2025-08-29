@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\Alert\AlertUser;
 
 use App\Models\Alert\AlertUser\AlertUser;
@@ -31,9 +32,21 @@ class AlertUserRepository extends AbstractRepository
             ->count();
     }
     public function getUsersWithAlerts()
-{
-    return $this->model
-        ->distinct()
-        ->pluck('user_id');
-}
+    {
+        return $this->model
+            ->distinct()
+            ->pluck('user_id');
+    }
+    public function storeMany($data)
+    {
+        return $this->model->insert(
+            collect($data)->map(function ($item) {
+                return array_merge($item, [
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            })->toArray()
+        );
+    }
+    
 }

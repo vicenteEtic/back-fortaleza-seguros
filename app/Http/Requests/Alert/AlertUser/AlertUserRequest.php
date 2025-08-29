@@ -24,9 +24,19 @@ class AlertUserRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'alert_id' => ['required', Rule::exists(Alert::class, 'id')],
-            'user_id' => ['required', Rule::exists(User::class, 'id')],
- 
+            '*.alert_id' => ['required', Rule::exists('alert', 'id')],
+            '*.user_id'  => ['required', Rule::exists('users', 'id')],
         ];
     }
+    
+    public function messages(): array
+    {
+        return [
+            '*.alert_id.required' => 'O campo alert_id é obrigatório.',
+            '*.alert_id.exists'   => 'O alerta informado não existe.',
+            '*.user_id.required'  => 'O campo user_id é obrigatório.',
+            '*.user_id.exists'    => 'O usuário informado não existe.',
+        ];
+    }
+    
 }

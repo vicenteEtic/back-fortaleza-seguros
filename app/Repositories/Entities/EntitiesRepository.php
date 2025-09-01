@@ -31,7 +31,6 @@ class EntitiesRepository extends AbstractRepository
             ->limit($limit)
             ->get();
     }
-
     public function show(int|string $id, array $relationships = [])
     {
         $query = $this->model->query();
@@ -45,5 +44,23 @@ class EntitiesRepository extends AbstractRepository
     
         return $query->findOrFail($id);
     }
+
+    public function index(?int $paginate, ?array $filterParams, ?array $orderByParams, $relationships = [])
+    {
+        $query = $this->buildQuery(
+            $paginate,
+            $filterParams,
+            $orderByParams,
+            $relationships,
+            ['alerts']
+        );
+    
+        // Se $paginate for null, $query já é uma Collection.
+        // Se $paginate tiver valor, $query é um Paginator.
+        return $query;
+    }
+    
+    
+    
     
 }

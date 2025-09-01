@@ -39,14 +39,28 @@ class AlertUserRepository extends AbstractRepository
     }
     public function storeMany($data)
     {
-        return $this->model->insert(
-            collect($data)->map(function ($item) {
+        $now = now();
+    
+        // insere na pivot alert_user
+        $inserted = $this->model->insert(
+            collect($data)->map(function ($item) use ($now) {
                 return array_merge($item, [
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ]);
             })->toArray()
         );
+    
+        // dispara evento em tempo real para cada utilizador
+        foreach ($data as $item) {
+            $user = \App\Models\User::find($item['user_id']);
+            if ($user) {
+                event(new \App\Events\AlertCreated($user));
+            }
+        }
+    
+        return $inserted;
     }
+    
     
 }

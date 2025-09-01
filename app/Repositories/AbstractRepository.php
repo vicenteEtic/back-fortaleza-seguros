@@ -24,12 +24,18 @@ abstract class AbstractRepository
         return $this->buildQuery($paginate, $filterParams, $orderByParams, $relationships, null);
     }
 
-    protected function buildQuery($paginate = null, $filterParams = null, $orderByParams = null, $relationships = [], $count = null, $withTrashed = false)
-    {
+    protected function buildQuery(
+        $paginate = null,
+        $filterParams = null,
+        $orderByParams = null,
+        $relationships = [],
+        $count = null,
+        $withTrashed = false
+    ) {
         $query = $this->model->query();
 
         if (in_array(SoftDeletes::class, class_uses($this->model))) {
-            if ($withTrashed == true) {
+            if ($withTrashed) {
                 $query = $query->withTrashed();
             }
         }
@@ -38,10 +44,15 @@ abstract class AbstractRepository
             $query = $query->with($relationships);
         }
 
+        // aplica counts genéricos
+        if (!empty($count)) {
+            $query = $query->withCount($count);
+        }
+
         $query = $this->applyFilter($query, $filterParams);
         $query = $this->applyOrder($query, $orderByParams);
+        return $this->paginateQuery($query, $paginate, $filterParams);
 
-        return $this->paginateQuery($query, $paginate, $filterParams, $count);
     }
 
     protected function applyFilter($query, $filterParams)

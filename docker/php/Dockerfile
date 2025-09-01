@@ -18,27 +18,30 @@ RUN apt-get update && apt-get install -y \
     curl \
     libzip-dev \
     apt-utils \
-    libonig-dev
+    libonig-dev \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install zip pdo_mysql mbstring exif
+# Extensões PHP
+RUN docker-php-ext-install zip pdo_mysql mbstring exif bcmath
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
 RUN docker-php-ext-install gd
 
-
-
+# Instalar Redis
 RUN mkdir -p /usr/src/php/ext/redis; \
     curl -fsSL https://pecl.php.net/get/redis --ipv4 | tar xvz -C "/usr/src/php/ext/redis" --strip 1; \
     docker-php-ext-install redis;
 
+# Instalar PCNTL (necessário para Laravel Reverb)
+RUN docker-php-ext-install pcntl
+
+# Instalar Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
     && php -r "unlink('composer-setup.php');"
 
-# Copie o restante do código da aplicação
+# Copiar código do app
 COPY . /var/www
-
-# Gere a chave de aplicação durante a construção do contêiner
-
 
 EXPOSE 9000
 

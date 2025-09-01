@@ -31,4 +31,19 @@ class EntitiesRepository extends AbstractRepository
             ->limit($limit)
             ->get();
     }
+
+    public function show(int|string $id, array $relationships = [])
+    {
+        $query = $this->model->query();
+    
+        if (!empty($relationships)) {
+            $query = $query->with($relationships);
+        }
+    
+        // adiciona total_alerts
+        $query = $query->withCount('alerts');
+    
+        return $query->findOrFail($id);
+    }
+    
 }

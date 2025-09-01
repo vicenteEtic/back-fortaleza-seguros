@@ -23,7 +23,7 @@ abstract class AbstractController extends Controller
 
     public function __construct(AbstractService $service)
     {
-        $this->service = $service;
+        $this->service = $service;       
     }
 
     /**

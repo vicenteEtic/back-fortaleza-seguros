@@ -34,4 +34,10 @@ class Entities extends Model
     {
         return $this->hasMany(ProductRisk::class, 'entity_id');
     }
+    
+    public function alerts()
+{
+    return $this->hasMany(\App\Models\Alert\Alert::class, 'entity_id', 'id');
+}
+
 }

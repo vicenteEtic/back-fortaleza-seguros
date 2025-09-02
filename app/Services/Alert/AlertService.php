@@ -26,4 +26,9 @@ class AlertService extends AbstractService
         $orderByParams = $orderByParams ?? ['created_at' => 'desc'];
         return $this->repository->index($paginate, $filterParams, $orderByParams, $relationships);
     }
+    public function getTotalAlerts(): array
+    {
+        return $this->repository->getTotalAlerts();
+    }
+
 }

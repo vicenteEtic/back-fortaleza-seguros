@@ -14,4 +14,17 @@ class AlertController extends AbstractController
     {
         $this->service = $service;
     }
+    public function getTotalAlerts()
+    {
+        try {
+         
+
+            return $this->service->getTotalAlerts();
+        } catch (Exception $e) {
+            if ($this->logRequest) {
+                $this->logRequest($e);
+            }
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -62,5 +62,8 @@ class AlertUserRepository extends AbstractRepository
         return $inserted;
     }
     
+
+   
+
     
 }

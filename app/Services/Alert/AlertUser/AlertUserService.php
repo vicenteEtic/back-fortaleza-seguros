@@ -83,5 +83,5 @@ class AlertUserService extends AbstractService
 {
     return $this->repository->storeMany($data);
 
-}
-}
+
+}}

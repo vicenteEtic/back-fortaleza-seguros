@@ -72,8 +72,8 @@ class AlertUserRepository extends AbstractRepository
         $alerts = $this->model
             ->where('user_id', auth()->id())
             ->whereHas('alert', fn ($q) => $q->where('is_active', 1))
-            ->with('alert:id,name,is_active,level') // só pega campos específicos
-            ->get(['id', 'alert_id', 'is_read']); // só pega campos essenciais do pivot
+            ->with('alert:id,name,is_active,level') 
+            ->get(['id', 'alert_id', 'is_read']); 
     
         $data= [
             'total'  => $alerts->count(),

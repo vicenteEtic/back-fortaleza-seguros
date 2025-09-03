@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GrupoType extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     protected $table = 'grupo_type';
     protected $primaryKey = 'id';
-    protected $fillable = ['name','description','grup_alert_id'];
+    protected $fillable = ['name', 'description', 'grup_alert_id'];
     public function Grup()
     {
         return $this->belongsTo(GrupoAlertEmails::class, 'grup_alert_id');

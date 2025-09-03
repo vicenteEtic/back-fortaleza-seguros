@@ -22,7 +22,10 @@ class GrupoTypeRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
+            'name' => ['required'],
+            'grup_alert_id' => ['required','numeric'],
             
+           
         ];
     }
 }

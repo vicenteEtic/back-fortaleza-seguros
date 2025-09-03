@@ -1,17 +1,17 @@
 <?php
     
-    namespace App\Http\Controllers\Alert\CommentAlert;
+    namespace App\Http\Controllers\Alert\GrupoType;
     
     use App\Http\Controllers\AbstractController;
-    use App\Services\Alert\CommentAlert\CommentAlertService;
-    use App\Http\Requests\Alert\CommentAlert\CommentAlertRequest;
+    use App\Services\Alert\GrupoType\GrupoTypeService;
+    use App\Http\Requests\Alert\GrupoType\GrupoTypeRequest;
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\Response;
     
-    class CommentAlertController extends AbstractController
+    class GrupoTypeController extends AbstractController
     {
-        public function __construct(CommentAlertService $service)
+        public function __construct(GrupoTypeService $service)
         {
             $this->service = $service;
         }
@@ -19,12 +19,12 @@
         /**
          * Store a newly created resource in storage.
          */
-        public function store(CommentAlertRequest $request)
+        public function store(GrupoTypeRequest $request)
         {
             try {
                 $this->logRequest();
-                $commentAlert = $this->service->store($request->validated());
-                return response()->json($commentAlert, Response::HTTP_CREATED);
+                $grupoType = $this->service->store($request->validated());
+                return response()->json($grupoType, Response::HTTP_CREATED);
             } catch (Exception $e) {
                 $this->logRequest($e);
                 return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -34,12 +34,12 @@
         /**
          * Update the specified resource in storage.
          */
-        public function update(CommentAlertRequest $request, $id)
+        public function update(GrupoTypeRequest $request, $id)
         {
             try {
                 $this->logRequest();
-                $commentAlert = $this->service->update($request->validated(), $id);
-                return response()->json($commentAlert, Response::HTTP_OK);
+                $grupoType = $this->service->update($request->validated(), $id);
+                return response()->json($grupoType, Response::HTTP_OK);
             } catch (ModelNotFoundException $e) {
                 $this->logRequest($e);
                 return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);

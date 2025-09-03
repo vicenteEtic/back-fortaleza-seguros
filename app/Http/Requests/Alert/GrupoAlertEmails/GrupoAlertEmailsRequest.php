@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Alert\CommentAlert;
+namespace App\Http\Requests\Alert\GrupoAlertEmails;
 
 use App\Http\Requests\BaseFormRequest;
 
-class CommentAlertRequest extends BaseFormRequest
+class GrupoAlertEmailsRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,8 @@ class CommentAlertRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'alert_id' => ['required'],
-            'comment'  => ['required'],
-        ];;
+            'name' => ['required'],
+           
+        ];
     }
 }

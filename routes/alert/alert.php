@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Alert\AlertController;
 use App\Http\Controllers\Alert\AlertUser\AlertUserController;
 use App\Http\Controllers\Alert\CommentAlert\CommentAlertController;
+use App\Http\Controllers\Alert\GrupoAlertEmails\GrupoAlertEmailsController;
 use App\Http\Requests\Alert\CommentAlert\CommentAlertRequest;
 use App\Models\Alert\AlertUser\AlertUser;
 
@@ -28,10 +29,18 @@ Route::put('/user', [AlertUserController::class, 'update'])
 
 Route::get('/comment', [CommentAlertController::class, 'index'])
     ->name('comment.index');
-    Route::get('/comment/{id}', [CommentAlertController::class, 'show'])
+Route::get('/comment/{id}', [CommentAlertController::class, 'show'])
     ->name('comment.show');
 Route::post('/comment', [CommentAlertController::class, 'store'])
     ->name('comment.store');
 
-    Route::get('/me/notifications/', [AlertUserController::class, 'countActiveAlertsForAuthenticatedUser'])
+Route::get('/me/notifications/', [AlertUserController::class, 'countActiveAlertsForAuthenticatedUser'])
     ->name('notifications.index');
+
+
+    Route::get('/grupoAlertEmails', [GrupoAlertEmailsController::class, 'index'])
+    ->name('grupoAlertEmails.index');
+Route::get('/grupoAlertEmails/{id}', [GrupoAlertEmailsController::class, 'show'])
+    ->name('grupoAlertEmails.show');
+Route::post('/grupoAlertEmails', [GrupoAlertEmailsController::class, 'store'])
+    ->name('grupoAlertEmails.store');

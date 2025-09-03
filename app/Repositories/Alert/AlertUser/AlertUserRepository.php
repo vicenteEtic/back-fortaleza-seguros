@@ -4,6 +4,7 @@ namespace App\Repositories\Alert\AlertUser;
 
 use App\Models\Alert\AlertUser\AlertUser;
 use App\Repositories\AbstractRepository;
+use Illuminate\Http\JsonResponse;
 
 class AlertUserRepository extends AbstractRepository
 {
@@ -40,7 +41,7 @@ class AlertUserRepository extends AbstractRepository
     public function storeMany($data)
     {
         $now = now();
-    
+
         // insere na pivot alert_user
         $inserted = $this->model->insert(
             collect($data)->map(function ($item) use ($now) {
@@ -50,7 +51,7 @@ class AlertUserRepository extends AbstractRepository
                 ]);
             })->toArray()
         );
-    
+
         // dispara evento em tempo real para cada utilizador
         foreach ($data as $item) {
             $user = \App\Models\User::find($item['user_id']);
@@ -58,12 +59,28 @@ class AlertUserRepository extends AbstractRepository
                 event(new \App\Events\AlertCreated($user));
             }
         }
-    
+
         return $inserted;
     }
+
+
+
+
+
+    public function getActiveAlertsForAuthenticatedUser()
+    {
+        $alerts = $this->model
+            ->where('user_id', auth()->id())
+            ->whereHas('alert', fn ($q) => $q->where('is_active', 1))
+            ->with('alert:id,name,is_active,level') // só pega campos específicos
+            ->get(['id', 'alert_id', 'is_read']); // só pega campos essenciais do pivot
     
-
-   
-
+        $data= [
+            'total'  => $alerts->count(),
+            'alerts' => $alerts,
+        ];
+        return $data;
+    }
+    
     
 }

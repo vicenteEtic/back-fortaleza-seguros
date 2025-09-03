@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('alert_user', function (Blueprint $table) {
             $table->id();
-            
             // Chaves estrangeiras
             $table->foreignId('alert_id')
                 ->constrained('alert')
@@ -25,11 +24,9 @@ return new class extends Migration
 
             // Status de leitura do alerta
             $table->boolean('is_read')->default(false);
-
             $table->timestamps();
             $table->softDeletes();
-            // Evita duplicidade
-            $table->unique(['alert_id', 'user_id']);
+       
         });
     }
 

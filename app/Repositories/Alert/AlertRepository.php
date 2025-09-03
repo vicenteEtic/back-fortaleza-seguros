@@ -33,11 +33,11 @@ class AlertRepository extends AbstractRepository
         // Monta resposta final
         $result = [];
         foreach ($months as $carbonMonth) {
-            $key = $carbonMonth->format('Y-m'); // chave usada no banco
+            $key = $carbonMonth->format('Y-m'); 
             $data = $alertsDetailed[$key] ?? null;
     
             $result[] = [
-                'month'      => $carbonMonth->translatedFormat('F'), // exemplo: "Setembro 2025"
+                'month'      => $carbonMonth->translatedFormat('F'), 
                 'total'      => $data->total ?? 0,
                 'is_active'  => $data->is_active ?? 0,
                 'is_inative' => $data->is_inative ?? 0,

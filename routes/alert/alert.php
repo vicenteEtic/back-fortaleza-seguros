@@ -32,3 +32,6 @@ Route::get('/comment', [CommentAlertController::class, 'index'])
     ->name('comment.show');
 Route::post('/comment', [CommentAlertController::class, 'store'])
     ->name('comment.store');
+
+    Route::get('/me/notifications/', [AlertUserController::class, 'countActiveAlertsForAuthenticatedUser'])
+    ->name('notifications.index');

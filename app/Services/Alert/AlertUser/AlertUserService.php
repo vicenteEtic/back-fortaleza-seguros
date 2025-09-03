@@ -83,5 +83,12 @@ class AlertUserService extends AbstractService
 {
     return $this->repository->storeMany($data);
 
+}
+public function countActiveAlertsForAuthenticatedUser()
+{
+    return $this->repository->getActiveAlertsForAuthenticatedUser();
 
-}}
+}
+
+
+}

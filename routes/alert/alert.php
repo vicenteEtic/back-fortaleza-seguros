@@ -22,9 +22,11 @@ Route::get('/user', [AlertUserController::class, 'getAllUsersAlertSummary'])
 Route::get('/user', [AlertUserController::class, 'getAllUsersAlertSummary'])
     ->name('alertUser.getAllUsersAlertSummary');
 
+    Route::post('/user', [AlertUserController::class, 'store'])
+    ->name('alertUser.store');
 
 Route::get('/total', [AlertController::class, 'getTotalAlerts'])
-    ->name('alertUser.store');
+    ->name('alertUser.total');
 Route::put('/user', [AlertUserController::class, 'update'])
     ->name('alertUser.update');
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Alert\AlertUser\AlertUserController;
 use App\Http\Controllers\Alert\CommentAlert\CommentAlertController;
 use App\Http\Controllers\Alert\GrupoAlertEmails\GrupoAlertEmailsController;
 use App\Http\Controllers\Alert\GrupoType\GrupoTypeController;
+use App\Http\Controllers\Alert\UserGrupoAlert\UserGrupoAlertController;
 use App\Http\Requests\Alert\CommentAlert\CommentAlertRequest;
 use App\Models\Alert\AlertUser\AlertUser;
 
@@ -52,3 +53,11 @@ Route::get('/grupoType/{id}', [GrupoTypeController::class, 'show'])
     ->name('grupoType.show');
 Route::post('/grupoType', [GrupoTypeController::class, 'store'])
     ->name('grupoType.store');
+
+
+    Route::get('/userGrupo', [UserGrupoAlertController::class, 'index'])
+    ->name('userGrupo.index');
+Route::get('/userGrupo/{id}', [UserGrupoAlertController::class, 'show'])
+    ->name('userGrupo.show');
+Route::post('/userGrupo', [UserGrupoAlertController::class, 'store'])
+    ->name('userGrupo.store');

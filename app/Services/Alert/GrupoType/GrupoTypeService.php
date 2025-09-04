@@ -17,6 +17,7 @@ class GrupoTypeService extends AbstractService
             ['name' => "Transaction Monitoring", 'info_pt' => "Monitoramento de Transações"],
             ['name' => "Customer Profile and Behavior", 'info_pt' => "Perfil e Comportamento do Cliente"],
             ['name' => "Linked to Award and Payment", 'info_pt' => "Ligados ao Prémio e Pagamento"],
+            ['name' => "Regulatory Compliance", 'info_pt' => "Correspondência com listas de sanções internacionais"],
         ];
         
     }

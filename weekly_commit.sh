@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# Mensagem de commit com a data da semana
-COMMIT_MSG="Weekly auto-commit - $(date '+%Y-%m-%d')"
+# Detecta branch atual
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
+# Adiciona tudo
 git add .
-git commit -m "$COMMIT_MSG"
-git push origin main
+
+# Cria commit com data da semana
+git commit -m "Weekly auto-commit - $(date +'%Y-%m-%d')"
+
+# Faz push para o branch atual
+git push origin "$BRANCH"

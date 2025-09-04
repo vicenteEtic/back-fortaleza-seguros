@@ -13,7 +13,7 @@ class GrupoAlertEmails extends Model
     protected $table = 'grupo_alert_emails';
     protected $primaryKey = 'id';
     protected $fillable = ['name','description'];
-    public function GrupoType()
+    public function grupoTypes()
     {
         return $this->hasMany(GrupoType::class, 'grup_alert_id');
     }

@@ -49,8 +49,8 @@ Route::get('/grupoAlertEmails/{id}', [GrupoAlertEmailsController::class, 'show']
 Route::post('/grupoAlertEmails', [GrupoAlertEmailsController::class, 'store'])
     ->name('grupoAlertEmails.store');
 
-    Route::get('/grupoType', [GrupoTypeController::class, 'index'])
-    ->name('grupoType.index');
+    Route::get('/grupoType', [GrupoTypeController::class, 'listTypGrup'])
+    ->name('grupoType.listTypGrup');
 Route::get('/grupoType/{id}', [GrupoTypeController::class, 'show'])
     ->name('grupoType.show');
 Route::post('/grupoType', [GrupoTypeController::class, 'store'])

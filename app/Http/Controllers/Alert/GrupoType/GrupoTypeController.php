@@ -16,9 +16,16 @@
             $this->service = $service;
         }
     
-        /**
-         * Store a newly created resource in storage.
-         */
+   public function listTypGrup(){
+    try {
+        $this->logRequest();
+        $grupoType = $this->service->listTypGrup();
+        return response()->json($grupoType, Response::HTTP_CREATED);
+    } catch (Exception $e) {
+        $this->logRequest($e);
+        return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+   }
         public function store(GrupoTypeRequest $request)
         {
             try {

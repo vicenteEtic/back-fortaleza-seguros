@@ -89,7 +89,7 @@ class AlertJob implements ShouldQueue
         foreach ($data as $item) {
             Log::info("Creating alert for: {$item['name']}");
 
-            Alert::updateOrCreate([
+          $alert=  Alert::updateOrCreate([
                 'origin_id' => $item['id']
             ], [
                 'name' => $item['name'],
@@ -102,6 +102,7 @@ class AlertJob implements ShouldQueue
                 'list' => $item['type'] ?? "PEP List world",
                 'is_active' => true,
             ]);
+            SendGrupoAlertEmailJob::dispatch( $alert->id);
         }
     }
 }

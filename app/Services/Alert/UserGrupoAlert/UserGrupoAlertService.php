@@ -10,4 +10,10 @@ class UserGrupoAlertService extends AbstractService
     {
         parent::__construct($repository);
     }
+
+    public function storeMany(array $data)
+    {
+        return $this->repository->storeMany($data);
+    
+    }
 }

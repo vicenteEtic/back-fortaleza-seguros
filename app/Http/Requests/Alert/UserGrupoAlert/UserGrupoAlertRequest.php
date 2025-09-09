@@ -24,8 +24,17 @@ class UserGrupoAlertRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'grup_alert_id' =>['required', Rule::exists(GrupoAlertEmails::class, 'id')],
-            'user_id' => ['required', Rule::exists(User::class, 'id')],
+            '*.grup_alert_id' =>['required', Rule::exists(GrupoAlertEmails::class, 'id')],
+            '*.user_id' => ['required', Rule::exists(User::class, 'id')],
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            '*.grup_alert_id.required' => 'O campo grup_alert_id é obrigatório.',
+            '*.grup_alert_id.exists'   => 'O grupo informado não existe.',
+            '*.user_id.required'  => 'O campo user_id é obrigatório.',
+            '*.user_id.exists'    => 'O usuário informado não existe.',
         ];
     }
 }

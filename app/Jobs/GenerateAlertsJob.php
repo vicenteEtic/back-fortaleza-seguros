@@ -121,7 +121,7 @@ class GenerateAlertsJob implements ShouldQueue
     private function createAlerts(array $data, int $entityId, string $type = "PEP"): void
     {
         foreach ($data as $item) {
-            $this->alertRepository->storeOrUpdate(
+            $alert=    $this->alertRepository->storeOrUpdate(
                 ['origin_id' => $item['id']],
                 [
                     'name' => $item['name'],
@@ -135,6 +135,7 @@ class GenerateAlertsJob implements ShouldQueue
                     'is_active' => true,
                 ]
             );
+            SendGrupoAlertEmailJob::dispatch( $alert->id);
         }
     }
 }

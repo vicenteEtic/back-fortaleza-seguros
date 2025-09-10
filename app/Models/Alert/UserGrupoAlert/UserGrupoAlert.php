@@ -3,7 +3,7 @@
 namespace App\Models\Alert\UserGrupoAlert;
 
 use App\Models\Alert\GrupoAlertEmails\GrupoAlertEmails;
-use App\Models\User\User;
+use App\Models\User\User; 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;

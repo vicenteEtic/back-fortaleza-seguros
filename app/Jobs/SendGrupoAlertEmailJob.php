@@ -72,8 +72,6 @@ class SendGrupoAlertEmailJob implements ShouldQueue
                         ->where('user_id', $user->id)
                         ->exists();
 
-                    // Envia email
-                    Mail::to($user->email)->send(new GrupoAlertMail($user, $alert));
 
 
                     if ($alreadyLinked) {
@@ -85,6 +83,8 @@ class SendGrupoAlertEmailJob implements ShouldQueue
                         'alert_id' => $alert->id,
                         'user_id'  => $user->id,
                     ]);
+                    // Envia email
+                    Mail::to($user->email)->send(new GrupoAlertMail($user, $alert));
 
                     Log::info("Usuário ID {$user->id} vinculado ao alert ID {$alert->id}");
                 } catch (\Throwable $e) {

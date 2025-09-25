@@ -5,7 +5,8 @@ namespace App\Repositories\Alert;
 use App\Models\Alert\Alert;
 use App\Repositories\AbstractRepository;
 use Carbon\Carbon;
-
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 class AlertRepository extends AbstractRepository
 {
     public function __construct(Alert $model)
@@ -78,5 +79,7 @@ class AlertRepository extends AbstractRepository
         ];
     }
 
-  
+    
+    
+
 }

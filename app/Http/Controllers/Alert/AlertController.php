@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Alert;
 
 use App\Services\Alert\AlertService;
 use App\Http\Controllers\AbstractController;
+use App\Http\Requests\Alert\AlertDocumentRequest;
 use App\Http\Requests\Alert\AlertUpdateStatusRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -49,4 +50,21 @@ class AlertController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function document(AlertDocumentRequest $request)
+    {
+        try {
+            $this->logRequest();
+            $commentAlert = $this->service->document($request->validated());
+            return response()->json($commentAlert, Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            $this->logRequest($e);
+            return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    
 }

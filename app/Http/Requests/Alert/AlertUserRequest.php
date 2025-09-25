@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Alert;
 
 use App\Http\Requests\BaseFormRequest;
-use App\Models\Alert\Alert;
-use App\Models\User\User;
 use Illuminate\Validation\Rule;
+
 class AlertUpdateStatusRequest extends BaseFormRequest
 {
     /**
@@ -18,23 +17,22 @@ class AlertUpdateStatusRequest extends BaseFormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'is_active' => ['required'],
-           
+            'is_active' => ['required', 'boolean'], // melhor validar como booleano
         ];
     }
-    
+
+    /**
+     * Custom error messages.
+     */
     public function messages(): array
     {
         return [
             'is_active.required' => 'O campo is_active é obrigatório.',
-         
+            'is_active.boolean'  => 'O campo is_active deve ser verdadeiro ou falso.',
         ];
     }
-    
 }

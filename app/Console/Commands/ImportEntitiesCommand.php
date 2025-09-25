@@ -12,7 +12,6 @@ class ImportEntitiesCommand extends Command
     public function handle()
     {
         $this->info('Iniciando importação...');
-
         // Substitua dispatch_now por dispatch_sync
         dispatch_sync(new ImportEntitiesJob());
 

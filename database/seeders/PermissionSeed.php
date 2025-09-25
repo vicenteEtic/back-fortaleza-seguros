@@ -41,12 +41,8 @@ class PermissionSeed extends Seeder
             ['name' => 'Diligências', 'description' => 'Permite gerenciar diligências'],
             ['name' => 'Profissões', 'description' => 'Permite gerenciar profissões'],
             ['name' => 'CAE', 'description' => 'Permite gerenciar CAE'],
-<<<<<<< HEAD
-            ['name' => "Perfil", "description" => 'Permite gerenciar perfil']
-=======
             ['name' => "Perfil", "description" => 'Permite gerenciar perfil'],
             ['name' => "Alertas", "description" => 'Permite gerenciar alertas']
->>>>>>> 41e56c054e2731c65758a767543979c0da2e04f5
         ];
 
         // Operações básicas

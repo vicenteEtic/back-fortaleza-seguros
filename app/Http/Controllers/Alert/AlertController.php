@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Alert;
 
 use App\Services\Alert\AlertService;
 use App\Http\Controllers\AbstractController;
-<<<<<<< HEAD
-=======
 use App\Http\Requests\Alert\AlertDocumentRequest;
->>>>>>> 41e56c054e2731c65758a767543979c0da2e04f5
 use App\Http\Requests\Alert\AlertUpdateStatusRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -53,8 +50,6 @@ class AlertController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-<<<<<<< HEAD
-=======
 
     public function document(AlertDocumentRequest $request)
     {
@@ -72,5 +67,4 @@ class AlertController extends AbstractController
     }
 
     
->>>>>>> 41e56c054e2731c65758a767543979c0da2e04f5
 }

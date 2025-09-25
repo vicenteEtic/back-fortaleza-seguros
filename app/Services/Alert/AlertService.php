@@ -31,4 +31,11 @@ class AlertService extends AbstractService
         return $this->repository->getTotalAlerts();
     }
 
+
+      public function status($data,$id): array
+    {
+        return $this->repository->status($data,$id);
+    }
+    
+
 }

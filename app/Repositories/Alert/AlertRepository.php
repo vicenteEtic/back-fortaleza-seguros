@@ -77,4 +77,8 @@ class AlertRepository extends AbstractRepository
             'by_month'   => $this->getTotalAlertsByMonth(),
         ];
     }
+
+    public function status($data,$id){
+        $this->model
+    }
 }

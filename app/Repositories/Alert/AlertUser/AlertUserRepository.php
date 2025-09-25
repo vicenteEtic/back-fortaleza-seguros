@@ -18,7 +18,7 @@ class AlertUserRepository extends AbstractRepository
         return $this->model
             ->where('user_id', $userId)
             ->whereHas('alert', function ($q) {
-                $q->where('is_active', 1);
+                $q->where('is_active', 0);
             })
             ->count();
     }
@@ -28,7 +28,7 @@ class AlertUserRepository extends AbstractRepository
         return $this->model
             ->where('user_id', $userId)
             ->whereHas('alert', function ($q) {
-                $q->where('is_active', 0);
+                $q->where('is_active', 1);
             })
             ->count();
     }

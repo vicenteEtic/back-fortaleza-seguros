@@ -78,7 +78,5 @@ class AlertRepository extends AbstractRepository
         ];
     }
 
-    public function status($data,$id){
-        $this->model
-    }
+  
 }

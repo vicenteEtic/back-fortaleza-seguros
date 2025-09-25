@@ -64,4 +64,8 @@ Route::get('/userGrupo/{id}', [UserGrupoAlertController::class, 'show'])
 Route::post('/userGrupo', [UserGrupoAlertController::class, 'store'])
     ->name('userGrupo.store');
 
+<<<<<<< HEAD
     Route::put('/{id}/status', [AlertController::class, 'status']);
+=======
+    Route::put('/{id}/status', [AlertController::class, 'status']);
+>>>>>>> 41e56c054e2731c65758a767543979c0da2e04f5

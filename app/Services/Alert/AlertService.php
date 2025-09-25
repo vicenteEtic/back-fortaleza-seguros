@@ -32,10 +32,20 @@ class AlertService extends AbstractService
     }
 
 
+<<<<<<< HEAD
       public function status($data,$id): array
     {
         return $this->repository->status($data,$id);
     }
     
 
+=======
+    public function status($data, $id): array
+    {
+        return $this->repository->status($data, $id);
+    }
+
+
+  
+>>>>>>> 41e56c054e2731c65758a767543979c0da2e04f5
 }

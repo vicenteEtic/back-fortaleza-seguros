@@ -19,13 +19,13 @@ class ChangePasswordRequest extends BaseFormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-   public function rules()
-    {
-        return [
-            'current_password' => 'required',
-            'new_password' => 'required|password_requirements',
-        ];
-    }
+  public function rules()
+{
+    return [
+        'new_password' => 'required|password_requirements|confirmed',
+    ];
+}
+
 
     public function withValidator(Validator $validator)
     {

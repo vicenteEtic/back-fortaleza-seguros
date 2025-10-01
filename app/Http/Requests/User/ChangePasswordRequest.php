@@ -27,19 +27,18 @@ class ChangePasswordRequest extends BaseFormRequest
 }
 
 
-    public function withValidator(Validator $validator)
-    {
-        // Adiciona a regra customizada
-        $validator->addExtension('password_requirements', function ($attribute, $value, $parameters, $validator) {
-            return preg_match(
-                '/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/',
-                $value
-            );
-        });
+   public function withValidator(Validator $validator)
+{
+    $validator->addExtension('password_requirements', function ($attribute, $value, $parameters, $validator) {
+        return preg_match(
+            '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{9,}$/',
+            $value
+        );
+    });
 
-        // Mensagem personalizada
-        $validator->addReplacer('password_requirements', function ($message, $attribute, $rule, $parameters) {
-            return 'A senha deve ter pelo menos 8 caracteres, incluir uma letra maiúscula, uma letra minúscula, um número e um caractere especial.';
-        });
-    }
+    $validator->addReplacer('password_requirements', function ($message, $attribute, $rule, $parameters) {
+        return 'A senha deve ter no mínimo 9 caracteres, conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um símbolo.';
+    });
+}
+
 }

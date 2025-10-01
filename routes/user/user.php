@@ -6,6 +6,8 @@ use App\Http\Controllers\User\UserController;
 Route::get('/me', [UserController::class, 'me'])
     ->name('user.me');
 
+Route::put('/changePassword/{id}', [UserController::class, 'changePassword'])
+    ->name('user.changePassword');
 Route::get('', [UserController::class, 'index'])
     ->name('user.index')
     ->middleware(['can:usuario-show']);
@@ -22,8 +24,10 @@ Route::put('{id}', [UserController::class, 'update'])
     ->name('user.update')
     ->middleware(['can:usuario-edit']);
 
-Route::delete('{id}', [UserController::class, 'destroy'])
-    ->name('user.destroy')
-    ->middleware(['can:usuario-delete']);
+    Route::put('{id}', [UserController::class, 'update'])
+    ->name('user.update')
+    ->middleware(['can:usuario-edit']);
+
 
 Route::post('/logout', [UserController::class, 'logout']);
+

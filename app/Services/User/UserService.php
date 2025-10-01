@@ -67,6 +67,8 @@ class UserService extends AbstractService
         return Auth::user()->load('role', 'role.permissions');
     }
 
+
+
     public function forgotPassword(string $userEmail): void
     {
         $userEmail = mb_strtolower($userEmail);
@@ -121,5 +123,9 @@ class UserService extends AbstractService
             'token' => $token,
            // 'user'  => $user
         ];
+    }
+
+    public function changePassword(array $data,$id){
+         return $this->repository->changePassword($data,$id);  
     }
 }

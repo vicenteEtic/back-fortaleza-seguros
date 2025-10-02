@@ -50,6 +50,9 @@ class IndicatorTypeController extends AbstractController
     /**
      * Update the specified resource in storage.
      */
+
+    
+ 
     public function update(IndicatorTypeRequest $request, $id)
     {
         try {

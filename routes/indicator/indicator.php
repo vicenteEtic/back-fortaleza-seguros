@@ -9,8 +9,10 @@ Route::get('', [IndicatorController::class, 'index'])
 
 Route::post('', [IndicatorController::class, 'store'])
     ->name('indicator.store');
-Route::get('getIndicatorsByFk', [IndicatorController::class, 'getIndicatorsByFk'])
+Route::put('getIndicatorsByFk/{id}', [IndicatorTypeController::class, 'update'])
     ->name('indicator.getIndicatorsByFk');
+
+    
 
 Route::put('{indicator}', [IndicatorController::class, 'update'])
     ->name('indicator.update');

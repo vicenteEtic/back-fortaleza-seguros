@@ -17,17 +17,7 @@ class IndicatorController extends AbstractController
     {
         parent::__construct($service, $logService);
     }
-    public function getIndicatorsByFk(Request $request)
-    {
-        try {
-            $indicators = $this->service->getIndicatorsByFk();
-            return response()->json($indicators);
-        } catch (\Throwable $th) {
-            $this->logRequest($th);
-            return response()->json(['error' => 'Erro ao buscar os dados.'], 500);
-        }
-    }
-
+   
 
     public function store(IndicatorRequest $request)
     {

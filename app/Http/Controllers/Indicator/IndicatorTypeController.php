@@ -153,4 +153,15 @@ class IndicatorTypeController extends AbstractController
         );
         return $typeIndicator;
     }
+
+
+
+    public function getIndicatorsByFk()
+    {
+        $typeIndicator = $this->getIndicatorsByFk();
+       
+        return $typeIndicator;
+    }
+
+    
 }

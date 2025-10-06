@@ -58,4 +58,20 @@ class IndicatorController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
+    public function getIndicatorsByFk()
+    {
+        try {
+            $this->logRequest();
+            $indicator = $this->service->getIndicatorsByFk();
+           
+            return response()->json($indicator, Response::HTTP_CREATED);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+  
 }

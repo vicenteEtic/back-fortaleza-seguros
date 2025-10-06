@@ -54,7 +54,6 @@ abstract class AbstractRepository
         $query = $this->applyFilter($query, $filterParams);
         $query = $this->applyOrder($query, $orderByParams);
         return $this->paginateQuery($query, $paginate, $filterParams);
-
     }
 
     protected function applyFilter($query, $filterParams)
@@ -139,26 +138,17 @@ abstract class AbstractRepository
      */
     public function store(array $data)
     {
-        
-         $maxAttempts = 3; // número de tentativas
-    for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
         try {
-            // Usa transação para consistência
             return DB::transaction(function () use ($data) {
                 return $this->model->create($data);
-            });
+            }, 6); // 5 é o número de tentativas de retry
         } catch (QueryException $e) {
-            // Se for erro de lock wait timeout, tenta novamente
-            if (str_contains($e->getMessage(), 'Lock wait timeout exceeded')) {
-                if ($attempt == $maxAttempts) {
-                    throw $e; // desiste após X tentativas
-                }
-                sleep(1); // espera 1 segundo antes de tentar novamente
-            } else {
-                throw $e; // qualquer outro erro lança normalmente
+            if (str_contains($e->getMessage(), 'Lock wait timeout')) {
+                // Tenta novamente ou retorna erro amigável
+                throw new \Exception('O banco está ocupado, tente novamente em alguns segundos.');
             }
+            throw $e;
         }
-    }
     }
 
     /**

@@ -6,6 +6,8 @@ use App\Helpers\FilterHandler;
 use App\Helpers\FilterHandlerV2;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 
 abstract class AbstractRepository
 {
@@ -137,7 +139,26 @@ abstract class AbstractRepository
      */
     public function store(array $data)
     {
-        return $this->model->create($data);
+        
+         $maxAttempts = 3; // número de tentativas
+    for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+        try {
+            // Usa transação para consistência
+            return DB::transaction(function () use ($data) {
+                return $this->model->create($data);
+            });
+        } catch (QueryException $e) {
+            // Se for erro de lock wait timeout, tenta novamente
+            if (str_contains($e->getMessage(), 'Lock wait timeout exceeded')) {
+                if ($attempt == $maxAttempts) {
+                    throw $e; // desiste após X tentativas
+                }
+                sleep(1); // espera 1 segundo antes de tentar novamente
+            } else {
+                throw $e; // qualquer outro erro lança normalmente
+            }
+        }
+    }
     }
 
     /**

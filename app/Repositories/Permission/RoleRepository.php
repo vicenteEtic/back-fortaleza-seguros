@@ -10,4 +10,14 @@ class RoleRepository extends AbstractRepository
     {
         parent::__construct($model);
     }
+
+    public function update(array $data, int $id)
+    {
+
+      
+        $model = $this->model->findOrFail($id);
+        $model->update($data);
+
+        return $model;
+    }
 }

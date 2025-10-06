@@ -14,6 +14,7 @@ Route::put('getIndicatorsByFk/{id}', [IndicatorTypeController::class, 'update'])
 
     Route::put('getIndicatorsByFk', [IndicatorTypeController::class, 'index'])
     ->name('indicator.getIndicatorsB');
+    
 Route::put('{indicator}', [IndicatorController::class, 'update'])
     ->name('indicator.update');
 

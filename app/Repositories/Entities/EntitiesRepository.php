@@ -73,7 +73,6 @@ class EntitiesRepository extends AbstractRepository
         'identification_capacity' => optional($valaiation->indetificationCapacity)->description
             ?? $valaiation->identification_capacity
             ?? null,
-
         'form_establishment' => $valaiation
             ? ($valaiation->form_establishment instanceof \App\Enum\FormEstablishment
                 ? $valaiation->form_establishment->value

@@ -62,54 +62,76 @@ class EntitiesRepository extends AbstractRepository
         ]);
     }
 
-    $entity = [
-        'id' => $entite->id,
-        'social_denomination' => $entite->social_denomination ?? null,
-        'entity_type' => $entite->entity_type ?? null,
-        'customer_number' => $entite->customer_number ?? null,
-        'policy_number' => $entite->policy_number ?? null,
-        'nif' => $entite->nif ?? null,
+ $entity = [
+    'id' => $entite->id ?? null,
+    'social_denomination' => $entite->social_denomination ?? null,
+    'entity_type' => $entite->entity_type ?? null,
+    'customer_number' => $entite->customer_number ?? null,
+    'policy_number' => $entite->policy_number ?? null,
+    'nif' => $entite->nif ?? null,
 
-        'identification_capacity' =>"Presencial",
-        'form_establishment' => $valaiation
-            ? ($valaiation->form_establishment instanceof \App\Enum\FormEstablishment
-                ? $valaiation->form_establishment->value
-                : ($valaiation->form_establishment == 0 ? 'Presencial' : 'Não Presencial'))
-            : null,
+    // Identification capacity
+    'identification_capacity' => $valaiation
+        ? optional($valaiation->indetificationCapacity)->description
+          ?? optional($this->indicatorType->model::find($valaiation->identification_capacity))->description
+          ?? null
+        : null,
 
-        'category' => optional($valaiation->category)->description
-            ?? optional($this->indicatorType->model::find($valaiation->category))->description
-            ?? null,
+    // Form establishment
+    'form_establishment' => $valaiation
+        ? ($valaiation->form_establishment instanceof \App\Enum\FormEstablishment
+            ? $valaiation->form_establishment->value
+            : ($valaiation->form_establishment == 0 ? 'Presencial' : 'Não Presencial'))
+        : null,
 
-        'status_residence' => $valaiation
-            ? ($valaiation->status_residence instanceof \App\Enum\StatusResidence
-                ? $valaiation->status_residence->value
-                : ($valaiation->status_residence == 0 ? 'Residente' : 'Não Residente'))
-            : null,
+    // Category
+    'category' => $valaiation
+        ? optional($valaiation->category)->description
+          ?? optional($this->indicatorType->model::find($valaiation->category))->description
+          ?? null
+        : null,
 
-        'profession' => optional($valaiation->profession)->description
-            ?? optional($this->indicatorType->model::find($valaiation->profession))->description
-            ?? null,
+    // Status residence
+    'status_residence' => $valaiation
+        ? ($valaiation->status_residence instanceof \App\Enum\StatusResidence
+            ? $valaiation->status_residence->value
+            : ($valaiation->status_residence == 0 ? 'Residente' : 'Não Residente'))
+        : null,
 
-        'pep' => (bool) ($valaiation->pep ?? false),
-        'product_risk' => $valaiation->product_risk ?? null,
+    // Profession
+    'profession' => $valaiation
+        ? optional($valaiation->profession)->description
+          ?? optional($this->indicatorType->model::find($valaiation->profession))->description
+          ?? null
+        : null,
 
-        'country_residence' => optional($valaiation->country_residence)->description
-            ?? optional($this->indicatorType->model::find($valaiation->country_residence))->description
-            ?? null,
+    // PEP and product risk
+    'pep' => $valaiation ? (bool) $valaiation->pep : false,
+    'product_risk' => $valaiation->product_risk ?? null,
 
-        'nationality' => optional($valaiation->nationlity)->description
-            ?? optional($this->indicatorType->model::find($valaiation->nationlity))->description
-            ?? null,
+    // Country residence
+    'country_residence' => $valaiation
+        ? optional($valaiation->countryResidence)->description
+          ?? optional($this->indicatorType->model::find($valaiation->country_residence))->description
+          ?? null
+        : null,
 
-        'punctuation' => $valaiation->score ?? null,
-        'risk_level' => $entite->risk_level ?? null,
-        'diligence' => $entite->diligence ?? null,
-        'last_evaluation' => $entite->last_evaluation ?? null,
-        'created_at' => $entite->created_at ?? null,
-        'color' => $entite->color ?? null,
-        'alerts_count' => $alerts_entitie ?? 0,
-    ];
+    // Nationality
+    'nationality' => $valaiation
+        ? optional($valaiation->nationlity)->description
+          ?? optional($this->indicatorType->model::find($valaiation->nationlity))->description
+          ?? null
+        : null,
+
+    // Outros campos
+    'punctuation' => $valaiation->score ?? null,
+    'risk_level' => $entite->risk_level ?? null,
+    'diligence' => $entite->diligence ?? null,
+    'last_evaluation' => $entite->last_evaluation ?? null,
+    'created_at' => $entite->created_at ?? null,
+    'color' => $entite->color ?? null,
+    'alerts_count' => $alerts_entitie ?? 0,
+];
 
     return $entity;
 }

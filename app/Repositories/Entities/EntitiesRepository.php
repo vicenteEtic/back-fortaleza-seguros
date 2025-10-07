@@ -70,7 +70,7 @@ class EntitiesRepository extends AbstractRepository
         'policy_number' => $entite->policy_number ?? null,
         'nif' => $entite->nif ?? null,
 
-        'identification_capacity' => optional($valaiation->indetificationCapacity)->description
+        'identification_capacity' => optional($valaiation->identification_capacity)->description
             ?? $valaiation->identification_capacity
             ?? null,
         'form_establishment' => $valaiation

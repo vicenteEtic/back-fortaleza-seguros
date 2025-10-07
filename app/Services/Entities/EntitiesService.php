@@ -78,4 +78,6 @@ class EntitiesService extends AbstractService
     {
         return $this->repository->getLastEntities($limit);
     }
+
+    
 }

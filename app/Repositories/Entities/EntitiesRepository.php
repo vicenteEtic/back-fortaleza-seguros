@@ -70,9 +70,7 @@ class EntitiesRepository extends AbstractRepository
         'policy_number' => $entite->policy_number ?? null,
         'nif' => $entite->nif ?? null,
 
-        'identification_capacity' =>optional($valaiation ->identification_capacity)->description
-            ?? optional($this->indicatorType->model::find($valaiation->identification_capacity))->description
-            ?? null,
+        'identification_capacity' =>"Presencial",
         'form_establishment' => $valaiation
             ? ($valaiation->form_establishment instanceof \App\Enum\FormEstablishment
                 ? $valaiation->form_establishment->value

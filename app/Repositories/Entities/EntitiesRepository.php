@@ -57,7 +57,7 @@ class EntitiesRepository extends AbstractRepository
             'channel',
             'countryResidence',
             'category',
-            'nationality',
+            'nationlity',
             'profession',
         ]);
     }
@@ -101,8 +101,8 @@ class EntitiesRepository extends AbstractRepository
             ?? optional($this->indicatorType->model::find($valaiation->country_residence))->description
             ?? null,
 
-        'nationality' => optional($valaiation->nationality)->description
-            ?? optional($this->indicatorType->model::find($valaiation->nationality))->description
+        'nationality' => optional($valaiation->nationlity)->description
+            ?? optional($this->indicatorType->model::find($valaiation->nationlity))->description
             ?? null,
 
         'punctuation' => $valaiation->score ?? null,

@@ -34,6 +34,16 @@ class EntitiesService extends AbstractService
     }
 
 
+    public function collectiveEntities_evaluation(): int
+    {
+        return $this->repository->collectiveEntities_evaluation();
+    }
+
+    public function privateEntities_evaluation()
+    {
+        return $this->repository->privateEntities_evaluation();
+    }
+
     public function initializeImportBatch(int $userId): int
     {
         $timeLimit = Carbon::now()->subSeconds(self::TIME_LIMIT_SECONDS);

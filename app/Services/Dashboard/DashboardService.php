@@ -21,13 +21,18 @@ class DashboardService
         $totalEntitiesSingular = $this->entitiesService->getEntitiesByType(TypeEntity::SINGULAR);
         $lastsAssessment = $this->riskAssessmentService->getLastAssessment(3);
 
+        
+        $collective_evaluation = $this->entitiesService->collectiveEntities_evaluation();
+        $private_evaluation = $this->entitiesService->privateEntities_evaluation();
         return [
             'total_entities' => $totalEntities,
             'total_risk_assessments' => $totalRiskAssessments,
             'total_entities_colective' => $totalEntitiesColectivo,
             'total_entities_singular' => $totalEntitiesSingular,
             'lasts_assessment' => $lastsAssessment,
-            'lasts_entities' => $this->entitiesService->getLastEntities(3)
+            'lasts_entities' => $this->entitiesService->getLastEntities(3),
+            'private_evaluation'=> $private_evaluation,
+            'collective_evaluation'=> $collective_evaluation,
         ];
     }
 }

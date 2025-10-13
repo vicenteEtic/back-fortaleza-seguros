@@ -81,7 +81,8 @@
 <body>
     <div class="container">
         
-      @php
+          
+     @php
             use Illuminate\Support\Str;
             $currentHost = request()->getHost();
         @endphp

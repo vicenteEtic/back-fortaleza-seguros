@@ -29,8 +29,9 @@ class RiskAssessmentController extends AbstractController
      */
     public function store(RiskAssessmentRequest $request)
     {
-        DB::beginTransaction();
-      
+        try {
+            DB::beginTransaction();
+
             $this->logRequest();
             $riskAssessment = $this->service->store($request->validated());
             GenerateAlertsJob::dispatch(
@@ -50,11 +51,11 @@ class RiskAssessmentController extends AbstractController
                 type: 'user',
                 level: 'info',
                 customMessage: "{$userName} realizou uma avaliação  na entidade  {$riskAssessment?->entity?->social_denomination} que resultou em uma pontuação de {$riskAssessment->score} com um nível de risco {$riskAssessment->risk_level} e o tipo de diligência {$riskAssessment->diligence}.",
-                idEntity:null
+                idEntity: null
             );
             DB::commit();
             return response()->json($riskAssessment, Response::HTTP_CREATED);
-            try {   } catch (Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             $this->logRequest($e);
             $this->logToDatabase(

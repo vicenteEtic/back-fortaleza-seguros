@@ -18,7 +18,7 @@ class AutoLogoutInactiveUser
             $cacheKey = 'user_last_activity_' . $user->id;
             $lastActivity = Cache::get($cacheKey);
           // Tempo máximo de inatividade (em minutos) — configurável no .env
-            $timeout = env('AUTO_LOGOUT_TIMEOUT', 2);
+            $timeout = env('AUTO_LOGOUT_TIMEOUT', 15);
 
             Log::info("AUTO LOGOUT: Verificando usuário {$user->id}");
 

@@ -5,6 +5,7 @@ namespace App\Repositories\Entities;
 use App\Enum\TypeEntity;
 use App\Models\Alert\Alert;
 use App\Models\Entities\Entities;
+use App\Models\Entities\RiskAssessment;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Indicator\IndicatorTypeRepository;
 use Illuminate\Database\Eloquent\Collection;
@@ -32,13 +33,19 @@ class EntitiesRepository extends AbstractRepository
         return $this->model->where('entity_type', $type)->count();
     }
 
+
     public function getLastEntities(int $limit = 3): ?Collection
     {
         return $this->model
             ->orderBy('created_at', 'desc')
             ->limit($limit)
             ->get();
+
+
     }
+
+
+
     public function show(int|string $id, array $relationships = [])
 {
     $entite = $this->model::find($id);
@@ -151,5 +158,23 @@ class EntitiesRepository extends AbstractRepository
         // Se $paginate for null, $query já é uma Collection.
         // Se $paginate tiver valor, $query é um Paginator.
         return $query;
+    }
+
+
+    public function privateEntities_evaluation():int
+    {
+      
+
+        return    $privateEntities_evaluation  = RiskAssessment::whereHas('entity', function ($query) {
+                $query->where('entity_type', 2);
+            })->count();
+            
+    }
+
+    public function collectiveEntities_evaluation():int
+    {
+     return   $collectiveEntities_evaluation = RiskAssessment::whereHas('entity', function ($query) {
+            $query->where('entity_type', 1);
+        })->count();
     }
 }

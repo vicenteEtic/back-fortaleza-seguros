@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\Return_;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -30,6 +31,7 @@ class RiskAssessmentController extends AbstractController
     public function store(RiskAssessmentRequest $request)
     {
         try {
+       
             DB::beginTransaction();
 
             $this->logRequest();

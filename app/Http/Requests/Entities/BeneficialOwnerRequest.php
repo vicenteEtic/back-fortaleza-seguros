@@ -24,7 +24,13 @@ class BeneficialOwnerRequest extends BaseFormRequest
         return [
             'name' => 'required',
             'pep' => 'required',
-            'risk_assessment_id' => 'required'
+            'risk_assessment_id' => 'required',
+            'nationality' => 'string',
+            'percentage' => 'string',
+            'is_legal_representative' => 'string',
+
+
+
         ];
     }
 }

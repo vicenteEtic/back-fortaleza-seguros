@@ -19,19 +19,13 @@ class AutoLogoutInactiveUser
             $lastActivity = Cache::get($cacheKey);
           // Tempo máximo de inatividade (em minutos) — configurável no .env
             $timeout = env('AUTO_LOGOUT_TIMEOUT', 15);
-
-            Log::info("AUTO LOGOUT: Verificando usuário {$user->id}");
-
             if ($lastActivity) {
-
                 // Garante que é um Carbon válido (se vier como string)
                 if (is_string($lastActivity)) {
                     $lastActivity = Carbon::parse($lastActivity);
                 }
-
                 // Corrige a ordem da diferença
                 $diff = $lastActivity->diffInMinutes(now());
-
                 Log::info("AUTO LOGOUT: Última atividade há {$diff} minutos (timeout {$timeout})");
 
                 if ($diff >= $timeout) {

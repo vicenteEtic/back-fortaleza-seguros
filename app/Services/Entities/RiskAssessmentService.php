@@ -88,8 +88,6 @@ class RiskAssessmentService extends AbstractService
             $this->beneficialOwnerService->createBeneficialOwner($data, $riskAssessment->id);
         }
 
-
-
         $riskProducts = $this->indicatorTypeRepository->getByIds($data['product_risk']);
         $this->productRiskService->storeProductRisks($riskProducts, $riskAssessment->id);
 

@@ -14,14 +14,17 @@ class UserGrupoAlertRepository extends AbstractRepository
     public function storeMany($data)
     {
         $now = now();
-    return $this->model->upsert(
-        collect($data)->map(function ($item) use ($now) {
-            return array_merge($item, [
-                'created_at' => $now,
+    foreach ($data as $item) {
+        $this->model->updateOrCreate(
+            [
+                'grup_alert_id' => $item['grup_alert_id'],
+                'user_id' => $item['user_id'],
+            ],
+            [
                 'updated_at' => $now,
-            ]);
-        })->toArray(),
-        ['alert_id', 'user_id']      
-    );
+                'created_at' => $now,
+            ]
+        );
     }
+     }
 }

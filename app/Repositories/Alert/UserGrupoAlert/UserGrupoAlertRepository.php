@@ -18,13 +18,21 @@ public function storeMany($data)
 {
     $now = now();
 
+    // Se não vierem dados, não faz nada
+    if (empty($data)) {
+        return;
+    }
+
     // Normaliza os dados recebidos
     $pairs = collect($data)->map(fn($item) => [
         'grup_alert_id' => (int) $item['grup_alert_id'],
         'user_id'       => (int) $item['user_id'],
     ]);
 
-    // 1️⃣ Cria ou reativa os registros enviados
+    // Pega o id do grupo (todos são iguais)
+    $grupoId = $pairs->first()['grup_alert_id'];
+
+    // 1️⃣ Cria ou atualiza os registros enviados
     foreach ($pairs as $item) {
         $this->model->updateOrCreate(
             [
@@ -39,14 +47,13 @@ public function storeMany($data)
         );
     }
 
-    // 2️⃣ Apaga fisicamente os que não vieram
-    if ($pairs->isNotEmpty()) {
-        $tuplas = $pairs->map(fn($p) => "({$p['grup_alert_id']}, {$p['user_id']})")->implode(',');
+    // 2️⃣ Deleta todos os registros desse grupo que não foram enviados
+    $userIds = $pairs->pluck('user_id')->implode(',');
 
-        DB::statement("
-            DELETE FROM user_grupo_alert 
-            WHERE (grup_alert_id, user_id) NOT IN ($tuplas)
-        ");
-    }
+    DB::statement("
+        DELETE FROM user_grupo_alert
+        WHERE grup_alert_id = ?
+        AND user_id NOT IN ($userIds)
+    ", [$grupoId]);
 }
 }

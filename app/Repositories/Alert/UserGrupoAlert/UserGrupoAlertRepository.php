@@ -12,17 +12,19 @@ class UserGrupoAlertRepository extends AbstractRepository
         parent::__construct($model);
     }
 
-   public function storeMany($data)
+
+
+public function storeMany($data)
 {
     $now = now();
 
     // Normaliza os dados recebidos
     $pairs = collect($data)->map(fn($item) => [
-        'grup_alert_id' => $item['grup_alert_id'],
-        'user_id'       => $item['user_id'],
+        'grup_alert_id' => (int) $item['grup_alert_id'],
+        'user_id'       => (int) $item['user_id'],
     ]);
 
-    // 1️⃣ Atualiza ou cria os registros recebidos
+    // 1️⃣ Cria ou reativa os registros enviados
     foreach ($pairs as $item) {
         $this->model->updateOrCreate(
             [
@@ -32,30 +34,25 @@ class UserGrupoAlertRepository extends AbstractRepository
             [
                 'created_at' => $now,
                 'updated_at' => $now,
-                'deleted_at' => null, // reativa se estiver soft-deleted
+                'deleted_at' => null, // reativa se estava apagado
             ]
         );
     }
 
-    // 2️⃣ Marca como deleted_at os que não foram enviados
+    // 2️⃣ Soft delete dos que NÃO foram enviados
     if ($pairs->isNotEmpty()) {
-        $this->model
-            ->whereNotExists(function ($query) use ($pairs) {
-                $query->select(DB::raw(1))
-                    ->fromRaw('(SELECT ' .
-                        implode(' UNION ALL SELECT ',
-                            $pairs->map(fn($p) => "{$p['grup_alert_id']} AS grup_alert_id, {$p['user_id']} AS user_id")->toArray()
-                        ) .
-                    ') AS temp')
-                    ->whereColumn('temp.grup_alert_id', 'user_grupo_alert.grup_alert_id')
-                    ->whereColumn('temp.user_id', 'user_grupo_alert.user_id');
-            })
-            ->whereNull('deleted_at')
-            ->update([
-                'deleted_at' => $now,
-                'updated_at' => $now,
-            ]);
+        // monta as tuplas (1,2),(1,3)...
+        $tuplas = $pairs->map(fn($p) => "({$p['grup_alert_id']}, {$p['user_id']})")->implode(',');
+
+        // executa SQL direto (MySQL aceita tuplas em NOT IN)
+        DB::statement("
+            UPDATE user_grupo_alert 
+            SET deleted_at = ?, updated_at = ? 
+            WHERE (grup_alert_id, user_id) NOT IN ($tuplas)
+            AND deleted_at IS NULL
+        ", [$now, $now]);
     }
 }
+
 
 }

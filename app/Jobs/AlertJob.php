@@ -90,7 +90,8 @@ class AlertJob implements ShouldQueue
             Log::info("Creating alert for: {$item['name']}");
 
           $alert=  Alert::updateOrCreate([
-                'origin_id' => $item['id']
+                'origin_id' => $item['id'],
+                 'name' => $item['name']
             ], [
                 'name' => $item['name'],
                 'level' => 'Alto',

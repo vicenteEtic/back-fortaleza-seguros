@@ -39,6 +39,9 @@ abstract class AbstractRepository
         if (in_array(SoftDeletes::class, class_uses($this->model))) {
             if ($withTrashed) {
                 $query = $query->withTrashed();
+            } else {
+                // Força excluir registros soft deleted
+                $query = $query->whereNull($this->model->getQualifiedDeletedAtColumn());
             }
         }
 

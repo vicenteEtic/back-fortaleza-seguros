@@ -95,6 +95,10 @@
             <div class="logo">
                 <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
             </div>
+              @elseif(Str::contains($currentHost, 'globalseguros.keepcomply.co.ao',[ '172.17.100.14', '172.17.100.12:8083']))
+            <div class="logo">
+               <img src="https://nossa-denuncias.keepcomply.co.ao:1130/global.png" alt="Keepcompay">
+            </div>
         @endif
 
         <p>Olá, <span class="highlight">{{ $user->first_name }}</span></p>
@@ -114,6 +118,8 @@
               Keepcompay — Todos os direitos reservados.
         @elseif(Str::contains($currentHost, 'nossa-denuncias.keepcomply.co.ao'))
             Nossa Seguros — Todos os direitos reservados.
+              @elseif(Str::contains($currentHost, 'globalseguros.keepcomply.co.ao',[ '172.17.100.14', '172.17.100.12:8083']))
+         Global Seguros — Todos os direitos reservados.
         @endif</p>
         </div>
     </div>

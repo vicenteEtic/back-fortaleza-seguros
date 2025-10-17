@@ -104,6 +104,10 @@
               Keepcompay — Todos os direitos reservados.
         @elseif(Str::contains($currentHost, 'nossa-denuncias.keepcomply.co.ao'))
             Nossa Seguros — Todos os direitos reservados.
+
+
+               @elseif(Str::contains($currentHost, 'globalseguros.keepcomply.co.ao',[ '172.17.100.14', '172.17.100.12:8083']))
+         Global Seguros — Todos os direitos reservados.
         @endif</p>
         </div>
     </div>

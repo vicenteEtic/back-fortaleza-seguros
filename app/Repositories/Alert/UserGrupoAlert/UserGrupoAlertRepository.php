@@ -34,25 +34,19 @@ public function storeMany($data)
             [
                 'created_at' => $now,
                 'updated_at' => $now,
-                'deleted_at' => null, // reativa se estava apagado
+                'deleted_at' => null,
             ]
         );
     }
 
-    // 2️⃣ Soft delete dos que NÃO foram enviados
+    // 2️⃣ Apaga fisicamente os que não vieram
     if ($pairs->isNotEmpty()) {
-        // monta as tuplas (1,2),(1,3)...
         $tuplas = $pairs->map(fn($p) => "({$p['grup_alert_id']}, {$p['user_id']})")->implode(',');
 
-        // executa SQL direto (MySQL aceita tuplas em NOT IN)
         DB::statement("
-            UPDATE user_grupo_alert 
-            SET deleted_at = ?, updated_at = ? 
+            DELETE FROM user_grupo_alert 
             WHERE (grup_alert_id, user_id) NOT IN ($tuplas)
-            AND deleted_at IS NULL
-        ", [$now, $now]);
+        ");
     }
 }
-
-
 }

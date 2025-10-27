@@ -35,6 +35,7 @@ class RiskAssessmentService extends AbstractService
         private readonly DiligenceService $diligenceService,
         private readonly ProductRiskService $productRiskService,
         private readonly BeneficialOwnerService $beneficialOwnerService,
+        private readonly PepService $pepService,
         private AlertService $alertService
     ) {
         parent::__construct($repository);
@@ -86,6 +87,10 @@ class RiskAssessmentService extends AbstractService
 
         if (isset($data['beneficial_owners'])) {
             $this->beneficialOwnerService->createBeneficialOwner($data, $riskAssessment->id);
+        }
+
+        if (!empty($data['pep']) && $data['pep'] === true) {
+            $this->pepService->createEntityPep($data['entity_id']);
         }
 
         $riskProducts = $this->indicatorTypeRepository->getByIds($data['product_risk']);

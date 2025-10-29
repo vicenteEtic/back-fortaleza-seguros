@@ -14,7 +14,7 @@ services:
     networks:
       - fortalezaSeguros-network
     ports:
-      - '8080:8080' # expõe a porta do reverb/websocket
+      - '8089:8080' # expõe a porta do reverb/websocket
 
   nginx:
     container_name: fortalezaSeguros-nginx

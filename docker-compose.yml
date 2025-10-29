@@ -2,7 +2,7 @@ version: '3'
 
 services:
   php:
-    container_name: setupNossaSeguros-php
+    container_name: fortalezaSeguros-php
     build:
       context: ./docker/php
       dockerfile: Dockerfile
@@ -12,41 +12,41 @@ services:
       - ./:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
-      - setupNossaSeguros-network
+      - fortalezaSeguros-network
     ports:
       - '8080:8080' # expõe a porta do reverb/websocket
 
   nginx:
-    container_name: setupNossaSeguros-nginx
+    container_name: fortalezaSeguros-nginx
     build:
       context: ./docker/nginx
       dockerfile: Dockerfile
     restart: always
     tty: true
     ports:
-      - '1025:80'
-      - '450:443'
+      - '1039:80'
+      - '453:443'
     volumes:
       - ./:/var/www
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
-      - setupNossaSeguros-network
+      - fortalezaSeguros-network
     depends_on:
       - php
 
   mysql:
-    container_name: setupNossaSeguros-mysql
+    container_name: fortalezaSeguros-mysql
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     tty: true
     volumes:
-      - setupNossaSeguros-data:/var/lib/mysql/
+      - fortalezaSeguros-data:/var/lib/mysql/
       - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
-      - setupNossaSeguros-network
+      - fortalezaSeguros-network
     ports:
-      - '3308:3306'
+      - '3311:3306'
     environment:
       MYSQL_DATABASE: nf
       MYSQL_ROOT_PASSWORD: root
@@ -54,33 +54,33 @@ services:
       MYSQL_PASSWORD: nf@204
 
   phpmyadmin:
-    container_name: setupNossaSeguros-phpmyadmin
+    container_name: fortalezaSeguros-phpmyadmin
     image: phpmyadmin:5.2
     restart: always
     ports:
-      - '8892:80'
+      - '8999:80'
     networks:
-      - setupNossaSeguros-network
+      - fortalezaSeguros-network
     environment:
-      PMA_HOST: setupNossaSeguros-mysql
+      PMA_HOST: fortalezaSeguros-mysql
     depends_on:
       - mysql
 
   redis:
-    container_name: setupNossaSeguros-redis
+    container_name: fortalezaSeguros-redis
     build:
       context: ./docker/redis
       dockerfile: Dockerfile
     restart: always
     ports:
-      - '6388:6379'
+      - '6499:6379'
     networks:
-      - setupNossaSeguros-network
+      - fortalezaSeguros-network
 
 networks:
-  setupNossaSeguros-network:
+  fortalezaSeguros-network:
     driver: bridge
 
 volumes:
-  setupNossaSeguros-data:
+  fortalezaSeguros-data:
     driver: local
